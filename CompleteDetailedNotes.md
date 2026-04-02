@@ -12825,3 +12825,571 @@ async function getUsersFromCache(userIds) {
 ---
 
 
+# Prisma & TypeScript - Complete Guide
+
+## Part 1: Prisma ORM - Modern Database Toolkit
+
+### What is Prisma?
+
+Prisma is a next-generation ORM (Object-Relational Mapping) that provides type-safe database access for Node.js & TypeScript. Think of it as a bridge between your code and your database that writes SQL for you AND gives you autocompletion!
+
+**Why Prisma? (2026 Industry Standard):**
+- **Type-Safe**: Full TypeScript support with autocomplete
+- **Auto-Generated**: Client code generated from your schema
+- **Migrations**: Database version control built-in
+- **Multiple Databases**: PostgreSQL, MySQL, SQLite, MongoDB, SQL Server
+- **Intuitive API**: Easy to learn, powerful to use
+- **Used By**: Vercel, Netlify, Twilio, and thousands of companies
+
+---
+
+## 1. Prisma Setup & Schema
+
+### Installation
+
+```bash
+# Install Prisma CLI
+npm install -D prisma
+
+# Install Prisma Client
+npm install @prisma/client
+
+# Initialize Prisma
+npx prisma init
+# Creates: prisma/schema.prisma and .env
+```
+
+### Database Connection
+
+```env
+# .env
+DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
+# Or for other databases:
+# DATABASE_URL="mysql://user:password@localhost:3306/mydb"
+# DATABASE_URL="mongodb+srv://user:password@cluster.mongodb.net/mydb"
+```
+
+### Schema Definition
+
+```prisma
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"  // or "mysql", "sqlite", "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Define models (tables)
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?  // ? means optional
+  password  String
+  role      Role     @default(USER)
+  posts     Post[]   // One-to-many relationship
+  profile   Profile? // One-to-one relationship
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")  // Custom table name
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  avatar String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+
+  @@map("profiles")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  tags      Tag[]    // Many-to-many
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@map("posts")
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+
+  @@map("tags")
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+```
+
+### Field Types & Modifiers
+
+```prisma
+model Example {
+  // String types
+  text      String
+  limitText String   @db.VarChar(255)
+  longText  String   @db.Text
+
+  // Number types
+  integer   Int
+  bigInt    BigInt
+  float     Float
+  decimal   Decimal  @db.Decimal(10, 2)
+
+  // Boolean
+  isActive  Boolean  @default(true)
+
+  // DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  birthday  DateTime @db.Date
+
+  // JSON
+  metadata  Json?
+
+  // Enum
+  role      Role     @default(USER)
+
+  // Arrays (PostgreSQL only)
+  tags      String[]
+
+  // Field modifiers
+  @id                    // Primary key
+  @unique                // Unique constraint
+  @default(value)        // Default value
+  @updatedAt            // Auto-update timestamp
+  @map("custom_name")   // Custom column name
+
+  // Indexes
+  @@index([field1, field2])
+  @@unique([field1, field2])
+  @@id([field1, field2])  // Composite primary key
+}
+```
+
+### Migrations
+
+```bash
+# Create migration
+npx prisma migrate dev --name init
+
+# Generate Prisma Client (after schema changes)
+npx prisma generate
+
+# Apply migrations in production
+npx prisma migrate deploy
+
+# Reset database (WARNING: deletes all data)
+npx prisma migrate reset
+
+# View migration status
+npx prisma migrate status
+
+# Create migration without applying
+npx prisma migrate dev --create-only
+```
+
+---
+
+## 2. Prisma Client - CRUD Operations
+
+### Setup Client
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient({
+  log: ['query', 'error', 'warn'],  // Logging
+});
+
+export default prisma;
+
+// In development, prevent multiple instances
+declare global {
+  var prisma: PrismaClient | undefined;
+}
+
+const prisma = globalThis.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prisma = prisma;
+}
+
+export default prisma;
+```
+
+### CREATE Operations
+
+```typescript
+import prisma from './prisma/client';
+
+// Create single record
+const user = await prisma.user.create({
+  data: {
+    email: 'hassan@example.com',
+    name: 'Hassan',
+    password: 'hashed_password',
+  },
+});
+
+// Create with relations
+const userWithPost = await prisma.user.create({
+  data: {
+    email: 'ali@example.com',
+    name: 'Ali',
+    password: 'hashed',
+    posts: {
+      create: {
+        title: 'My First Post',
+        content: 'Hello World!',
+      },
+    },
+  },
+  include: {
+    posts: true,  // Include related posts in result
+  },
+});
+
+// Create many
+const users = await prisma.user.createMany({
+  data: [
+    { email: 'user1@example.com', name: 'User 1', password: 'hash1' },
+    { email: 'user2@example.com', name: 'User 2', password: 'hash2' },
+  ],
+  skipDuplicates: true,  // Skip if email exists
+});
+```
+
+### READ Operations
+
+```typescript
+// Find many
+const allUsers = await prisma.user.findMany();
+
+// Find with filters
+const activeUsers = await prisma.user.findMany({
+  where: {
+    role: 'USER',
+    posts: {
+      some: {
+        published: true,
+      },
+    },
+  },
+});
+
+// Find unique
+const user = await prisma.user.findUnique({
+  where: { email: 'hassan@example.com' },
+});
+
+// Find first
+const firstAdmin = await prisma.user.findFirst({
+  where: { role: 'ADMIN' },
+});
+
+// Find with relations
+const userWithPosts = await prisma.user.findUnique({
+  where: { id: 1 },
+  include: {
+    posts: true,
+    profile: true,
+  },
+});
+
+// Select specific fields
+const usersEmail = await prisma.user.findMany({
+  select: {
+    id: true,
+    email: true,
+    name: true,
+  },
+});
+
+// Pagination
+const page = 1;
+const limit = 20;
+
+const users = await prisma.user.findMany({
+  skip: (page - 1) * limit,
+  take: limit,
+});
+
+// Ordering
+const sortedUsers = await prisma.user.findMany({
+  orderBy: [
+    { createdAt: 'desc' },
+    { name: 'asc' },
+  ],
+});
+
+// Count
+const userCount = await prisma.user.count({
+  where: { role: 'USER' },
+});
+
+// Aggregate
+const stats = await prisma.user.aggregate({
+  _count: true,
+  _avg: { id: true },
+  _sum: { id: true },
+  _min: { createdAt: true },
+  _max: { createdAt: true },
+});
+```
+
+### UPDATE Operations
+
+```typescript
+// Update one
+const updatedUser = await prisma.user.update({
+  where: { id: 1 },
+  data: {
+    name: 'Hassan Ahmed',
+    updatedAt: new Date(),
+  },
+});
+
+// Update many
+const result = await prisma.user.updateMany({
+  where: { role: 'USER' },
+  data: { role: 'MODERATOR' },
+});
+
+// Upsert (update if exists, create if not)
+const user = await prisma.user.upsert({
+  where: { email: 'hassan@example.com' },
+  update: { name: 'Hassan Updated' },
+  create: {
+    email: 'hassan@example.com',
+    name: 'Hassan',
+    password: 'hash',
+  },
+});
+
+// Update with relations
+const updatedPost = await prisma.post.update({
+  where: { id: 1 },
+  data: {
+    title: 'Updated Title',
+    tags: {
+      connect: [{ id: 1 }, { id: 2 }],  // Connect to existing tags
+    },
+  },
+});
+```
+
+### DELETE Operations
+
+```typescript
+// Delete one
+const deletedUser = await prisma.user.delete({
+  where: { id: 1 },
+});
+
+// Delete many
+const result = await prisma.user.deleteMany({
+  where: {
+    createdAt: {
+      lt: new Date('2023-01-01'),
+    },
+  },
+});
+```
+
+---
+
+## Part 2: TypeScript - Complete Guide
+
+### What is TypeScript?
+
+TypeScript is JavaScript with syntax for types. It's a strongly typed programming language that builds on JavaScript, giving you better tooling and catching errors before your code runs.
+
+**Why TypeScript? (2026 Industry Standard):**
+- **Type Safety**: Catch errors at compile-time, not runtime
+- **Better IDE Support**: Autocomplete, refactoring, navigation
+- **Self-Documenting**: Types serve as documentation
+- **Easier Refactoring**: Rename, restructure with confidence
+- **Industry Standard**: 90%+ of new projects use TypeScript
+
+### Basic Types
+
+```typescript
+// Primitives
+let name: string = 'Hassan';
+let age: number = 25;
+let isActive: boolean = true;
+let notDefined: undefined = undefined;
+let nothing: null = null;
+
+// Arrays
+let numbers: number[] = [1, 2, 3];
+let names: Array<string> = ['Ali', 'Sara'];
+
+// Tuple (fixed-length array with known types)
+let user: [string, number] = ['Hassan', 25];
+
+// Object type
+let person: { name: string; age: number } = {
+  name: 'Hassan',
+  age: 25,
+};
+
+// Any (avoid when possible!)
+let anything: any = 'could be anything';
+anything = 123;
+anything = true;
+
+// Unknown (safer than any)
+let value: unknown = 'hello';
+if (typeof value === 'string') {
+  console.log(value.toUpperCase());  // OK inside type guard
+}
+
+// Void (no return value)
+function logMessage(message: string): void {
+  console.log(message);
+}
+
+// Never (never returns)
+function throwError(message: string): never {
+  throw new Error(message);
+}
+```
+
+### Interfaces and Types
+
+```typescript
+// Interface
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age?: number;  // Optional
+  readonly createdAt: Date;  // Read-only
+}
+
+const user: User = {
+  id: 1,
+  name: 'Hassan',
+  email: 'hassan@example.com',
+  createdAt: new Date(),
+};
+
+// Type alias
+type ID = string | number;
+type Point = { x: number; y: number };
+
+// Union types
+type Status = 'pending' | 'approved' | 'rejected';
+let orderStatus: Status = 'pending';
+
+// Intersection types
+type Admin = User & { role: 'admin'; permissions: string[] };
+
+// Function types
+type MathOperation = (a: number, b: number) => number;
+
+const add: MathOperation = (a, b) => a + b;
+```
+
+### Generics
+
+```typescript
+// Generic function
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+const num = identity<number>(42);
+const str = identity<string>('hello');
+
+// Generic interface
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  error?: string;
+}
+
+const userResponse: ApiResponse<User> = {
+  success: true,
+  data: {
+    id: 1,
+    name: 'Hassan',
+    email: 'hassan@example.com',
+    createdAt: new Date(),
+  },
+};
+
+// Generic class
+class DataStore<T> {
+  private items: T[] = [];
+
+  add(item: T): void {
+    this.items.push(item);
+  }
+
+  get(index: number): T | undefined {
+    return this.items[index];
+  }
+}
+
+const userStore = new DataStore<User>();
+userStore.add(user);
+```
+
+### Utility Types
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+}
+
+// Partial - all properties optional
+type PartialUser = Partial<User>;
+
+// Required - all properties required
+type RequiredUser = Required<User>;
+
+// Pick - select specific properties
+type UserPreview = Pick<User, 'id' | 'name' | 'email'>;
+
+// Omit - exclude properties
+type UserWithoutPassword = Omit<User, 'password'>;
+
+// Readonly - make all properties readonly
+type ImmutableUser = Readonly<User>;
+
+// Record - object type with specific keys
+type UserRoles = Record<string, 'admin' | 'user'>;
+
+// ReturnType - infer function return type
+function getUser() {
+  return { id: 1, name: 'Hassan' };
+}
+type UserType = ReturnType<typeof getUser>;
+```
+
+---
+
