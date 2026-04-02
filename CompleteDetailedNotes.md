@@ -9633,3 +9633,1902 @@ export default router;
 ```
 
 ---
+
+# TypeScript - Complete Guide (JavaScript with Types)
+
+## TypeScript Fundamentals - Understanding Static Typing
+
+### What is TypeScript?
+
+TypeScript is a superset of JavaScript that adds static types. Every valid JavaScript code is also valid TypeScript, but TypeScript adds optional type annotations that help catch errors during development.
+
+**Why TypeScript? (Industry Standard 2026):**
+- **Early Error Detection**: Catch bugs before runtime
+- **Better IDE Support**: Autocomplete, refactoring, navigation
+- **Self-Documenting**: Types serve as documentation
+- **Refactoring Safety**: Rename and restructure with confidence
+- **Team Collaboration**: Clear contracts between code modules
+- **Industry Adoption**: Used by Microsoft, Google, Airbnb, Slack, Netflix
+
+---
+
+## 1. Basic Types - Building Blocks
+
+### Primitive Types
+
+```typescript
+// String
+let name: string = 'Hassan';
+let message: string = `Hello, ${name}!`;
+
+// Number (all numbers are floating point)
+let age: number = 25;
+let price: number = 99.99;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+let octal: number = 0o744;
+
+// Boolean
+let isActive: boolean = true;
+let hasPermission: boolean = false;
+
+// Null and Undefined
+let nothing: null = null;
+let notDefined: undefined = undefined;
+
+// Any (avoid when possible - defeats TypeScript's purpose)
+let anything: any = 'hello';
+anything = 42;
+anything = true; // All valid, no type checking
+
+// Unknown (safer than any - must check type before use)
+let userInput: unknown = getUserInput();
+
+// Must check type before using
+if (typeof userInput === 'string') {
+  console.log(userInput.toUpperCase());
+}
+
+// Void (no return value)
+function logMessage(message: string): void {
+  console.log(message);
+  // No return statement
+}
+
+// Never (function never returns)
+function throwError(message: string): never {
+  throw new Error(message);
+}
+
+function infiniteLoop(): never {
+  while (true) {
+    // Never exits
+  }
+}
+
+// Symbol
+let sym: symbol = Symbol('unique');
+
+// BigInt
+let bigNumber: bigint = 100n;
+```
+
+### Type Inference
+
+```typescript
+// TypeScript infers types automatically
+let inferredString = 'hello'; // Type: string
+let inferredNumber = 42; // Type: number
+let inferredBoolean = true; // Type: boolean
+
+// TypeScript infers from function return
+function double(x: number) {
+  return x * 2; // Return type inferred as number
+}
+
+let result = double(5); // result is inferred as number
+
+// Best practice: Let TypeScript infer when obvious
+let name = 'Hassan'; // Good, type is obvious
+let age: number = 25; // Redundant, type is inferred
+
+// Explicit types when needed
+let notObvious: string | null = getSomeValue(); // Good, union type
+```
+
+### Arrays
+
+```typescript
+// Array of numbers
+let numbers: number[] = [1, 2, 3, 4, 5];
+
+// Alternative syntax (generic)
+let numbers: Array<number> = [1, 2, 3, 4, 5];
+
+// Array of strings
+let names: string[] = ['Ali', 'Sara', 'Hassan'];
+
+// Array of any type (avoid)
+let mixed: any[] = [1, 'text', true];
+
+// Array of specific types (union)
+let mixedTyped: (number | string)[] = [1, 'text', 2, 'hello'];
+
+// Readonly array (immutable)
+let readonlyNumbers: ReadonlyArray<number> = [1, 2, 3];
+// readonlyNumbers.push(4); // Error: push doesn't exist
+
+// Or using readonly modifier
+let readonlyNames: readonly string[] = ['Ali', 'Sara'];
+
+// Multi-dimensional arrays
+let matrix: number[][] = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+// Real-world: Array of user objects
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+let users: User[] = [
+  { id: 1, name: 'Hassan', email: 'hassan@example.com' },
+  { id: 2, name: 'Ali', email: 'ali@example.com' }
+];
+```
+
+### Tuples - Fixed-Length Arrays
+
+```typescript
+// Tuple with 2 elements
+let coordinate: [number, number] = [10, 20];
+
+// Tuple with 3 elements
+let person: [string, number, boolean] = ['Hassan', 25, true];
+
+// Accessing tuple elements
+let name = person[0]; // Type: string
+let age = person[1];  // Type: number
+
+// Destructuring tuples
+let [userName, userAge, isActive] = person;
+
+// Optional tuple elements
+let optional: [string, number?] = ['Hassan'];
+optional = ['Ali', 30]; // Also valid
+
+// Rest elements in tuples
+let tuple: [string, ...number[]] = ['Hassan', 1, 2, 3, 4];
+
+// Readonly tuples
+let readonlyTuple: readonly [string, number] = ['Hassan', 25];
+// readonlyTuple[0] = 'Ali'; // Error: readonly
+
+// Real-world: React useState
+const [count, setCount]: [number, (value: number) => void] = useState(0);
+
+// Real-world: Function returning tuple
+function getUser(): [string, number] {
+  return ['Hassan', 25];
+}
+
+const [name, age] = getUser();
+
+// Real-world: Key-value pair
+type Entry = [string, number];
+const entries: Entry[] = [
+  ['apple', 5],
+  ['banana', 3],
+  ['orange', 7]
+];
+```
+
+### Enums - Named Constants
+
+```typescript
+// Numeric enum (default starts at 0)
+enum Direction {
+  Up,    // 0
+  Down,  // 1
+  Left,  // 2
+  Right  // 3
+}
+
+let move: Direction = Direction.Up;
+console.log(Direction.Up); // 0
+
+// Numeric enum with custom values
+enum Status {
+  Pending = 1,
+  Approved = 2,
+  Rejected = 3
+}
+
+// String enum (recommended for better debugging)
+enum Color {
+  Red = 'RED',
+  Green = 'GREEN',
+  Blue = 'BLUE'
+}
+
+let favoriteColor: Color = Color.Blue;
+console.log(favoriteColor); // 'BLUE'
+
+// Heterogeneous enum (mixed - not recommended)
+enum Mixed {
+  No = 0,
+  Yes = 'YES'
+}
+
+// Const enum (better performance, inlined at compile time)
+const enum HttpStatus {
+  Ok = 200,
+  BadRequest = 400,
+  Unauthorized = 401,
+  NotFound = 404,
+  ServerError = 500
+}
+
+let status: HttpStatus = HttpStatus.Ok;
+
+// Real-world: User roles
+enum UserRole {
+  Admin = 'ADMIN',
+  Editor = 'EDITOR',
+  Viewer = 'VIEWER'
+}
+
+function hasPermission(role: UserRole): boolean {
+  return role === UserRole.Admin || role === UserRole.Editor;
+}
+
+// Real-world: Order status
+enum OrderStatus {
+  Pending = 'PENDING',
+  Processing = 'PROCESSING',
+  Shipped = 'SHIPPED',
+  Delivered = 'DELIVERED',
+  Cancelled = 'CANCELLED'
+}
+
+interface Order {
+  id: number;
+  status: OrderStatus;
+}
+
+const order: Order = {
+  id: 1,
+  status: OrderStatus.Pending
+};
+
+// Modern alternative: Union of string literals (often preferred)
+type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+
+// This is more lightweight and flexible
+```
+
+---
+
+## 2. Type Annotations and Type Aliases
+
+### Function Types
+
+```typescript
+// Function with typed parameters and return type
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+// Arrow function
+const multiply = (a: number, b: number): number => {
+  return a * b;
+};
+
+// Implicit return
+const subtract = (a: number, b: number): number => a - b;
+
+// Optional parameters
+function greet(name: string, greeting?: string): string {
+  return greeting ? `${greeting}, ${name}!` : `Hello, ${name}!`;
+}
+
+greet('Hassan'); // "Hello, Hassan!"
+greet('Hassan', 'Hi'); // "Hi, Hassan!"
+
+// Default parameters
+function createUser(name: string, age: number = 18): object {
+  return { name, age };
+}
+
+// Rest parameters
+function sum(...numbers: number[]): number {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+sum(1, 2, 3, 4, 5); // 15
+
+// Function type as variable
+let calculate: (x: number, y: number) => number;
+
+calculate = (a, b) => a + b;
+calculate = (a, b) => a * b;
+// calculate = (a, b) => `${a}${b}`; // Error: return type must be number
+
+// Void return type
+function logMessage(message: string): void {
+  console.log(message);
+  // No return or return undefined
+}
+
+// Never return type (for functions that never return)
+function throwError(message: string): never {
+  throw new Error(message);
+}
+
+// Function overloads
+function getValue(id: number): string;
+function getValue(name: string): number;
+function getValue(param: number | string): string | number {
+  if (typeof param === 'number') {
+    return 'Value for ID: ' + param;
+  } else {
+    return param.length;
+  }
+}
+
+let result1 = getValue(123); // Type: string
+let result2 = getValue('Hassan'); // Type: number
+
+// Real-world: Callback types
+type Callback = (error: Error | null, data?: any) => void;
+
+function fetchData(url: string, callback: Callback): void {
+  // Simulate async operation
+  setTimeout(() => {
+    if (url.startsWith('http')) {
+      callback(null, { data: 'success' });
+    } else {
+      callback(new Error('Invalid URL'));
+    }
+  }, 1000);
+}
+
+// Real-world: Event handler type
+type EventHandler = (event: MouseEvent) => void;
+
+const handleClick: EventHandler = (event) => {
+  console.log('Clicked at:', event.clientX, event.clientY);
+};
+```
+
+### Type Aliases
+
+```typescript
+// Simple type alias
+type Username = string;
+type Age = number;
+type ID = string | number;
+
+let userId: ID = 123;
+userId = 'abc-123'; // Also valid
+
+// Object type alias
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  age?: number; // Optional property
+};
+
+const user: User = {
+  id: 1,
+  name: 'Hassan',
+  email: 'hassan@example.com'
+  // age is optional
+};
+
+// Union types
+type Status = 'pending' | 'approved' | 'rejected';
+type Theme = 'light' | 'dark';
+
+let currentTheme: Theme = 'dark';
+// currentTheme = 'blue'; // Error: not in union
+
+// Intersection types
+type Person = {
+  name: string;
+  age: number;
+};
+
+type Employee = {
+  employeeId: number;
+  department: string;
+};
+
+type EmployeePerson = Person & Employee;
+
+const employee: EmployeePerson = {
+  name: 'Hassan',
+  age: 25,
+  employeeId: 12345,
+  department: 'Engineering'
+};
+
+// Function type alias
+type MathOperation = (a: number, b: number) => number;
+
+const add: MathOperation = (a, b) => a + b;
+const multiply: MathOperation = (a, b) => a * b;
+
+// Generic type alias
+type Result<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+};
+
+const userResult: Result<User> = {
+  success: true,
+  data: { id: 1, name: 'Hassan', email: 'hassan@example.com' }
+};
+
+const numberResult: Result<number> = {
+  success: false,
+  error: 'Calculation failed'
+};
+
+// Real-world: API response type
+type ApiResponse<T> = {
+  status: number;
+  message: string;
+  data: T;
+  timestamp: Date;
+};
+
+type UserListResponse = ApiResponse<User[]>;
+type SingleUserResponse = ApiResponse<User>;
+
+// Real-world: Nullable type
+type Nullable<T> = T | null;
+
+let userName: Nullable<string> = 'Hassan';
+userName = null; // Valid
+```
+
+---
+
+## 3. Interfaces - Defining Object Shapes
+
+### Basic Interfaces
+
+```typescript
+// Interface definition
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const user: User = {
+  id: 1,
+  name: 'Hassan',
+  email: 'hassan@example.com'
+};
+
+// Optional properties
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description?: string; // Optional
+}
+
+// Readonly properties
+interface Config {
+  readonly apiUrl: string;
+  readonly timeout: number;
+}
+
+const config: Config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+};
+
+// config.apiUrl = 'other'; // Error: readonly property
+
+// Index signatures (for dynamic properties)
+interface StringMap {
+  [key: string]: string;
+}
+
+const translations: StringMap = {
+  hello: 'مرحبا',
+  goodbye: 'الوداع',
+  thanks: 'شكرا'
+};
+
+// Numeric index signature
+interface NumberArray {
+  [index: number]: number;
+}
+
+const fibonacci: NumberArray = [1, 1, 2, 3, 5, 8];
+
+// Method signatures
+interface Calculator {
+  add(a: number, b: number): number;
+  subtract(a: number, b: number): number;
+}
+
+const calc: Calculator = {
+  add: (a, b) => a + b,
+  subtract: (a, b) => a - b
+};
+
+// Function type in interface
+interface SearchFunction {
+  (query: string, limit: number): Promise<string[]>;
+}
+
+const search: SearchFunction = async (query, limit) => {
+  // Implementation
+  return ['result1', 'result2'];
+};
+
+// Real-world: API endpoint interface
+interface ApiEndpoint {
+  url: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  headers?: Record<string, string>;
+  body?: any;
+}
+```
+
+### Extending Interfaces
+
+```typescript
+// Base interface
+interface Person {
+  name: string;
+  age: number;
+}
+
+// Extending interface
+interface Employee extends Person {
+  employeeId: number;
+  department: string;
+}
+
+const employee: Employee = {
+  name: 'Hassan',
+  age: 25,
+  employeeId: 12345,
+  department: 'Engineering'
+};
+
+// Multiple inheritance
+interface Timestamped {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Document extends Person, Timestamped {
+  id: string;
+  title: string;
+}
+
+const doc: Document = {
+  id: 'doc-1',
+  title: 'TypeScript Guide',
+  name: 'Hassan',
+  age: 25,
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
+
+// Real-world: Model inheritance
+interface BaseModel {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface User extends BaseModel {
+  email: string;
+  password: string;
+  role: 'admin' | 'user';
+}
+
+interface Post extends BaseModel {
+  title: string;
+  content: string;
+  authorId: string;
+  published: boolean;
+}
+```
+
+### Interface vs Type Alias
+
+```typescript
+// Key differences
+
+// 1. Declaration merging (interfaces only)
+interface User {
+  name: string;
+}
+
+interface User {
+  email: string;
+}
+
+// Merged into single interface
+const user: User = {
+  name: 'Hassan',
+  email: 'hassan@example.com'
+};
+
+// 2. Extends vs intersection
+// Interface
+interface A {
+  a: string;
+}
+interface B extends A {
+  b: string;
+}
+
+// Type
+type C = {
+  a: string;
+}
+type D = C & {
+  b: string;
+}
+
+// 3. Type aliases can do more
+type ID = string | number; // Union
+type Callback = (data: any) => void; // Function
+type Tuple = [string, number]; // Tuple
+
+// 4. When to use which?
+// Use interface for:
+// - Object shapes
+// - When you might extend/merge
+// - Public API definitions
+
+// Use type for:
+// - Unions and intersections
+// - Primitive aliases
+// - Function types
+// - Tuples
+// - Utility type compositions
+
+// Real-world example: Combining both
+interface UserBase {
+  id: string;
+  email: string;
+}
+
+type UserRole = 'admin' | 'user' | 'moderator';
+
+interface User extends UserBase {
+  role: UserRole;
+  permissions: string[];
+}
+```
+
+---
+
+## 4. Generics - Reusable Type Parameters
+
+### Basic Generics
+
+```typescript
+// Generic function
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let output1 = identity<string>('hello'); // Type: string
+let output2 = identity<number>(42); // Type: number
+let output3 = identity('hello'); // Type inferred as string
+
+// Generic function with constraints
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const user = { name: 'Hassan', age: 25 };
+let name = getProperty(user, 'name'); // Type: string
+let age = getProperty(user, 'age'); // Type: number
+// getProperty(user, 'invalid'); // Error: 'invalid' not in user
+
+// Generic array function
+function firstElement<T>(arr: T[]): T | undefined {
+  return arr[0];
+}
+
+let first = firstElement([1, 2, 3]); // Type: number | undefined
+let firstString = firstElement(['a', 'b']); // Type: string | undefined
+
+// Generic with multiple type parameters
+function pair<T, U>(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+let stringAndNumber = pair('hello', 42); // Type: [string, number]
+let boolAndString = pair(true, 'yes'); // Type: [boolean, string]
+
+// Real-world: API response wrapper
+function wrapResponse<T>(data: T, success: boolean = true) {
+  return {
+    success,
+    data,
+    timestamp: new Date()
+  };
+}
+
+const userResponse = wrapResponse({ id: 1, name: 'Hassan' });
+// Type: { success: boolean; data: { id: number; name: string }; timestamp: Date }
+```
+
+### Generic Interfaces and Types
+
+```typescript
+// Generic interface
+interface Box<T> {
+  value: T;
+}
+
+let stringBox: Box<string> = { value: 'hello' };
+let numberBox: Box<number> = { value: 42 };
+
+// Generic type alias
+type Container<T> = {
+  item: T;
+  count: number;
+};
+
+let apples: Container<string> = {
+  item: 'apple',
+  count: 5
+};
+
+// Generic with default type
+interface Response<T = any> {
+  data: T;
+  status: number;
+}
+
+let response1: Response = { data: 'anything', status: 200 };
+let response2: Response<User> = { 
+  data: { id: 1, name: 'Hassan', email: 'hassan@example.com' },
+  status: 200
+};
+
+// Real-world: API response
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+// Usage
+type UserResponse = ApiResponse<User>;
+type UsersResponse = ApiResponse<User[]>;
+type DeleteResponse = ApiResponse<{ id: string }>;
+
+async function fetchUser(id: string): Promise<ApiResponse<User>> {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
+    return {
+      success: true,
+      data
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Failed to fetch user'
+    };
+  }
+}
+```
+
+### Generic Classes
+
+```typescript
+// Generic class
+class DataStore<T> {
+  private items: T[] = [];
+  
+  add(item: T): void {
+    this.items.push(item);
+  }
+  
+  get(index: number): T | undefined {
+    return this.items[index];
+  }
+  
+  getAll(): T[] {
+    return [...this.items];
+  }
+  
+  remove(index: number): T | undefined {
+    return this.items.splice(index, 1)[0];
+  }
+  
+  clear(): void {
+    this.items = [];
+  }
+}
+
+// Usage
+const numberStore = new DataStore<number>();
+numberStore.add(1);
+numberStore.add(2);
+console.log(numberStore.getAll()); // [1, 2]
+
+const userStore = new DataStore<User>();
+userStore.add({ id: 1, name: 'Hassan', email: 'hassan@example.com' });
+
+// Real-world: Repository pattern
+class Repository<T extends { id: string | number }> {
+  private items = new Map<string | number, T>();
+  
+  create(item: T): T {
+    this.items.set(item.id, item);
+    return item;
+  }
+  
+  findById(id: string | number): T | undefined {
+    return this.items.get(id);
+  }
+  
+  findAll(): T[] {
+    return Array.from(this.items.values());
+  }
+  
+  update(id: string | number, updates: Partial<T>): T | undefined {
+    const item = this.items.get(id);
+    if (item) {
+      const updated = { ...item, ...updates };
+      this.items.set(id, updated);
+      return updated;
+    }
+    return undefined;
+  }
+  
+  delete(id: string | number): boolean {
+    return this.items.delete(id);
+  }
+}
+
+// Usage
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+const productRepo = new Repository<Product>();
+productRepo.create({ id: 1, name: 'Laptop', price: 999 });
+productRepo.update(1, { price: 899 });
+```
+
+### Generic Constraints
+
+```typescript
+// Constraint using extends
+function getLength<T extends { length: number }>(arg: T): number {
+  return arg.length;
+}
+
+getLength('hello'); // OK: string has length
+getLength([1, 2, 3]); // OK: array has length
+getLength({ length: 10, value: 'test' }); // OK: has length property
+// getLength(42); // Error: number doesn't have length
+
+// Using keyof constraint
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+// Constructor constraint
+function create<T>(Constructor: new () => T): T {
+  return new Constructor();
+}
+
+class User {
+  constructor(public name: string = 'Guest') {}
+}
+
+const user = create(User); // Type: User
+
+// Real-world: Type-safe event emitter
+class TypedEventEmitter<Events extends Record<string, any>> {
+  private listeners: { [K in keyof Events]?: Array<(data: Events[K]) => void> } = {};
+  
+  on<K extends keyof Events>(event: K, listener: (data: Events[K]) => void): void {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event]!.push(listener);
+  }
+  
+  emit<K extends keyof Events>(event: K, data: Events[K]): void {
+    const listeners = this.listeners[event];
+    if (listeners) {
+      listeners.forEach(listener => listener(data));
+    }
+  }
+}
+
+// Define events
+interface AppEvents {
+  userLoggedIn: { userId: string; timestamp: Date };
+  userLoggedOut: { userId: string };
+  dataUpdated: { type: string; id: number };
+}
+
+const emitter = new TypedEventEmitter<AppEvents>();
+
+// Type-safe event handling
+emitter.on('userLoggedIn', (data) => {
+  console.log(`User ${data.userId} logged in at ${data.timestamp}`);
+});
+
+emitter.emit('userLoggedIn', {
+  userId: '123',
+  timestamp: new Date()
+});
+```
+
+---
+
+## 5. Advanced Types
+
+### Union and Intersection Types
+
+```typescript
+// Union types (OR)
+type StringOrNumber = string | number;
+
+let value: StringOrNumber = 'hello';
+value = 42; // Also valid
+
+// Union with type narrowing
+function formatValue(value: string | number): string {
+  if (typeof value === 'string') {
+    return value.toUpperCase();
+  } else {
+    return value.toFixed(2);
+  }
+}
+
+// Intersection types (AND)
+type Person = {
+  name: string;
+  age: number;
+};
+
+type Employee = {
+  employeeId: number;
+  department: string;
+};
+
+type EmployeePerson = Person & Employee;
+
+const employee: EmployeePerson = {
+  name: 'Hassan',
+  age: 25,
+  employeeId: 12345,
+  department: 'Engineering'
+};
+
+// Real-world: Combining API response types
+type SuccessResponse<T> = {
+  success: true;
+  data: T;
+};
+
+type ErrorResponse = {
+  success: false;
+  error: string;
+};
+
+type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+
+function handleResponse<T>(response: ApiResponse<T>): void {
+  if (response.success) {
+    console.log('Data:', response.data);
+  } else {
+    console.error('Error:', response.error);
+  }
+}
+```
+
+### Literal Types
+
+```typescript
+// String literal types
+type Direction = 'north' | 'south' | 'east' | 'west';
+let heading: Direction = 'north';
+// heading = 'up'; // Error
+
+// Numeric literal types
+type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;
+let roll: DiceRoll = 4;
+
+// Boolean literal types
+type Success = true;
+type Failure = false;
+
+// Combining literals
+type Status = 'idle' | 'loading' | 'success' | 'error';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+// Real-world: Component props
+interface ButtonProps {
+  variant: 'primary' | 'secondary' | 'danger';
+  size: 'small' | 'medium' | 'large';
+  disabled?: boolean;
+}
+
+const button: ButtonProps = {
+  variant: 'primary',
+  size: 'medium'
+};
+```
+
+### Template Literal Types
+
+```typescript
+// Basic template literal type
+type EmailEvent = `email-${string}`;
+
+let event1: EmailEvent = 'email-sent';
+let event2: EmailEvent = 'email-opened';
+// let event3: EmailEvent = 'sms-sent'; // Error
+
+// Combining literals
+type Color = 'red' | 'blue' | 'green';
+type Size = 'small' | 'large';
+type Style = `${Color}-${Size}`;
+
+// Results in: 'red-small' | 'red-large' | 'blue-small' | 'blue-large' | 'green-small' | 'green-large'
+
+let style: Style = 'red-small';
+
+// Real-world: Event names
+type EventName = 'click' | 'focus' | 'blur';
+type EventHandler = `on${Capitalize<EventName>}`;
+
+// Results in: 'onClick' | 'onFocus' | 'onBlur'
+
+interface ComponentProps {
+  onClick?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
+
+// Real-world: CSS properties
+type CSSProperty = 'color' | 'background' | 'font-size';
+type CSSValue<T extends CSSProperty> = T extends 'font-size'
+  ? `${number}px` | `${number}em`
+  : string;
+```
+
+### Mapped Types
+
+```typescript
+// Make all properties optional
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+type PartialUser = Partial<User>;
+// { id?: number; name?: string; email?: string; }
+
+// Make all properties required
+type Required<T> = {
+  [P in keyof T]-?: T[P]; // -? removes optional modifier
+};
+
+// Make all properties readonly
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type ReadonlyUser = Readonly<User>;
+// { readonly id: number; readonly name: string; readonly email: string; }
+
+// Pick specific properties
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+type UserCredentials = Pick<User, 'email'>;
+// { email: string }
+
+// Omit specific properties
+type Omit<T, K extends keyof T> = {
+  [P in Exclude<keyof T, K>]: T[P];
+};
+
+type UserWithoutId = Omit<User, 'id'>;
+// { name: string; email: string; }
+
+// Custom mapped type
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+};
+
+type UserGetters = Getters<User>;
+// {
+//   getId: () => number;
+//   getName: () => string;
+//   getEmail: () => string;
+// }
+
+// Real-world: Form state
+type FormState<T> = {
+  [K in keyof T]: {
+    value: T[K];
+    error: string | null;
+    touched: boolean;
+  };
+};
+
+type UserFormState = FormState<User>;
+```
+
+### Conditional Types
+
+```typescript
+// Basic conditional type
+type IsString<T> = T extends string ? true : false;
+
+type A = IsString<string>; // true
+type B = IsString<number>; // false
+
+// Conditional with infer
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+function getUser() {
+  return { id: 1, name: 'Hassan' };
+}
+
+type User = ReturnType<typeof getUser>;
+// { id: number; name: string; }
+
+// Distributive conditional types
+type ToArray<T> = T extends any ? T[] : never;
+
+type StrOrNumArray = ToArray<string | number>;
+// string[] | number[]
+
+// Real-world: Extract nullable types
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+type MaybeString = string | null | undefined;
+type DefinitelyString = NonNullable<MaybeString>; // string
+
+// Real-world: Extract function parameters
+type Parameters<T> = T extends (...args: infer P) => any ? P : never;
+
+function createUser(name: string, age: number) {
+  return { name, age };
+}
+
+type CreateUserParams = Parameters<typeof createUser>;
+// [name: string, age: number]
+
+// Complex conditional type
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
+
+type Resolved = UnwrapPromise<Promise<string>>; // string
+type NotPromise = UnwrapPromise<number>; // number
+```
+
+---
+
+## 6. Utility Types (Built-in)
+
+```typescript
+// Partial<T> - Make all properties optional
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function updateUser(id: number, updates: Partial<User>) {
+  // updates can have any subset of User properties
+}
+
+updateUser(1, { name: 'Ali' }); // OK
+updateUser(2, { email: 'ali@example.com' }); // OK
+
+// Required<T> - Make all properties required
+interface Config {
+  apiUrl?: string;
+  timeout?: number;
+  retries?: number;
+}
+
+type RequiredConfig = Required<Config>;
+// { apiUrl: string; timeout: number; retries: number; }
+
+// Readonly<T> - Make all properties readonly
+const user: Readonly<User> = {
+  id: 1,
+  name: 'Hassan',
+  email: 'hassan@example.com'
+};
+
+// user.name = 'Ali'; // Error: readonly
+
+// Record<K, T> - Create object type with keys K and values T
+type UserRoles = Record<string, string[]>;
+
+const roles: UserRoles = {
+  admin: ['read', 'write', 'delete'],
+  editor: ['read', 'write'],
+  viewer: ['read']
+};
+
+// More specific
+type PageInfo = Record<'home' | 'about' | 'contact', { title: string; url: string }>;
+
+// Pick<T, K> - Pick specific properties
+type UserPreview = Pick<User, 'id' | 'name'>;
+// { id: number; name: string; }
+
+// Omit<T, K> - Omit specific properties
+type UserWithoutEmail = Omit<User, 'email'>;
+// { id: number; name: string; }
+
+// Exclude<T, U> - Exclude types from union
+type T1 = Exclude<'a' | 'b' | 'c', 'a' | 'b'>; // 'c'
+type T2 = Exclude<string | number | (() => void), Function>; // string | number
+
+// Extract<T, U> - Extract types from union
+type T3 = Extract<'a' | 'b' | 'c', 'a' | 'f'>; // 'a'
+type T4 = Extract<string | number | (() => void), Function>; // () => void
+
+// NonNullable<T> - Remove null and undefined
+type T5 = NonNullable<string | number | null | undefined>; // string | number
+
+// ReturnType<T> - Get function return type
+function createUser() {
+  return { id: 1, name: 'Hassan' };
+}
+
+type User = ReturnType<typeof createUser>;
+// { id: number; name: string; }
+
+// Parameters<T> - Get function parameter types
+function greet(name: string, age: number) {
+  console.log(`Hello ${name}, age ${age}`);
+}
+
+type GreetParams = Parameters<typeof greet>;
+// [name: string, age: number]
+
+// ConstructorParameters<T> - Get constructor parameter types
+class Person {
+  constructor(public name: string, public age: number) {}
+}
+
+type PersonParams = ConstructorParameters<typeof Person>;
+// [name: string, age: number]
+
+// InstanceType<T> - Get instance type of constructor
+type PersonInstance = InstanceType<typeof Person>;
+// Person
+
+// Awaited<T> - Get type of awaited Promise
+type AsyncReturnType = Awaited<Promise<string>>; // string
+type NestedAsync = Awaited<Promise<Promise<number>>>; // number
+
+// Real-world: API response handling
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+}
+
+async function fetchUser(): Promise<ApiResponse<User>> {
+  const response = await fetch('/api/user');
+  return response.json();
+}
+
+type FetchUserReturn = Awaited<ReturnType<typeof fetchUser>>;
+// ApiResponse<User>
+
+type UserData = Awaited<ReturnType<typeof fetchUser>>['data'];
+// User
+```
+
+---
+
+## 7. Classes and OOP
+
+```typescript
+// Basic class
+class Person {
+  // Properties
+  name: string;
+  age: number;
+  
+  // Constructor
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+  
+  // Method
+  greet(): string {
+    return `Hello, I'm ${this.name}`;
+  }
+}
+
+const person = new Person('Hassan', 25);
+console.log(person.greet());
+
+// Access modifiers
+class User {
+  public name: string;        // Accessible everywhere (default)
+  private password: string;   // Only within class
+  protected role: string;     // Within class and subclasses
+  
+  constructor(name: string, password: string, role: string) {
+    this.name = name;
+    this.password = password;
+    this.role = role;
+  }
+  
+  private hashPassword(): string {
+    return `hashed_${this.password}`;
+  }
+  
+  public login(password: string): boolean {
+    return this.password === password;
+  }
+}
+
+const user = new User('Hassan', 'secret123', 'admin');
+console.log(user.name); // OK
+// console.log(user.password); // Error: private
+// console.log(user.role); // Error: protected
+
+// Parameter properties (shorthand)
+class Product {
+  constructor(
+    public id: number,
+    public name: string,
+    private price: number
+  ) {
+    // Properties automatically assigned
+  }
+  
+  getPrice(): number {
+    return this.price;
+  }
+}
+
+// Readonly properties
+class Point {
+  readonly x: number;
+  readonly y: number;
+  
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+const point = new Point(10, 20);
+// point.x = 30; // Error: readonly
+
+// Getters and setters
+class Temperature {
+  private _celsius: number = 0;
+  
+  get celsius(): number {
+    return this._celsius;
+  }
+  
+  set celsius(value: number) {
+    if (value < -273.15) {
+      throw new Error('Temperature below absolute zero');
+    }
+    this._celsius = value;
+  }
+  
+  get fahrenheit(): number {
+    return (this._celsius * 9/5) + 32;
+  }
+  
+  set fahrenheit(value: number) {
+    this._celsius = (value - 32) * 5/9;
+  }
+}
+
+const temp = new Temperature();
+temp.celsius = 25;
+console.log(temp.fahrenheit); // 77
+
+// Static members
+class MathUtils {
+  static PI: number = 3.14159;
+  
+  static circleArea(radius: number): number {
+    return this.PI * radius * radius;
+  }
+}
+
+console.log(MathUtils.PI);
+console.log(MathUtils.circleArea(10));
+
+// Abstract classes
+abstract class Animal {
+  constructor(public name: string) {}
+  
+  abstract makeSound(): string; // Must be implemented by subclass
+  
+  move(): string {
+    return `${this.name} is moving`;
+  }
+}
+
+class Dog extends Animal {
+  makeSound(): string {
+    return 'Woof!';
+  }
+}
+
+// const animal = new Animal('Generic'); // Error: cannot instantiate abstract class
+const dog = new Dog('Max');
+
+// Implementing interfaces
+interface Flyable {
+  fly(): void;
+  altitude: number;
+}
+
+class Bird implements Flyable {
+  altitude: number = 0;
+  
+  fly(): void {
+    this.altitude += 10;
+    console.log(`Flying at ${this.altitude}m`);
+  }
+}
+
+// Real-world: Repository pattern
+interface Repository<T> {
+  findAll(): Promise<T[]>;
+  findById(id: string): Promise<T | null>;
+  create(item: T): Promise<T>;
+  update(id: string, item: Partial<T>): Promise<T>;
+  delete(id: string): Promise<void>;
+}
+
+class UserRepository implements Repository<User> {
+  private users: Map<string, User> = new Map();
+  
+  async findAll(): Promise<User[]> {
+    return Array.from(this.users.values());
+  }
+  
+  async findById(id: string): Promise<User | null> {
+    return this.users.get(id) || null;
+  }
+  
+  async create(user: User): Promise<User> {
+    this.users.set(user.id.toString(), user);
+    return user;
+  }
+  
+  async update(id: string, updates: Partial<User>): Promise<User> {
+    const user = this.users.get(id);
+    if (!user) throw new Error('User not found');
+    const updated = { ...user, ...updates };
+    this.users.set(id, updated);
+    return updated;
+  }
+  
+  async delete(id: string): Promise<void> {
+    this.users.delete(id);
+  }
+}
+```
+
+---
+
+## 8. Decorators (Experimental - Enable in tsconfig.json)
+
+```typescript
+// tsconfig.json
+// {
+//   "compilerOptions": {
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true
+//   }
+// }
+
+// Class decorator
+function sealed(constructor: Function) {
+  Object.seal(constructor);
+  Object.seal(constructor.prototype);
+}
+
+@sealed
+class BugReport {
+  type = 'report';
+  title: string;
+  
+  constructor(title: string) {
+    this.title = title;
+  }
+}
+
+// Method decorator
+function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  
+  descriptor.value = function(...args: any[]) {
+    console.log(`Calling ${propertyKey} with:`, args);
+    const result = originalMethod.apply(this, args);
+    console.log(`Result:`, result);
+    return result;
+  };
+  
+  return descriptor;
+}
+
+class Calculator {
+  @log
+  add(a: number, b: number): number {
+    return a + b;
+  }
+}
+
+// Property decorator
+function required(target: any, propertyKey: string) {
+  let value: any;
+  
+  const getter = function() {
+    return value;
+  };
+  
+  const setter = function(newVal: any) {
+    if (newVal === null || newVal === undefined) {
+      throw new Error(`${propertyKey} is required`);
+    }
+    value = newVal;
+  };
+  
+  Object.defineProperty(target, propertyKey, {
+    get: getter,
+    set: setter,
+    enumerable: true,
+    configurable: true
+  });
+}
+
+class User {
+  @required
+  email: string;
+  
+  constructor(email: string) {
+    this.email = email;
+  }
+}
+
+// Real-world: Validation decorator
+function validate(validationRules: any) {
+  return function(target: any, propertyKey: string) {
+    // Validation logic
+  };
+}
+
+class CreateUserDTO {
+  @validate({ minLength: 3, maxLength: 50 })
+  name: string;
+  
+  @validate({ email: true })
+  email: string;
+  
+  @validate({ min: 18, max: 120 })
+  age: number;
+}
+```
+
+---
+
+## 9. Modules and Namespaces
+
+```typescript
+// ES6 Modules (recommended)
+
+// math.ts
+export function add(a: number, b: number): number {
+  return a + b;
+}
+
+export function subtract(a: number, b: number): number {
+  return a - b;
+}
+
+export const PI = 3.14159;
+
+// user.ts
+export interface User {
+  id: number;
+  name: string;
+}
+
+export default class UserService {
+  getUser(id: number): User {
+    return { id, name: 'Hassan' };
+  }
+}
+
+// app.ts
+import { add, subtract, PI } from './math';
+import UserService, { User } from './user';
+import * as MathUtils from './math';
+
+// Type-only imports (no runtime code)
+import type { User } from './user';
+
+// Namespaces (legacy - avoid in modern code)
+namespace Validation {
+  export interface StringValidator {
+    isValid(s: string): boolean;
+  }
+  
+  export class EmailValidator implements StringValidator {
+    isValid(s: string): boolean {
+      return /\S+@\S+\.\S+/.test(s);
+    }
+  }
+}
+
+let validator = new Validation.EmailValidator();
+
+// Module augmentation
+// original-module.d.ts
+export interface Config {
+  apiUrl: string;
+}
+
+// augment.ts
+import { Config } from './original-module';
+
+declare module './original-module' {
+  interface Config {
+    timeout?: number; // Add new property
+  }
+}
+
+// Global augmentation
+declare global {
+  interface Window {
+    myCustomProperty: string;
+  }
+}
+
+window.myCustomProperty = 'value';
+```
+
+---
+
+## 10. Type Guards and Narrowing
+
+```typescript
+// typeof type guard
+function printValue(value: string | number) {
+  if (typeof value === 'string') {
+    console.log(value.toUpperCase()); // TypeScript knows it's string
+  } else {
+    console.log(value.toFixed(2)); // TypeScript knows it's number
+  }
+}
+
+// instanceof type guard
+class Dog {
+  bark() { console.log('Woof!'); }
+}
+
+class Cat {
+  meow() { console.log('Meow!'); }
+}
+
+function makeSound(animal: Dog | Cat) {
+  if (animal instanceof Dog) {
+    animal.bark(); // TypeScript knows it's Dog
+  } else {
+    animal.meow(); // TypeScript knows it's Cat
+  }
+}
+
+// in operator narrowing
+type Fish = { swim: () => void };
+type Bird = { fly: () => void };
+
+function move(animal: Fish | Bird) {
+  if ('swim' in animal) {
+    animal.swim();
+  } else {
+    animal.fly();
+  }
+}
+
+// Custom type guards
+function isString(value: any): value is string {
+  return typeof value === 'string';
+}
+
+function processValue(value: string | number) {
+  if (isString(value)) {
+    console.log(value.toUpperCase()); // TypeScript knows it's string
+  }
+}
+
+// Discriminated unions
+type SuccessResponse = {
+  status: 'success';
+  data: any;
+};
+
+type ErrorResponse = {
+  status: 'error';
+  error: string;
+};
+
+type ApiResponse = SuccessResponse | ErrorResponse;
+
+function handleResponse(response: ApiResponse) {
+  if (response.status === 'success') {
+    console.log(response.data); // TypeScript knows it has data
+  } else {
+    console.error(response.error); // TypeScript knows it has error
+  }
+}
+
+// Real-world: Form field validation
+type TextField = {
+  type: 'text';
+  value: string;
+  placeholder: string;
+};
+
+type NumberField = {
+  type: 'number';
+  value: number;
+  min: number;
+  max: number;
+};
+
+type Field = TextField | NumberField;
+
+function validateField(field: Field): boolean {
+  switch (field.type) {
+    case 'text':
+      return field.value.length > 0; // TypeScript knows all TextField properties
+    case 'number':
+      return field.value >= field.min && field.value <= field.max; // Knows NumberField properties
+  }
+}
+```
+
+---
+
+## 11. Best Practices (Industry Standards 2026)
+
+```typescript
+// 1. Use strict mode
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true
+  }
+}
+
+// 2. Prefer interfaces for object shapes
+interface User {
+  id: number;
+  name: string;
+}
+
+// 3. Use type aliases for unions, intersections, primitives
+type ID = string | number;
+type Status = 'active' | 'inactive';
+
+// 4. Always specify function return types
+function getUser(id: number): Promise<User> {
+  // ...
+}
+
+// 5. Use readonly for immutable data
+interface Config {
+  readonly apiUrl: string;
+  readonly timeout: number;
+}
+
+// 6. Avoid any, use unknown instead
+function processData(data: unknown) {
+  if (typeof data === 'string') {
+    return data.toUpperCase();
+  }
+  // Handle other cases
+}
+
+// 7. Use const assertions for literal types
+const config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+} as const;
+
+// config.apiUrl is type 'https://api.example.com', not string
+
+// 8. Use never for exhaustive checking
+type Shape = Circle | Square | Triangle;
+
+function getArea(shape: Shape): number {
+  switch (shape.kind) {
+    case 'circle':
+      return Math.PI * shape.radius ** 2;
+    case 'square':
+      return shape.size ** 2;
+    case 'triangle':
+      return (shape.base * shape.height) / 2;
+    default:
+      const _exhaustive: never = shape;
+      throw new Error('Unhandled shape');
+  }
+}
+
+// 9. Use discriminated unions for complex types
+type LoadingState = {
+  status: 'loading';
+};
+
+type SuccessState<T> = {
+  status: 'success';
+  data: T;
+};
+
+type ErrorState = {
+  status: 'error';
+  error: string;
+};
+
+type AsyncState<T> = LoadingState | SuccessState<T> | ErrorState;
+
+// 10. Organize types in separate files
+// types/user.ts
+// types/api.ts
+// types/common.ts
+```
+
+---
+
+
