@@ -11531,4 +11531,1297 @@ type AsyncState<T> = LoadingState | SuccessState<T> | ErrorState;
 
 ---
 
+# Redis - Complete Guide (In-Memory Data Store)
+
+## Redis Fundamentals - Understanding In-Memory Storage
+
+### What is Redis?
+
+Redis (REmote DIctionary Server) is an in-memory data structure store used as a database, cache, message broker, and streaming engine. Think of it as super-fast storage that lives in RAM (memory) instead of disk.
+
+**Why Redis? (Industry Standard 2026):**
+- **Blazing Fast**: All data in RAM, microsecond latency
+- **Versatile**: Caching, sessions, real-time analytics, pub/sub, queues
+- **Data Structures**: Strings, Lists, Sets, Hashes, Sorted Sets, Streams
+- **Persistence**: Can save to disk for durability
+- **Scalability**: Replication and clustering built-in
+- **Used By**: Twitter, GitHub, Instagram, Stack Overflow, Airbnb
+
+**Common Use Cases:**
+- **Caching**: Store frequently accessed data
+- **Session Storage**: User sessions in web applications
+- **Rate Limiting**: Track API request counts
+- **Real-time Analytics**: Leaderboards, counters, metrics
+- **Message Queues**: Background job processing
+- **Pub/Sub**: Real-time notifications
+
+---
+
+## 1. Redis Data Types - Core Structures
+
+### Strings - The Simplest Type
+
+```redis
+# SET - Store a string value
+SET user:1:name "Hassan"
+SET user:1:email "hassan@example.com"
+
+# GET - Retrieve value
+GET user:1:name
+# Returns: "Hassan"
+
+# SET with expiration (in seconds)
+SET session:abc123 "user_data" EX 3600
+# Expires after 1 hour
+
+# SET with expiration (milliseconds)
+SET session:xyz789 "user_data" PX 60000
+# Expires after 60 seconds
+
+# SET only if key doesn't exist
+SET user:1:name "Ali" NX
+# Returns: (nil) - key already exists
+
+# SET only if key exists
+SET user:1:name "Ali" XX
+# Updates existing key
+
+# SETEX - Set with expiration in one command
+SETEX session:abc123 3600 "user_data"
+
+# MSET - Set multiple keys at once
+MSET user:1:name "Hassan" user:1:age "25" user:1:city "Lahore"
+
+# MGET - Get multiple keys at once
+MGET user:1:name user:1:age user:1:city
+# Returns: ["Hassan", "25", "Lahore"]
+
+# INCR / DECR - Increment/Decrement numbers
+SET views:post:123 100
+INCR views:post:123  # Now 101
+DECR views:post:123  # Now 100
+INCRBY views:post:123 10  # Increase by 10
+DECRBY views:post:123 5   # Decrease by 5
+
+# APPEND - Append to string
+SET message "Hello"
+APPEND message " World"
+GET message  # Returns: "Hello World"
+
+# STRLEN - Get string length
+STRLEN message  # Returns: 11
+
+# DEL - Delete key
+DEL user:1:name
+
+# EXISTS - Check if key exists
+EXISTS user:1:name  # Returns: 0 (false) or 1 (true)
+
+# EXPIRE - Set expiration on existing key
+SET user:1:name "Hassan"
+EXPIRE user:1:name 3600  # Expires in 1 hour
+
+# TTL - Time to live (seconds until expiration)
+TTL user:1:name  # Returns: remaining seconds or -1 (no expiry) or -2 (doesn't exist)
+
+# PERSIST - Remove expiration
+PERSIST user:1:name
+```
+
+### Hashes - Objects/Maps
+
+```redis
+# HSET - Set hash field
+HSET user:1 name "Hassan"
+HSET user:1 email "hassan@example.com"
+HSET user:1 age 25
+
+# HMSET - Set multiple fields (deprecated, use HSET)
+HSET user:1 name "Hassan" email "hassan@example.com" age 25
+
+# HGET - Get hash field
+HGET user:1 name
+# Returns: "Hassan"
+
+# HGETALL - Get all fields and values
+HGETALL user:1
+# Returns: ["name", "Hassan", "email", "hassan@example.com", "age", "25"]
+
+# HMGET - Get multiple fields
+HMGET user:1 name email
+# Returns: ["Hassan", "hassan@example.com"]
+
+# HEXISTS - Check if field exists
+HEXISTS user:1 name  # Returns: 1 (true)
+
+# HDEL - Delete field
+HDEL user:1 age
+
+# HKEYS - Get all field names
+HKEYS user:1
+# Returns: ["name", "email"]
+
+# HVALS - Get all values
+HVALS user:1
+# Returns: ["Hassan", "hassan@example.com"]
+
+# HLEN - Number of fields
+HLEN user:1  # Returns: 2
+
+# HINCRBY - Increment hash field
+HSET user:1 score 100
+HINCRBY user:1 score 50  # Now 150
+
+# Real-world: Store user object
+HSET user:123 
+  name "Hassan Ahmed" 
+  email "hassan@example.com" 
+  age 25 
+  city "Lahore" 
+  role "admin"
+  created_at "2024-01-15"
+```
+
+### Lists - Ordered Collections
+
+```redis
+# LPUSH - Add to left (beginning)
+LPUSH tasks "Task 3"
+LPUSH tasks "Task 2"
+LPUSH tasks "Task 1"
+# List: ["Task 1", "Task 2", "Task 3"]
+
+# RPUSH - Add to right (end)
+RPUSH tasks "Task 4"
+# List: ["Task 1", "Task 2", "Task 3", "Task 4"]
+
+# LRANGE - Get range of elements
+LRANGE tasks 0 -1  # All elements
+LRANGE tasks 0 2   # First 3 elements
+
+# LPOP - Remove and return from left
+LPOP tasks  # Returns: "Task 1"
+
+# RPOP - Remove and return from right
+RPOP tasks  # Returns: "Task 4"
+
+# LLEN - Length of list
+LLEN tasks  # Returns: 2
+
+# LINDEX - Get element by index
+LINDEX tasks 0  # First element
+
+# LSET - Set element at index
+LSET tasks 0 "Updated Task"
+
+# LTRIM - Trim list to range
+LTRIM tasks 0 9  # Keep only first 10 elements
+
+# LINSERT - Insert before/after element
+LINSERT tasks BEFORE "Task 2" "Task 1.5"
+LINSERT tasks AFTER "Task 2" "Task 2.5"
+
+# LREM - Remove elements
+LREM tasks 0 "Task 2"  # Remove all occurrences
+
+# Real-world: Activity log (keep last 100)
+LPUSH activity:user:123 "Logged in"
+LTRIM activity:user:123 0 99  # Keep only last 100
+```
+
+### Sets - Unique Unordered Collections
+
+```redis
+# SADD - Add members to set
+SADD tags:post:123 "javascript" "nodejs" "redis"
+
+# SMEMBERS - Get all members
+SMEMBERS tags:post:123
+# Returns: ["javascript", "nodejs", "redis"]
+
+# SISMEMBER - Check membership
+SISMEMBER tags:post:123 "javascript"  # Returns: 1 (true)
+
+# SREM - Remove member
+SREM tags:post:123 "redis"
+
+# SCARD - Set cardinality (count)
+SCARD tags:post:123  # Returns: 2
+
+# SPOP - Remove and return random member
+SPOP tags:post:123
+
+# SRANDMEMBER - Get random member (without removing)
+SRANDMEMBER tags:post:123
+
+# Set operations
+SADD set1 "a" "b" "c"
+SADD set2 "b" "c" "d"
+
+# SUNION - Union (all unique elements)
+SUNION set1 set2  # ["a", "b", "c", "d"]
+
+# SINTER - Intersection (common elements)
+SINTER set1 set2  # ["b", "c"]
+
+# SDIFF - Difference (in set1 but not set2)
+SDIFF set1 set2  # ["a"]
+
+# Real-world: Online users
+SADD online:users "user:1" "user:2" "user:3"
+SISMEMBER online:users "user:1"  # Is user online?
+SREM online:users "user:1"  # User logged out
+SCARD online:users  # Count online users
+```
+
+### Sorted Sets - Sets with Scores
+
+```redis
+# ZADD - Add members with scores
+ZADD leaderboard 100 "hassan"
+ZADD leaderboard 150 "ali"
+ZADD leaderboard 120 "sara"
+
+# ZRANGE - Get range by rank (ascending)
+ZRANGE leaderboard 0 -1
+# Returns: ["hassan", "sara", "ali"]
+
+# ZRANGE with scores
+ZRANGE leaderboard 0 -1 WITHSCORES
+# Returns: ["hassan", "100", "sara", "120", "ali", "150"]
+
+# ZREVRANGE - Get range (descending)
+ZREVRANGE leaderboard 0 2 WITHSCORES
+# Top 3: ["ali", "150", "sara", "120", "hassan", "100"]
+
+# ZSCORE - Get score of member
+ZSCORE leaderboard "hassan"  # Returns: "100"
+
+# ZINCRBY - Increment score
+ZINCRBY leaderboard 50 "hassan"  # Now 150
+
+# ZRANK - Get rank (0-based, ascending)
+ZRANK leaderboard "hassan"  # Returns: 0 (lowest score)
+
+# ZREVRANK - Get rank (descending)
+ZREVRANK leaderboard "ali"  # Returns: 0 (highest score)
+
+# ZREM - Remove member
+ZREM leaderboard "sara"
+
+# ZCARD - Count members
+ZCARD leaderboard  # Returns: 2
+
+# ZCOUNT - Count members in score range
+ZCOUNT leaderboard 100 150
+
+# ZRANGEBYSCORE - Get members by score range
+ZRANGEBYSCORE leaderboard 100 150
+
+# Real-world: Trending posts (by engagement)
+ZADD trending:posts 1500 "post:123"  # 1500 engagement
+ZADD trending:posts 2000 "post:456"
+ZADD trending:posts 1200 "post:789"
+
+ZREVRANGE trending:posts 0 9 WITHSCORES  # Top 10 trending
+```
+
+---
+
+## 2. Redis with Node.js - Using ioredis
+
+### Setup and Connection
+
+```javascript
+// Install: npm install ioredis
+
+import Redis from 'ioredis';
+
+// Basic connection
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+  password: 'your-password',  // If authentication is enabled
+  db: 0  // Database number (0-15 by default)
+});
+
+// Connection from URL
+const redis = new Redis(process.env.REDIS_URL);
+// Example: redis://user:password@localhost:6379/0
+
+// With options
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+  retryStrategy: (times) => {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
+  maxRetriesPerRequest: 3,
+  enableReadyCheck: true,
+  enableOfflineQueue: true
+});
+
+// Connection events
+redis.on('connect', () => {
+  console.log('✅ Redis connected');
+});
+
+redis.on('error', (err) => {
+  console.error('❌ Redis error:', err);
+});
+
+redis.on('ready', () => {
+  console.log('✅ Redis ready');
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  await redis.quit();
+  console.log('Redis connection closed');
+  process.exit(0);
+});
+```
+
+### Basic Operations
+
+```javascript
+// Strings
+await redis.set('user:1:name', 'Hassan');
+const name = await redis.get('user:1:name');
+console.log(name); // 'Hassan'
+
+// Set with expiration (seconds)
+await redis.set('session:abc', 'data', 'EX', 3600);
+// Or using setex
+await redis.setex('session:abc', 3600, 'data');
+
+// Multiple get/set
+await redis.mset('key1', 'value1', 'key2', 'value2');
+const values = await redis.mget('key1', 'key2');
+
+// Increment/Decrement
+await redis.set('views', 100);
+await redis.incr('views');  // 101
+await redis.incrby('views', 10);  // 111
+await redis.decr('views');  // 110
+
+// Hashes
+await redis.hset('user:1', 'name', 'Hassan');
+await redis.hset('user:1', 'email', 'hassan@example.com');
+await redis.hset('user:1', 'age', 25);
+
+// Or set multiple fields at once
+await redis.hset('user:1', {
+  name: 'Hassan',
+  email: 'hassan@example.com',
+  age: 25
+});
+
+const user = await redis.hgetall('user:1');
+console.log(user);
+// { name: 'Hassan', email: 'hassan@example.com', age: '25' }
+
+const name = await redis.hget('user:1', 'name');
+await redis.hdel('user:1', 'age');
+
+// Lists
+await redis.rpush('tasks', 'Task 1', 'Task 2', 'Task 3');
+await redis.lpush('tasks', 'Urgent Task');
+const tasks = await redis.lrange('tasks', 0, -1);
+
+const task = await redis.lpop('tasks');
+const lastTask = await redis.rpop('tasks');
+
+// Sets
+await redis.sadd('tags', 'javascript', 'nodejs', 'redis');
+const tags = await redis.smembers('tags');
+const isMember = await redis.sismember('tags', 'javascript');
+
+// Sorted Sets
+await redis.zadd('leaderboard', 100, 'hassan', 150, 'ali', 120, 'sara');
+const top3 = await redis.zrevrange('leaderboard', 0, 2, 'WITHSCORES');
+
+// Delete keys
+await redis.del('user:1');
+
+// Check existence
+const exists = await redis.exists('user:1');
+
+// Get TTL (time to live)
+const ttl = await redis.ttl('session:abc');
+```
+
+---
+
+## 3. Caching Patterns - Real-World Usage
+
+### Cache-Aside Pattern (Most Common)
+
+```javascript
+// Cache-aside: Application handles caching logic
+
+class UserService {
+  constructor(redis, database) {
+    this.redis = redis;
+    this.db = database;
+  }
+  
+  async getUser(userId) {
+    const cacheKey = `user:${userId}`;
+    
+    // Try to get from cache
+    const cached = await this.redis.get(cacheKey);
+    if (cached) {
+      console.log('Cache hit');
+      return JSON.parse(cached);
+    }
+    
+    // Cache miss - get from database
+    console.log('Cache miss - fetching from database');
+    const user = await this.db.users.findById(userId);
+    
+    if (!user) {
+      return null;
+    }
+    
+    // Store in cache (expire in 1 hour)
+    await this.redis.setex(
+      cacheKey,
+      3600,
+      JSON.stringify(user)
+    );
+    
+    return user;
+  }
+  
+  async updateUser(userId, updates) {
+    // Update database
+    const user = await this.db.users.update(userId, updates);
+    
+    // Invalidate cache
+    await this.redis.del(`user:${userId}`);
+    
+    return user;
+  }
+}
+
+// Usage
+const userService = new UserService(redis, database);
+const user = await userService.getUser(123);
+```
+
+### Function Result Caching
+
+```javascript
+// Cache function results
+async function cachedFetch(url, ttl = 3600) {
+  const cacheKey = `fetch:${url}`;
+  
+  // Check cache
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    return JSON.parse(cached);
+  }
+  
+  // Fetch data
+  const response = await fetch(url);
+  const data = await response.json();
+  
+  // Cache result
+  await redis.setex(cacheKey, ttl, JSON.stringify(data));
+  
+  return data;
+}
+
+// Usage
+const users = await cachedFetch('https://api.example.com/users');
+```
+
+### Database Query Caching
+
+```javascript
+class ProductRepository {
+  constructor(redis, db) {
+    this.redis = redis;
+    this.db = db;
+  }
+  
+  async getProducts(filters) {
+    // Create cache key from filters
+    const cacheKey = `products:${JSON.stringify(filters)}`;
+    
+    // Try cache
+    const cached = await this.redis.get(cacheKey);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+    
+    // Query database
+    const products = await this.db.query(`
+      SELECT * FROM products 
+      WHERE category = $1 AND price < $2
+    `, [filters.category, filters.maxPrice]);
+    
+    // Cache for 5 minutes
+    await this.redis.setex(cacheKey, 300, JSON.stringify(products));
+    
+    return products;
+  }
+  
+  async invalidateCategory(category) {
+    // Simple invalidation: delete specific cache
+    // Better: use key patterns with SCAN
+    const pattern = `products:*"category":"${category}"*`;
+    
+    // Note: KEYS is slow on large datasets, use SCAN in production
+    const keys = await this.redis.keys(pattern);
+    if (keys.length > 0) {
+      await this.redis.del(...keys);
+    }
+  }
+}
+```
+
+### Cache Warming (Pre-populate Cache)
+
+```javascript
+// Warm cache with frequently accessed data
+async function warmCache() {
+  console.log('Warming cache...');
+  
+  // Get most popular products
+  const popularProducts = await db.query(`
+    SELECT * FROM products 
+    ORDER BY views DESC 
+    LIMIT 100
+  `);
+  
+  // Store in cache
+  for (const product of popularProducts) {
+    await redis.setex(
+      `product:${product.id}`,
+      3600,
+      JSON.stringify(product)
+    );
+  }
+  
+  console.log(`Cached ${popularProducts.length} products`);
+}
+
+// Run on server start
+warmCache();
+
+// Run periodically
+setInterval(warmCache, 30 * 60 * 1000);  // Every 30 minutes
+```
+
+---
+
+## 4. Session Management
+
+```javascript
+// Express session with Redis
+import session from 'express-session';
+import RedisStore from 'connect-redis';
+import Redis from 'ioredis';
+
+const redis = new Redis();
+
+app.use(session({
+  store: new RedisStore({ client: redis }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000  // 24 hours
+  }
+}));
+
+// Usage in routes
+app.post('/login', async (req, res) => {
+  const user = await authenticateUser(req.body);
+  
+  // Store user in session
+  req.session.userId = user.id;
+  req.session.role = user.role;
+  
+  res.json({ message: 'Logged in' });
+});
+
+app.get('/profile', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  
+  res.json({ userId: req.session.userId });
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.json({ message: 'Logged out' });
+});
+```
+
+---
+
+## 5. Rate Limiting - API Protection
+
+### Simple Rate Limiter
+
+```javascript
+// Rate limit using Redis counters
+async function rateLimit(userId, maxRequests = 100, windowSeconds = 60) {
+  const key = `rate_limit:${userId}`;
+  
+  // Increment counter
+  const current = await redis.incr(key);
+  
+  // Set expiration on first request
+  if (current === 1) {
+    await redis.expire(key, windowSeconds);
+  }
+  
+  // Check if limit exceeded
+  if (current > maxRequests) {
+    const ttl = await redis.ttl(key);
+    throw new Error(`Rate limit exceeded. Try again in ${ttl} seconds`);
+  }
+  
+  return {
+    allowed: true,
+    remaining: maxRequests - current
+  };
+}
+
+// Usage in Express middleware
+app.use(async (req, res, next) => {
+  try {
+    const userId = req.user?.id || req.ip;
+    const result = await rateLimit(userId, 100, 60);
+    
+    res.setHeader('X-RateLimit-Remaining', result.remaining);
+    next();
+  } catch (error) {
+    res.status(429).json({ error: error.message });
+  }
+});
+```
+
+### Sliding Window Rate Limiter (More Accurate)
+
+```javascript
+class SlidingWindowRateLimiter {
+  constructor(redis) {
+    this.redis = redis;
+  }
+  
+  async check(userId, maxRequests = 100, windowSeconds = 60) {
+    const key = `rate_limit:${userId}`;
+    const now = Date.now();
+    const windowStart = now - (windowSeconds * 1000);
+    
+    // Use sorted set with timestamps as scores
+    const multi = this.redis.multi();
+    
+    // Remove old requests
+    multi.zremrangebyscore(key, 0, windowStart);
+    
+    // Count current requests
+    multi.zcard(key);
+    
+    // Add current request
+    multi.zadd(key, now, `${now}-${Math.random()}`);
+    
+    // Set expiration
+    multi.expire(key, windowSeconds);
+    
+    const results = await multi.exec();
+    const currentRequests = results[1][1];
+    
+    if (currentRequests >= maxRequests) {
+      return {
+        allowed: false,
+        remaining: 0,
+        resetIn: Math.ceil((windowStart + windowSeconds * 1000 - now) / 1000)
+      };
+    }
+    
+    return {
+      allowed: true,
+      remaining: maxRequests - currentRequests - 1
+    };
+  }
+}
+
+// Usage
+const limiter = new SlidingWindowRateLimiter(redis);
+
+app.use(async (req, res, next) => {
+  const userId = req.user?.id || req.ip;
+  const result = await limiter.check(userId, 100, 60);
+  
+  if (!result.allowed) {
+    return res.status(429).json({
+      error: 'Rate limit exceeded',
+      resetIn: result.resetIn
+    });
+  }
+  
+  res.setHeader('X-RateLimit-Remaining', result.remaining);
+  next();
+});
+```
+
+---
+
+## 6. Pub/Sub - Real-Time Messaging
+
+### Basic Pub/Sub
+
+```javascript
+// Publisher
+import Redis from 'ioredis';
+
+const publisher = new Redis();
+
+// Publish message
+await publisher.publish('notifications', JSON.stringify({
+  type: 'new_message',
+  userId: 123,
+  message: 'Hello!'
+}));
+
+// Subscriber (separate instance!)
+const subscriber = new Redis();
+
+subscriber.subscribe('notifications', (err, count) => {
+  console.log(`Subscribed to ${count} channel(s)`);
+});
+
+subscriber.on('message', (channel, message) => {
+  console.log(`Received from ${channel}:`, message);
+  
+  const data = JSON.parse(message);
+  // Handle notification
+  handleNotification(data);
+});
+
+// Unsubscribe
+subscriber.unsubscribe('notifications');
+```
+
+### Real-World: WebSocket Notifications
+
+```javascript
+// notifications.js
+import { Server } from 'socket.io';
+import Redis from 'ioredis';
+
+const io = new Server(server);
+const subscriber = new Redis();
+
+// Subscribe to notification channel
+subscriber.subscribe('user:notifications');
+
+subscriber.on('message', (channel, message) => {
+  const notification = JSON.parse(message);
+  
+  // Send to specific user's socket
+  io.to(`user:${notification.userId}`).emit('notification', notification);
+});
+
+// When user connects
+io.on('connection', (socket) => {
+  const userId = socket.handshake.auth.userId;
+  
+  // Join user-specific room
+  socket.join(`user:${userId}`);
+  
+  console.log(`User ${userId} connected`);
+});
+
+// In your application, publish notifications
+const publisher = new Redis();
+
+async function sendNotification(userId, notification) {
+  await publisher.publish('user:notifications', JSON.stringify({
+    userId,
+    ...notification
+  }));
+}
+
+// Usage
+await sendNotification(123, {
+  type: 'new_message',
+  title: 'New Message',
+  body: 'You have a new message from Ali'
+});
+```
+
+### Pattern Subscription
+
+```javascript
+// Subscribe to pattern
+subscriber.psubscribe('user:*:notifications');
+
+subscriber.on('pmessage', (pattern, channel, message) => {
+  console.log(`Pattern ${pattern} matched ${channel}`);
+  
+  // Extract userId from channel name
+  const userId = channel.split(':')[1];
+  
+  // Handle message
+  const data = JSON.parse(message);
+  handleUserNotification(userId, data);
+});
+
+// Publish to specific user
+publisher.publish('user:123:notifications', JSON.stringify({
+  type: 'like',
+  postId: 456
+}));
+```
+
+---
+
+## 7. Job Queues with Bull
+
+### Setup Bull Queue
+
+```javascript
+// Install: npm install bull
+
+import Queue from 'bull';
+import Redis from 'ioredis';
+
+// Create queue
+const emailQueue = new Queue('email', {
+  redis: {
+    host: 'localhost',
+    port: 6379
+  }
+});
+
+// Add job to queue
+await emailQueue.add('welcome-email', {
+  to: 'hassan@example.com',
+  name: 'Hassan',
+  templateId: 'welcome'
+});
+
+// Add job with options
+await emailQueue.add('password-reset', {
+  to: 'user@example.com',
+  resetToken: 'abc123'
+}, {
+  delay: 5000,  // Delay 5 seconds
+  attempts: 3,  // Retry 3 times
+  backoff: {
+    type: 'exponential',
+    delay: 2000
+  },
+  removeOnComplete: true,
+  removeOnFail: false
+});
+
+// Process jobs (in separate worker process)
+emailQueue.process('welcome-email', async (job) => {
+  const { to, name, templateId } = job.data;
+  
+  console.log(`Sending welcome email to ${to}`);
+  
+  // Send email
+  await sendEmail({
+    to,
+    subject: 'Welcome!',
+    template: templateId,
+    data: { name }
+  });
+  
+  return { sent: true, timestamp: new Date() };
+});
+
+// Job events
+emailQueue.on('completed', (job, result) => {
+  console.log(`Job ${job.id} completed:`, result);
+});
+
+emailQueue.on('failed', (job, error) => {
+  console.error(`Job ${job.id} failed:`, error.message);
+});
+
+emailQueue.on('progress', (job, progress) => {
+  console.log(`Job ${job.id} progress: ${progress}%`);
+});
+
+// Real-world: Image processing queue
+const imageQueue = new Queue('image-processing');
+
+imageQueue.process(async (job) => {
+  const { imagePath, userId } = job.data;
+  
+  // Report progress
+  job.progress(10);
+  
+  // Generate thumbnail
+  const thumbnail = await generateThumbnail(imagePath);
+  job.progress(50);
+  
+  // Optimize image
+  const optimized = await optimizeImage(imagePath);
+  job.progress(80);
+  
+  // Upload to S3
+  const url = await uploadToS3(optimized);
+  job.progress(100);
+  
+  return { thumbnail, url };
+});
+
+// Add image processing job
+await imageQueue.add({
+  imagePath: '/uploads/image.jpg',
+  userId: 123
+});
+```
+
+---
+
+## 8. Leaderboards and Rankings
+
+```javascript
+// Game leaderboard
+class Leaderboard {
+  constructor(redis, name) {
+    this.redis = redis;
+    this.key = `leaderboard:${name}`;
+  }
+  
+  async addScore(userId, score) {
+    await this.redis.zadd(this.key, score, userId);
+  }
+  
+  async incrementScore(userId, points) {
+    await this.redis.zincrby(this.key, points, userId);
+  }
+  
+  async getTopPlayers(count = 10) {
+    // Get top N with scores
+    const results = await this.redis.zrevrange(
+      this.key,
+      0,
+      count - 1,
+      'WITHSCORES'
+    );
+    
+    // Format: [player1, score1, player2, score2, ...]
+    const leaderboard = [];
+    for (let i = 0; i < results.length; i += 2) {
+      leaderboard.push({
+        userId: results[i],
+        score: parseInt(results[i + 1]),
+        rank: i / 2 + 1
+      });
+    }
+    
+    return leaderboard;
+  }
+  
+  async getUserRank(userId) {
+    // Get rank (0-based, reverse order)
+    const rank = await this.redis.zrevrank(this.key, userId);
+    
+    if (rank === null) {
+      return null;
+    }
+    
+    const score = await this.redis.zscore(this.key, userId);
+    
+    return {
+      userId,
+      rank: rank + 1,  // 1-based rank
+      score: parseInt(score)
+    };
+  }
+  
+  async getPlayerCount() {
+    return await this.redis.zcard(this.key);
+  }
+  
+  async getScoreRange(minScore, maxScore) {
+    const results = await this.redis.zrangebyscore(
+      this.key,
+      minScore,
+      maxScore,
+      'WITHSCORES'
+    );
+    
+    const players = [];
+    for (let i = 0; i < results.length; i += 2) {
+      players.push({
+        userId: results[i],
+        score: parseInt(results[i + 1])
+      });
+    }
+    
+    return players;
+  }
+}
+
+// Usage
+const gameLeaderboard = new Leaderboard(redis, 'global');
+
+await gameLeaderboard.addScore('user:123', 1500);
+await gameLeaderboard.incrementScore('user:123', 100);
+
+const topPlayers = await gameLeaderboard.getTopPlayers(10);
+const myRank = await gameLeaderboard.getUserRank('user:123');
+
+console.log('Top 10:', topPlayers);
+console.log('My rank:', myRank);
+```
+
+---
+
+## 9. Distributed Locks
+
+```javascript
+// Prevent race conditions in distributed systems
+class RedisLock {
+  constructor(redis) {
+    this.redis = redis;
+  }
+  
+  async acquire(lockKey, ttl = 10000) {
+    const lockValue = `${Date.now()}-${Math.random()}`;
+    
+    // Try to set lock (only if doesn't exist)
+    const result = await this.redis.set(
+      lockKey,
+      lockValue,
+      'PX',  // Milliseconds
+      ttl,
+      'NX'   // Only if not exists
+    );
+    
+    if (result === 'OK') {
+      return lockValue;  // Lock acquired
+    }
+    
+    return null;  // Lock already held
+  }
+  
+  async release(lockKey, lockValue) {
+    // Only delete if we own the lock (prevent deleting others' locks)
+    const script = `
+      if redis.call("get", KEYS[1]) == ARGV[1] then
+        return redis.call("del", KEYS[1])
+      else
+        return 0
+      end
+    `;
+    
+    const result = await this.redis.eval(script, 1, lockKey, lockValue);
+    return result === 1;
+  }
+  
+  async withLock(lockKey, callback, ttl = 10000) {
+    const lockValue = await this.acquire(lockKey, ttl);
+    
+    if (!lockValue) {
+      throw new Error('Could not acquire lock');
+    }
+    
+    try {
+      return await callback();
+    } finally {
+      await this.release(lockKey, lockValue);
+    }
+  }
+}
+
+// Usage: Prevent double-processing
+const lock = new RedisLock(redis);
+
+async function processOrder(orderId) {
+  const lockKey = `lock:order:${orderId}`;
+  
+  await lock.withLock(lockKey, async () => {
+    // This code won't run concurrently for same order
+    const order = await getOrder(orderId);
+    
+    if (order.status === 'processing') {
+      console.log('Already processing');
+      return;
+    }
+    
+    await updateOrder(orderId, { status: 'processing' });
+    await chargePayment(order);
+    await createShipment(order);
+    await updateOrder(orderId, { status: 'completed' });
+  });
+}
+```
+
+---
+
+## 10. Best Practices (2026 Industry Standards)
+
+### Connection Management
+
+```javascript
+// Use connection pooling
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+  retryStrategy: (times) => {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
+  maxRetriesPerRequest: 3
+});
+
+// Reuse connections, don't create new ones for each request
+// DON'T:
+app.get('/user/:id', async (req, res) => {
+  const redis = new Redis();  // BAD!
+  const user = await redis.get(`user:${req.params.id}`);
+  await redis.quit();
+  res.json(user);
+});
+
+// DO:
+const redis = new Redis();  // Create once
+app.get('/user/:id', async (req, res) => {
+  const user = await redis.get(`user:${req.params.id}`);
+  res.json(user);
+});
+```
+
+### Key Naming Conventions
+
+```javascript
+// Use consistent naming patterns
+// Pattern: object:id:field or namespace:object:id
+
+// Good patterns
+user:123:profile
+user:123:sessions
+post:456:views
+cache:api:users:list
+rate_limit:user:123
+leaderboard:global
+session:abc123def456
+
+// Bad patterns
+user123profile  // Hard to scan
+userProfile_123  // Inconsistent
+123  // Not descriptive
+```
+
+### Memory Management
+
+```javascript
+// Set expiration on cache keys
+await redis.setex('cache:users', 3600, data);  // 1 hour
+
+// Use LRU eviction policy in redis.conf
+maxmemory 2gb
+maxmemory-policy allkeys-lru
+
+// Monitor memory usage
+const info = await redis.info('memory');
+console.log(info);
+
+// Use smaller data structures when possible
+// Hash is more memory-efficient than multiple string keys
+// Instead of:
+await redis.set('user:1:name', 'Hassan');
+await redis.set('user:1:email', 'hassan@example.com');
+
+// Use:
+await redis.hset('user:1', {
+  name: 'Hassan',
+  email: 'hassan@example.com'
+});
+```
+
+### Error Handling
+
+```javascript
+// Always handle Redis errors
+redis.on('error', (err) => {
+  console.error('Redis error:', err);
+  // Don't crash the app, log to monitoring service
+});
+
+// Wrap operations in try-catch
+async function getUserFromCache(userId) {
+  try {
+    const user = await redis.get(`user:${userId}`);
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error('Cache error:', error);
+    // Fail gracefully - return null and fetch from database
+    return null;
+  }
+}
+
+// Use circuit breaker pattern for cache failures
+let cacheEnabled = true;
+
+async function getUser(userId) {
+  if (cacheEnabled) {
+    try {
+      const cached = await redis.get(`user:${userId}`);
+      if (cached) return JSON.parse(cached);
+    } catch (error) {
+      console.error('Cache error, disabling for 60s');
+      cacheEnabled = false;
+      setTimeout(() => { cacheEnabled = true; }, 60000);
+    }
+  }
+  
+  // Fetch from database
+  return await database.getUser(userId);
+}
+```
+
+### Pipelining for Batch Operations
+
+```javascript
+// Pipeline multiple commands
+const pipeline = redis.pipeline();
+
+pipeline.set('key1', 'value1');
+pipeline.set('key2', 'value2');
+pipeline.get('key1');
+pipeline.incr('counter');
+
+const results = await pipeline.exec();
+// Results is array of [error, result] pairs
+
+// Real-world: Batch cache multiple users
+async function getUsersFromCache(userIds) {
+  const pipeline = redis.pipeline();
+  
+  userIds.forEach(id => {
+    pipeline.get(`user:${id}`);
+  });
+  
+  const results = await pipeline.exec();
+  
+  return results.map((result, index) => {
+    const [error, data] = result;
+    if (error || !data) return null;
+    return JSON.parse(data);
+  });
+}
+```
+
+---
+
 
