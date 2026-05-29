@@ -1,0 +1,2448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --accent: #1d9e75;
+      --accent2: #534ab7;
+      --warn: #ba7517;
+      --danger: #a32d2d;
+      --bg: var(--color-background-primary);
+      --bg2: var(--color-background-secondary);
+      --bg3: var(--color-background-tertiary);
+      --text: var(--color-text-primary);
+      --muted: var(--color-text-secondary);
+      --hint: var(--color-text-tertiary);
+      --border: var(--color-border-tertiary);
+      --border2: var(--color-border-secondary);
+      --radius: var(--border-radius-md);
+      --radius-lg: var(--border-radius-lg);
+    }
+    h2.sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    body {
+      font-family: var(--font-sans);
+      color: white;
+      background: black;
+    }
+
+    .shell {
+      display: flex;
+      gap: 0;
+      min-height: 700px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 0.5px solid var(--border);
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+    .sidebar-header {
+      padding: 4px 14px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--hint);
+    }
+    .tab-group {
+      margin-bottom: 4px;
+    }
+    .tab-group-label {
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--hint);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+      line-height: 1.3;
+    }
+    .nav-item:hover {
+      background: var(--bg3);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: var(--bg);
+      color: var(--accent);
+      border-left-color: var(--accent);
+      font-weight: 500;
+    }
+    .nav-item i {
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
+      min-width: 0;
+    }
+
+    .section-hero {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .section-hero h1 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .section-hero p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .concept-card {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: var(--bg2);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .card-header h3 {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+    }
+    .card-header .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 500;
+    }
+    .badge-js {
+      background: #faeeda;
+      color: #633806;
+    }
+    .badge-node {
+      background: #e1f5ee;
+      color: #085041;
+    }
+    .badge-es {
+      background: #eeedfe;
+      color: #3c3489;
+    }
+    .badge-new {
+      background: #faece7;
+      color: #712b13;
+    }
+    .card-body {
+      padding: 16px;
+      display: none;
+    }
+    .card-body.open {
+      display: block;
+    }
+
+    .explain-block {
+      margin-bottom: 16px;
+    }
+    .explain-block .label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--hint);
+      margin-bottom: 6px;
+    }
+    .explain-block p {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+    .explain-block ul {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 16px;
+      line-height: 1.8;
+    }
+
+    pre {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--text);
+      margin: 8px 0;
+    }
+    .kw {
+      color: #534ab7;
+      font-weight: 500;
+    }
+    .fn {
+      color: #1d9e75;
+    }
+    .str {
+      color: #ba7517;
+    }
+    .cm {
+      color: var(--hint);
+      font-style: italic;
+    }
+    .num {
+      color: #a32d2d;
+    }
+
+    .real-world {
+      background: #e1f5ee;
+      border-left: 3px solid #1d9e75;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .real-world .rw-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #085041;
+      margin-bottom: 4px;
+    }
+    .real-world p {
+      font-size: 13px;
+      color: #0f6e56;
+      line-height: 1.6;
+    }
+
+    .gotcha {
+      background: #faeeda;
+      border-left: 3px solid #ba7517;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .gotcha .g-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #633806;
+      margin-bottom: 4px;
+    }
+    .gotcha p {
+      font-size: 13px;
+      color: #854f0b;
+      line-height: 1.6;
+    }
+
+    .tip {
+      background: #eeedfe;
+      border-left: 3px solid #534ab7;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .tip .t-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #26215c;
+      margin-bottom: 4px;
+    }
+    .tip p {
+      font-size: 13px;
+      color: #3c3489;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 0.5px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .search-bar {
+      padding: 8px 14px;
+      margin-bottom: 8px;
+    }
+    .search-bar input {
+      width: 100%;
+      font-size: 12.5px;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      background: var(--bg);
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 12px;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border2);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dot.active {
+      background: var(--accent);
+    }
+
+    .mini-tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 99px;
+      border: 0.5px solid var(--border2);
+      color: var(--muted);
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .tags-row {
+      margin: 8px 0;
+    }
+  </style>
+  <body>
+    <h2 class="sr-only">
+      Complete JavaScript and Node.js guide with real-world examples for every
+      concept
+    </h2>
+
+    <div class="shell">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">JS + Node.js Guide</div>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search topics..."
+            oninput="filterNav(this.value)"
+          />
+        </div>
+
+        <div class="tab-group">
+          <div class="tab-group-label">
+            <i class="ti ti-brand-javascript" aria-hidden="true"></i> JavaScript
+          </div>
+          <div
+            class="nav-item active"
+            onclick="show('declarations')"
+            data-search="var let const hoisting scope declarations"
+          >
+            <i class="ti ti-variable" aria-hidden="true"></i>Declarations
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('operators')"
+            data-search="operators arithmetic assignment comparison logical bitwise ternary spread nullish optional chaining"
+          >
+            <i class="ti ti-math-function" aria-hidden="true"></i>Operators
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('control')"
+            data-search="control flow loops if switch for while break continue try catch"
+          >
+            <i class="ti ti-arrows-split" aria-hidden="true"></i>Control Flow
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('functions')"
+            data-search="functions closures arrow iife this bind call apply rest default parameters"
+          >
+            <i class="ti ti-code" aria-hidden="true"></i>Functions & Closures
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('objects')"
+            data-search="objects classes extends super prototype inheritance getters setters private fields"
+          >
+            <i class="ti ti-box" aria-hidden="true"></i>Objects & Classes
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('primitives')"
+            data-search="primitives string number boolean symbol bigint NaN Infinity"
+          >
+            <i class="ti ti-letter-t" aria-hidden="true"></i>Primitives
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('collections')"
+            data-search="array map set weakmap weakset flat flatmap filter reduce find"
+          >
+            <i class="ti ti-database" aria-hidden="true"></i>Collections
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('async')"
+            data-search="async await promise then catch all allSettled race generators yield"
+          >
+            <i class="ti ti-clock-play" aria-hidden="true"></i>Async & Promises
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('iteration')"
+            data-search="iterator iterable generator for of symbol iterator regexp regex"
+          >
+            <i class="ti ti-rotate-clockwise" aria-hidden="true"></i>Iteration &
+            Regex
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('modules')"
+            data-search="modules import export default named dynamic top level await json"
+          >
+            <i class="ti ti-puzzle" aria-hidden="true"></i>Modules
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('modern')"
+            data-search="modern es2024 es2025 es2026 temporal records tuples decorators iterator helpers"
+          >
+            <i class="ti ti-sparkles" aria-hidden="true"></i>Modern JS (2024–26)
+          </div>
+        </div>
+
+        <div class="tab-group" style="margin-top: 8px">
+          <div class="tab-group-label">
+            <i class="ti ti-brand-nodejs" aria-hidden="true"></i> Node.js
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('process')"
+            data-search="process env argv exit cwd platform arch global console dirname filename"
+          >
+            <i class="ti ti-terminal" aria-hidden="true"></i>Globals & Process
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('fs')"
+            data-search="fs file system readfile writefile mkdir stat stream createreadstream"
+          >
+            <i class="ti ti-folder-open" aria-hidden="true"></i>File System
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('http')"
+            data-search="http https fetch createserver request response headers status fetch undici abortcontroller"
+          >
+            <i class="ti ti-world" aria-hidden="true"></i>HTTP & Fetch
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('events')"
+            data-search="events eventemitter on emit once off removelistener stream readable writable pipeline"
+          >
+            <i class="ti ti-broadcast" aria-hidden="true"></i>Events & Streams
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('nodemods')"
+            data-search="crypto zlib buffer child process worker threads util promisify os path url dns"
+          >
+            <i class="ti ti-package" aria-hidden="true"></i>Core Modules
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('nodemodules')"
+            data-search="commonjs esm require module exports import meta url type module mjs"
+          >
+            <i class="ti ti-file-import" aria-hidden="true"></i>CJS vs ESM
+          </div>
+          <div
+            class="nav-item"
+            onclick="show('nodepatterns')"
+            data-search="express fastify prisma drizzle zod pino winston clustering docker pm2 typescript"
+          >
+            <i class="ti ti-layout-grid" aria-hidden="true"></i>Patterns & Best
+            Practices
+          </div>
+        </div>
+      </nav>
+
+      <main class="content" id="mainContent">
+        <!-- SECTION: declarations -->
+        <div id="sec-declarations" class="section">
+          <div class="section-hero">
+            <h1>Variable Declarations</h1>
+            <p>
+              How JavaScript stores values — the three declaration keywords,
+              their scoping rules, and the infamous Temporal Dead Zone.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-variable"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>var — function-scoped, hoisted</h3>
+              <span class="badge badge-js">Classic</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">What it is</div>
+                <p>
+                  <code>var</code> declares a variable that is scoped to the
+                  nearest function (not block). It is
+                  <strong>hoisted</strong> to the top of its function and
+                  initialized to <code>undefined</code> before any code runs.
+                </p>
+              </div>
+              <pre><span class="cm">// Hoisting in action</span>
+<span class="fn">console</span>.log(name); <span class="cm">// → undefined (not an error!)</span>
+<span class="kw">var</span> name = <span class="str">"Alice"</span>;
+
+<span class="cm">// var ignores block scope</span>
+<span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">var</span> city = <span class="str">"Karachi"</span>;
+}
+<span class="fn">console</span>.log(city); <span class="cm">// → "Karachi" — escapes the if block!</span>
+
+<span class="cm">// var is function-scoped</span>
+<span class="kw">function</span> <span class="fn">greet</span>() {
+  <span class="kw">var</span> msg = <span class="str">"Hello"</span>;
+}
+<span class="fn">console</span>.log(msg); <span class="cm">// → ReferenceError: msg is not defined</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world context</div>
+                <p>
+                  You'll see <code>var</code> in legacy codebases (pre-2015).
+                  Avoid it in new code — its hoisting and loose scoping cause
+                  subtle bugs. Prefer <code>let</code> or <code>const</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-variable"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>let — block-scoped, reassignable</h3>
+              <span class="badge badge-es">ES2015+</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">What it is</div>
+                <p>
+                  <code>let</code> declares a variable scoped to the nearest
+                  <code>{ }</code> block. It is hoisted but NOT initialized —
+                  accessing it before the declaration throws a ReferenceError
+                  (the Temporal Dead Zone).
+                </p>
+              </div>
+              <pre><span class="cm">// Block scope</span>
+<span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">let</span> score = <span class="num">42</span>;
+  <span class="fn">console</span>.log(score); <span class="cm">// → 42</span>
+}
+<span class="fn">console</span>.log(score); <span class="cm">// → ReferenceError ✅ proper scoping</span>
+
+<span class="cm">// let can be reassigned</span>
+<span class="kw">let</span> counter = <span class="num">0</span>;
+counter++;   <span class="cm">// fine</span>
+counter = <span class="num">10</span>; <span class="cm">// fine</span>
+
+<span class="cm">// Temporal Dead Zone (TDZ)</span>
+<span class="fn">console</span>.log(x); <span class="cm">// → ReferenceError: Cannot access 'x' before init</span>
+<span class="kw">let</span> x = <span class="num">5</span>;</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Use <code>let</code> for loop counters (<code
+                    >for (let i = 0...)</code
+                  >), mutable local values, and any variable whose value changes
+                  over time.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-lock"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>const — block-scoped, no reassignment</h3>
+              <span class="badge badge-es">ES2015+</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">What it is</div>
+                <p>
+                  <code>const</code> creates a block-scoped binding that cannot
+                  be <em>reassigned</em>. It does NOT make the value immutable —
+                  objects and arrays declared with <code>const</code> can still
+                  be mutated.
+                </p>
+              </div>
+              <pre><span class="kw">const</span> MAX = <span class="num">100</span>;
+MAX = <span class="num">200</span>; <span class="cm">// → TypeError: Assignment to constant variable</span>
+
+<span class="cm">// Object contents can still change</span>
+<span class="kw">const</span> user = { name: <span class="str">"Ali"</span>, age: <span class="num">25</span> };
+user.age = <span class="num">26</span>;       <span class="cm">// ✅ OK — mutating property</span>
+user = {};             <span class="cm">// ❌ TypeError — reassigning the binding</span>
+
+<span class="cm">// Arrays too</span>
+<span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+nums.push(<span class="num">4</span>);         <span class="cm">// ✅ OK</span>
+nums = [<span class="num">5</span>, <span class="num">6</span>];        <span class="cm">// ❌ TypeError</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Default to <code>const</code> for everything. Switch to
+                  <code>let</code> only when you know the variable needs to be
+                  reassigned. This signals intent clearly to other developers.
+                </p>
+              </div>
+              <div class="gotcha">
+                <div class="g-label">Common gotcha</div>
+                <p>
+                  <code>const</code> ≠ immutable. If you need a truly immutable
+                  object, use <code>Object.freeze(obj)</code>. Even that is
+                  shallow — nested objects can still change.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: operators -->
+        <div id="sec-operators" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Operators</h1>
+            <p>
+              All the symbols JavaScript uses to compute, compare, assign, and
+              combine values — including modern additions like optional chaining
+              and nullish coalescing.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-math-function"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>
+                Optional chaining <code>?.</code> and nullish coalescing
+                <code>??</code>
+              </h3>
+              <span class="badge badge-es">ES2020</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">Optional chaining <code>?.</code></div>
+                <p>
+                  Safely access deeply nested properties. If any part of the
+                  chain is <code>null</code> or <code>undefined</code>, the
+                  expression short-circuits and returns
+                  <code>undefined</code> instead of throwing.
+                </p>
+              </div>
+              <pre><span class="kw">const</span> user = { profile: { address: { city: <span class="str">"Lahore"</span> } } };
+
+<span class="cm">// Old way — verbose and error-prone</span>
+<span class="kw">const</span> city = user && user.profile && user.profile.address && user.profile.address.city;
+
+<span class="cm">// New way — clean</span>
+<span class="kw">const</span> city = user?.profile?.address?.city; <span class="cm">// → "Lahore"</span>
+<span class="kw">const</span> zip  = user?.profile?.address?.zip;  <span class="cm">// → undefined (no error)</span>
+
+<span class="cm">// Works with methods and array indices too</span>
+user?.save?.();          <span class="cm">// calls save() only if it exists</span>
+arr?.[<span class="num">0</span>];               <span class="cm">// safe array access</span></pre>
+              <div class="explain-block" style="margin-top: 14px">
+                <div class="label">Nullish coalescing <code>??</code></div>
+                <p>
+                  Returns the right side only when the left side is
+                  <code>null</code> or <code>undefined</code> (not when it's
+                  <code>0</code>, <code>""</code>, or <code>false</code>).
+                </p>
+              </div>
+              <pre><span class="kw">const</span> port = process.env.PORT ?? <span class="num">3000</span>;
+<span class="cm">// If PORT is undefined → 3000. If PORT is "0" → "0" (keeps it!)</span>
+
+<span class="cm">// vs || which falsely triggers on 0 and ""</span>
+<span class="kw">const</span> count = <span class="num">0</span> || <span class="num">10</span>;   <span class="cm">// → 10  (wrong if 0 is valid)</span>
+<span class="kw">const</span> count = <span class="num">0</span> ?? <span class="num">10</span>;   <span class="cm">// → 0   (correct)</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  These two operators are everywhere in React props, API
+                  response parsing, and config defaults.
+                  <code>user?.avatar ?? "/default.png"</code> is a pattern
+                  you'll write dozens of times.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-equal"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Logical assignment operators <code>&&= ||= ??=</code></h3>
+              <span class="badge badge-es">ES2021</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">let</span> a = <span class="kw">null</span>;
+a ??= <span class="str">"default"</span>;  <span class="cm">// if a is null/undefined → assign "default"</span>
+<span class="cm">// a → "default"</span>
+
+<span class="kw">let</span> user = { name: <span class="str">"Sara"</span> };
+user.role ||= <span class="str">"viewer"</span>; <span class="cm">// if user.role is falsy → assign "viewer"</span>
+
+<span class="kw">let</span> isAdmin = <span class="kw">true</span>;
+isAdmin &&= checkPermissions(); <span class="cm">// if isAdmin → reassign with checkPermissions()</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Setting default values in config objects, caching computed
+                  results, lazy initialization of object properties without
+                  verbose if-statements.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-dots-circle-horizontal"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Spread <code>...</code> and Rest parameters</h3>
+              <span class="badge badge-es">ES2015+</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Spread: expand iterable into individual elements</span>
+<span class="kw">const</span> a = [<span class="num">1</span>, <span class="num">2</span>], b = [<span class="num">3</span>, <span class="num">4</span>];
+<span class="kw">const</span> merged = [...a, ...b];        <span class="cm">// → [1, 2, 3, 4]</span>
+
+<span class="kw">const</span> base = { color: <span class="str">"red"</span> };
+<span class="kw">const</span> btn  = { ...base, size: <span class="str">"lg"</span> }; <span class="cm">// → { color: "red", size: "lg" }</span>
+
+<span class="cm">// Rest: collect remaining args into an array</span>
+<span class="kw">function</span> <span class="fn">sum</span>(...nums) {
+  <span class="kw">return</span> nums.reduce((a, b) => a + b, <span class="num">0</span>);
+}
+<span class="fn">sum</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>); <span class="cm">// → 10</span>
+
+<span class="cm">// Clone without mutation</span>
+<span class="kw">const</span> updatedUser = { ...user, age: <span class="num">30</span> }; <span class="cm">// immutable update pattern</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Redux reducers use spread for immutable state updates:
+                  <code
+                    >return { ...state, loading: false, data: action.payload
+                    }</code
+                  >. This pattern is fundamental to React state management.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: control -->
+        <div id="sec-control" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Control Flow & Loops</h1>
+            <p>
+              How JavaScript makes decisions, repeats actions, and handles
+              errors at runtime.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-arrows-split"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>for...of vs for...in</h3>
+              <span class="badge badge-es">ES2015</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// for...of — iterates VALUES of any iterable</span>
+<span class="kw">const</span> fruits = [<span class="str">"apple"</span>, <span class="str">"mango"</span>, <span class="str">"banana"</span>];
+<span class="kw">for</span> (<span class="kw">const</span> fruit <span class="kw">of</span> fruits) {
+  <span class="fn">console</span>.log(fruit); <span class="cm">// apple, mango, banana</span>
+}
+
+<span class="cm">// Works on strings, Maps, Sets, generators too</span>
+<span class="kw">for</span> (<span class="kw">const</span> char <span class="kw">of</span> <span class="str">"hello"</span>) { <span class="fn">console</span>.log(char); }
+
+<span class="cm">// for...in — iterates KEYS of an object (avoid for arrays)</span>
+<span class="kw">const</span> car = { make: <span class="str">"Toyota"</span>, year: <span class="num">2024</span> };
+<span class="kw">for</span> (<span class="kw">const</span> key <span class="kw">in</span> car) {
+  <span class="fn">console</span>.log(key, car[key]); <span class="cm">// make Toyota, year 2024</span>
+}</pre>
+              <div class="gotcha">
+                <div class="g-label">Gotcha</div>
+                <p>
+                  Never use <code>for...in</code> on arrays — it can pick up
+                  prototype properties and the order isn't guaranteed. Use
+                  <code>for...of</code>, <code>.forEach()</code>, or a regular
+                  <code>for</code> loop instead.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-shield-check"
+                aria-hidden="true"
+                style="color: var(--danger)"
+              ></i>
+              <h3>try / catch / finally — error handling</h3>
+              <span class="badge badge-js">Core</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Basic structure</span>
+<span class="kw">try</span> {
+  <span class="kw">const</span> data = JSON.parse(badJson); <span class="cm">// might throw</span>
+} <span class="kw">catch</span> (err) {
+  <span class="fn">console</span>.error(<span class="str">"Parse failed:"</span>, err.message);
+} <span class="kw">finally</span> {
+  <span class="fn">console</span>.log(<span class="str">"Always runs — good for cleanup"</span>);
+}
+
+<span class="cm">// Custom errors with context (ES2022 cause)</span>
+<span class="kw">try</span> {
+  <span class="kw">await</span> <span class="fn">fetchUser</span>(id);
+} <span class="kw">catch</span> (err) {
+  <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"User fetch failed"</span>, { cause: err });
+}
+
+<span class="cm">// Re-throwing specific errors</span>
+<span class="kw">catch</span> (err) {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> NetworkError) <span class="kw">throw</span> err; <span class="cm">// re-throw</span>
+  <span class="fn">handleGenericError</span>(err);
+}</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world pattern: API calls</div>
+                <p>
+                  Every <code>fetch()</code> or database query should be wrapped
+                  in try/catch. In Express.js, use an
+                  <code>asyncHandler</code> wrapper so errors bubble up to your
+                  global error middleware automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: functions -->
+        <div id="sec-functions" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Functions & Closures</h1>
+            <p>
+              The heart of JavaScript — from classic declarations to arrow
+              functions, closures, and the power of lexical scoping.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-arrow-right"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Arrow functions — lexical <code>this</code></h3>
+              <span class="badge badge-es">ES2015</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Concise syntax</span>
+<span class="kw">const</span> <span class="fn">double</span> = x => x * <span class="num">2</span>;
+<span class="kw">const</span> <span class="fn">add</span> = (a, b) => a + b;
+<span class="kw">const</span> <span class="fn">greet</span> = name => ({ message: <span class="str">`Hello ${name}`</span> }); <span class="cm">// object: wrap in ()</span>
+
+<span class="cm">// Arrow has NO own 'this' — inherits from enclosing scope</span>
+<span class="kw">class</span> <span class="fn">Timer</span> {
+  <span class="fn">constructor</span>() {
+    <span class="kw">this</span>.seconds = <span class="num">0</span>;
+  }
+  <span class="fn">start</span>() {
+    <span class="cm">// 'this' works here because arrow inherits Timer's this</span>
+    setInterval(() => {
+      <span class="kw">this</span>.seconds++;     <span class="cm">// ✅</span>
+    }, <span class="num">1000</span>);
+  }
+}
+
+<span class="cm">// vs regular function — 'this' would be undefined in strict mode</span>
+setInterval(<span class="kw">function</span>() {
+  <span class="kw">this</span>.seconds++; <span class="cm">// ❌ 'this' is not the Timer</span>
+}, <span class="num">1000</span>);</pre>
+              <div class="tip">
+                <div class="t-label">Rule of thumb</div>
+                <p>
+                  Use arrow functions for callbacks and inline logic. Use
+                  regular
+                  <code>function</code> when you need <code>this</code> to be
+                  dynamic (event handlers on DOM elements, object methods that
+                  need their own <code>this</code>).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-lock-square"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Closures — functions that remember</h3>
+              <span class="badge badge-js">Core</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">What it is</div>
+                <p>
+                  A closure is a function that retains access to its outer
+                  scope's variables even after the outer function has returned.
+                  This is how JavaScript manages private state.
+                </p>
+              </div>
+              <pre><span class="cm">// Classic closure: a counter factory</span>
+<span class="kw">function</span> <span class="fn">makeCounter</span>(start = <span class="num">0</span>) {
+  <span class="kw">let</span> count = start;       <span class="cm">// private to this closure</span>
+  <span class="kw">return</span> {
+    <span class="fn">increment</span>: () => ++count,
+    <span class="fn">decrement</span>: () => --count,
+    <span class="fn">value</span>:     () => count,
+  };
+}
+
+<span class="kw">const</span> counter = <span class="fn">makeCounter</span>(<span class="num">10</span>);
+counter.increment(); <span class="cm">// 11</span>
+counter.increment(); <span class="cm">// 12</span>
+counter.decrement(); <span class="cm">// 11</span>
+counter.value();     <span class="cm">// 11</span>
+<span class="cm">// count is truly private — no direct access</span>
+
+<span class="cm">// Real-world: memoization closure</span>
+<span class="kw">function</span> <span class="fn">memoize</span>(fn) {
+  <span class="kw">const</span> cache = <span class="kw">new</span> Map();
+  <span class="kw">return</span> (...args) => {
+    <span class="kw">const</span> key = JSON.stringify(args);
+    <span class="kw">if</span> (cache.has(key)) <span class="kw">return</span> cache.get(key);
+    <span class="kw">const</span> result = fn(...args);
+    cache.set(key, result);
+    <span class="kw">return</span> result;
+  };
+}</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  React's <code>useState</code> hook, event handler factories,
+                  module patterns, memoization, and currying all rely on
+                  closures. Understanding closures is key to mastering React
+                  hooks.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-link"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>call / apply / bind — controlling <code>this</code></h3>
+              <span class="badge badge-js">Core</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">function</span> <span class="fn">introduce</span>(greeting, punctuation) {
+  <span class="kw">return</span> <span class="str">`${greeting}, I'm ${<span class="kw">this</span>.name}${punctuation}`</span>;
+}
+<span class="kw">const</span> person = { name: <span class="str">"Zara"</span> };
+
+<span class="cm">// .call() — invoke with explicit this, args spread</span>
+introduce.call(person, <span class="str">"Hi"</span>, <span class="str">"!"</span>); <span class="cm">// → "Hi, I'm Zara!"</span>
+
+<span class="cm">// .apply() — invoke with explicit this, args as array</span>
+introduce.apply(person, [<span class="str">"Hello"</span>, <span class="str">"."</span>]); <span class="cm">// → "Hello, I'm Zara."</span>
+
+<span class="cm">// .bind() — returns NEW function with this permanently set</span>
+<span class="kw">const</span> zaraSays = introduce.bind(person);
+zaraSays(<span class="str">"Hey"</span>, <span class="str">"?"</span>); <span class="cm">// → "Hey, I'm Zara?"</span>
+
+<span class="cm">// bind in class — common React pattern (before arrow methods)</span>
+<span class="kw">this</span>.handleClick = <span class="kw">this</span>.handleClick.bind(<span class="kw">this</span>);</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: objects -->
+        <div id="sec-objects" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Objects & Classes</h1>
+            <p>
+              JavaScript's class system — prototypal inheritance, private
+              fields, static methods, getters/setters, and how
+              <code>extends</code> works.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-box"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Classes — full anatomy</h3>
+              <span class="badge badge-es">ES2015–2022</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">class</span> <span class="fn">BankAccount</span> {
+  <span class="cm">// Private field (ES2022) — truly inaccessible outside</span>
+  #balance = <span class="num">0</span>;
+  #transactions = [];
+
+  <span class="cm">// Static — belongs to the class, not instances</span>
+  <span class="kw">static</span> currency = <span class="str">"PKR"</span>;
+
+  <span class="fn">constructor</span>(owner, initialBalance) {
+    <span class="kw">this</span>.owner = owner;
+    <span class="kw">this</span>.#balance = initialBalance;
+  }
+
+  <span class="cm">// Getter — computed property</span>
+  <span class="kw">get</span> <span class="fn">balance</span>() { <span class="kw">return</span> <span class="kw">this</span>.#balance; }
+
+  <span class="cm">// Setter — validates before setting</span>
+  <span class="kw">set</span> <span class="fn">balance</span>(v) {
+    <span class="kw">if</span> (v < <span class="num">0</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Balance can't be negative"</span>);
+    <span class="kw">this</span>.#balance = v;
+  }
+
+  <span class="fn">deposit</span>(amount) {
+    <span class="kw">this</span>.#balance += amount;
+    <span class="kw">this</span>.#transactions.push({ type: <span class="str">"deposit"</span>, amount });
+    <span class="kw">return this</span>; <span class="cm">// method chaining</span>
+  }
+
+  <span class="cm">// Static factory method</span>
+  <span class="kw">static</span> <span class="fn">createEmpty</span>(owner) {
+    <span class="kw">return new</span> <span class="fn">BankAccount</span>(owner, <span class="num">0</span>);
+  }
+}
+
+<span class="cm">// Inheritance</span>
+<span class="kw">class</span> <span class="fn">SavingsAccount</span> <span class="kw">extends</span> <span class="fn">BankAccount</span> {
+  <span class="fn">constructor</span>(owner, balance, rate) {
+    <span class="kw">super</span>(owner, balance); <span class="cm">// must call super first</span>
+    <span class="kw">this</span>.interestRate = rate;
+  }
+  <span class="fn">addInterest</span>() {
+    <span class="kw">this</span>.deposit(<span class="kw">this</span>.balance * <span class="kw">this</span>.interestRate);
+  }
+}
+
+<span class="kw">const</span> acc = <span class="kw">new</span> <span class="fn">SavingsAccount</span>(<span class="str">"Ahmed"</span>, <span class="num">1000</span>, <span class="num">0.05</span>);
+acc.deposit(<span class="num">500</span>).deposit(<span class="num">200</span>); <span class="cm">// chained</span>
+acc.addInterest();
+<span class="fn">console</span>.log(acc.balance); <span class="cm">// 1785</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Classes power every major JS framework. React class
+                  components, custom Errors, ORM models (Prisma entities), and
+                  Node.js EventEmitters all use this pattern.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-tool"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Object utility methods</h3>
+              <span class="badge badge-js">Built-in</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">const</span> user = { name: <span class="str">"Sara"</span>, age: <span class="num">28</span>, role: <span class="str">"admin"</span> };
+
+Object.keys(user);    <span class="cm">// → ["name", "age", "role"]</span>
+Object.values(user);  <span class="cm">// → ["Sara", 28, "admin"]</span>
+Object.entries(user); <span class="cm">// → [["name","Sara"], ["age",28], ...]</span>
+
+<span class="cm">// Build from entries — powerful transformation</span>
+<span class="kw">const</span> upper = Object.fromEntries(
+  Object.entries(user).map(([k, v]) => [k, String(v).toUpperCase()])
+);
+
+<span class="cm">// Deep-ish clone (only top-level)</span>
+<span class="kw">const</span> clone = Object.assign({}, user);
+
+<span class="cm">// Freeze — prevents all mutations</span>
+<span class="kw">const</span> config = Object.freeze({ API_URL: <span class="str">"https://api.example.com"</span> });
+config.API_URL = <span class="str">"x"</span>; <span class="cm">// silently fails (throws in strict mode)</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: async -->
+        <div id="sec-async" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Async & Promises</h1>
+            <p>
+              JavaScript's event loop is single-threaded. Promises and
+              async/await let you handle I/O without blocking — the most
+              critical skill for modern JS.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-clock-play"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Promises — the foundation</h3>
+              <span class="badge badge-es">ES2015</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Creating a Promise</span>
+<span class="kw">function</span> <span class="fn">delay</span>(ms) {
+  <span class="kw">return new</span> Promise(resolve => setTimeout(resolve, ms));
+}
+
+<span class="cm">// Chaining</span>
+<span class="fn">fetchUser</span>(id)
+  .then(user => <span class="fn">fetchOrders</span>(user.id))
+  .then(orders => orders.filter(o => o.status === <span class="str">"active"</span>))
+  .catch(err => <span class="fn">console</span>.error(<span class="str">"Failed:"</span>, err))
+  .finally(() => setLoading(<span class="kw">false</span>));
+
+<span class="cm">// Parallel — all must succeed</span>
+<span class="kw">const</span> [user, posts, comments] = <span class="kw">await</span> Promise.all([
+  <span class="fn">fetchUser</span>(id),
+  <span class="fn">fetchPosts</span>(id),
+  <span class="fn">fetchComments</span>(id),
+]);
+
+<span class="cm">// allSettled — wait for ALL, some may fail</span>
+<span class="kw">const</span> results = <span class="kw">await</span> Promise.allSettled([req1, req2, req3]);
+results.forEach(r => {
+  <span class="kw">if</span> (r.status === <span class="str">"fulfilled"</span>) use(r.value);
+  <span class="kw">else</span> log(r.reason);
+});
+
+<span class="cm">// race — first to resolve/reject wins</span>
+<span class="kw">const</span> result = <span class="kw">await</span> Promise.race([
+  <span class="fn">fetchData</span>(),
+  <span class="fn">delay</span>(<span class="num">5000</span>).then(() => { <span class="kw">throw new</span> Error(<span class="str">"Timeout"</span>) }),
+]);</pre>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-player-play"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>async / await — cleaner async code</h3>
+              <span class="badge badge-es">ES2017</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// async function always returns a Promise</span>
+<span class="kw">async function</span> <span class="fn">loadDashboard</span>(userId) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> user    = <span class="kw">await</span> <span class="fn">fetchUser</span>(userId);
+    <span class="kw">const</span> account = <span class="kw">await</span> <span class="fn">fetchAccount</span>(user.accountId);
+
+    <span class="cm">// Parallel where possible</span>
+    <span class="kw">const</span> [txns, alerts] = <span class="kw">await</span> Promise.all([
+      <span class="fn">getTransactions</span>(account.id),
+      <span class="fn">getAlerts</span>(user.id),
+    ]);
+
+    <span class="kw">return</span> { user, account, txns, alerts };
+  } <span class="kw">catch</span> (err) {
+    <span class="fn">logger</span>.error(<span class="str">"Dashboard load failed"</span>, { userId, err });
+    <span class="kw">throw</span> err;
+  }
+}
+
+<span class="cm">// AbortController — cancel fetch on timeout or unmount</span>
+<span class="kw">const</span> controller = <span class="kw">new</span> AbortController();
+<span class="kw">const</span> timeout = setTimeout(() => controller.abort(), <span class="num">10000</span>);
+<span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">"/api/data"</span>, { signal: controller.signal });
+clearTimeout(timeout);</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world pattern</div>
+                <p>
+                  In a Next.js app you'd write
+                  <code>async function getServerSideProps()</code> — this
+                  function <code>await</code>s a Prisma DB query and returns
+                  data as props. This is the most common async pattern in
+                  production apps.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-refresh"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>Generators — pausable functions</h3>
+              <span class="badge badge-es">ES2015</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Generator function — use function* syntax</span>
+<span class="kw">function</span>* <span class="fn">idGenerator</span>() {
+  <span class="kw">let</span> id = <span class="num">1</span>;
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">yield</span> id++; <span class="cm">// pauses here, returns value</span>
+  }
+}
+
+<span class="kw">const</span> gen = <span class="fn">idGenerator</span>();
+gen.next().value; <span class="cm">// → 1</span>
+gen.next().value; <span class="cm">// → 2</span>
+
+<span class="cm">// Async generator — for streaming data</span>
+<span class="kw">async function</span>* <span class="fn">streamChunks</span>(url) {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(url);
+  <span class="kw">const</span> reader = res.body.getReader();
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">const</span> { done, value } = <span class="kw">await</span> reader.read();
+    <span class="kw">if</span> (done) <span class="kw">break</span>;
+    <span class="kw">yield</span> <span class="kw">new</span> TextDecoder().decode(value);
+  }
+}
+<span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> <span class="fn">streamChunks</span>(<span class="str">"/api/stream"</span>)) {
+  displayChunk(chunk);
+}</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  AI streaming responses (like ChatGPT token-by-token output)
+                  use async generators. Redux-Saga uses generators extensively
+                  for complex async flows.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: collections -->
+        <div id="sec-collections" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Collections</h1>
+            <p>
+              Arrays, Maps, and Sets — the data structures you'll use every day,
+              including all the modern immutable methods.
+            </p>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-list"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Array — the full toolkit</h3>
+              <span class="badge badge-js">Built-in</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">const</span> orders = [
+  { id: <span class="num">1</span>, total: <span class="num">250</span>, status: <span class="str">"paid"</span>   },
+  { id: <span class="num">2</span>, total: <span class="num">480</span>, status: <span class="str">"pending"</span>},
+  { id: <span class="num">3</span>, total: <span class="num">120</span>, status: <span class="str">"paid"</span>   },
+];
+
+<span class="cm">// map — transform each element</span>
+<span class="kw">const</span> totals = orders.map(o => o.total); <span class="cm">// [250, 480, 120]</span>
+
+<span class="cm">// filter — keep matching elements</span>
+<span class="kw">const</span> paid = orders.filter(o => o.status === <span class="str">"paid"</span>);
+
+<span class="cm">// reduce — fold into single value</span>
+<span class="kw">const</span> revenue = orders.reduce((sum, o) => sum + o.total, <span class="num">0</span>); <span class="cm">// 850</span>
+
+<span class="cm">// find / findIndex</span>
+<span class="kw">const</span> bigOrder = orders.find(o => o.total > <span class="num">400</span>); <span class="cm">// { id:2 ... }</span>
+
+<span class="cm">// flat / flatMap</span>
+<span class="kw">const</span> tags = orders.flatMap(o => o.tags ?? []); <span class="cm">// flatten nested arrays</span>
+
+<span class="cm">// Immutable methods (ES2024) — don't mutate original</span>
+<span class="kw">const</span> sorted = orders.toSorted((a, b) => a.total - b.total);
+<span class="kw">const</span> updated = orders.with(<span class="num">1</span>, { ...orders[<span class="num">1</span>], status: <span class="str">"paid"</span> });
+<span class="kw">const</span> reversed = orders.toReversed();
+<span class="cm">// original 'orders' is unchanged ✅</span>
+
+<span class="cm">// at() — negative indexing</span>
+orders.at(-<span class="num">1</span>); <span class="cm">// last element</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  In a React component rendering order history, you'd chain:
+                  <code
+                    >orders.filter(o =&gt; o.status === 'paid').toSorted((a,b)
+                    =&gt; b.date - a.date).slice(0,10).map(o =&gt; &lt;OrderCard
+                    key={o.id} /&gt;)</code
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-map"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Map — key-value with any key type</h3>
+              <span class="badge badge-es">ES2015</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Map vs Object: Map allows any key type, maintains insertion order</span>
+<span class="kw">const</span> cache = <span class="kw">new</span> Map();
+
+cache.set(<span class="str">"user:123"</span>, { name: <span class="str">"Ali"</span> });
+cache.set(<span class="num">42</span>, <span class="str">"numeric key"</span>);  <span class="cm">// objects as keys too</span>
+cache.set(userObj, sessionData);    <span class="cm">// object as key!</span>
+
+cache.get(<span class="str">"user:123"</span>);  <span class="cm">// → { name: "Ali" }</span>
+cache.has(<span class="str">"user:123"</span>);  <span class="cm">// → true</span>
+cache.size;               <span class="cm">// → 3</span>
+cache.delete(<span class="num">42</span>);
+
+<span class="cm">// Iteration</span>
+<span class="kw">for</span> (<span class="kw">const</span> [key, value] <span class="kw">of</span> cache) {
+  <span class="fn">console</span>.log(key, value);
+}
+
+<span class="cm">// Build from object</span>
+<span class="kw">const</span> map = <span class="kw">new</span> Map(Object.entries(myObj));</pre>
+              <div class="tip">
+                <div class="t-label">When to use Map vs Object</div>
+                <p>
+                  Use <code>Map</code> when keys aren't strings, when you need
+                  insertion-order iteration, or when you frequently add/remove
+                  keys (Map is faster for this). Use plain objects for static
+                  config or JSON data.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-circle-dashed"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>Set — unique values + ES2025 set algebra</h3>
+              <span class="badge badge-es">ES2015 + ES2025</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Deduplicate an array instantly</span>
+<span class="kw">const</span> unique = [...<span class="kw">new</span> Set([<span class="num">1</span>,<span class="num">2</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">3</span>,<span class="num">3</span>])]; <span class="cm">// → [1,2,3]</span>
+
+<span class="kw">const</span> admins  = <span class="kw">new</span> Set([<span class="str">"alice"</span>, <span class="str">"bob"</span>]);
+<span class="kw">const</span> editors = <span class="kw">new</span> Set([<span class="str">"bob"</span>, <span class="str">"carol"</span>]);
+
+<span class="cm">// ES2025 set methods — no more manual loops</span>
+admins.union(editors);             <span class="cm">// → Set {"alice","bob","carol"}</span>
+admins.intersection(editors);      <span class="cm">// → Set {"bob"}</span>
+admins.difference(editors);        <span class="cm">// → Set {"alice"}</span>
+admins.symmetricDifference(editors)<span class="cm">// → Set {"alice","carol"}</span>
+admins.isSubsetOf(editors);        <span class="cm">// → false</span>
+admins.isDisjointFrom(editors);    <span class="cm">// → false</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Permission systems:
+                  <code
+                    >const hasAccess =
+                    requiredPermissions.isSubsetOf(user.permissions)</code
+                  >. Tagging systems and faceted search filters use set
+                  operations constantly.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: primitives -->
+        <div id="sec-primitives" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Primitives & Built-in Types</h1>
+            <p>
+              String, Number, Boolean, Symbol, BigInt — the atomic values of
+              JavaScript and their rich built-in methods.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-letter-t"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>String — methods you'll use daily</h3>
+              <span class="badge badge-js">Built-in</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">const</span> email = <span class="str">"  User@Example.COM  "</span>;
+
+email.trim().toLowerCase();          <span class="cm">// → "user@example.com"</span>
+email.includes(<span class="str">"@"</span>);               <span class="cm">// → true</span>
+email.startsWith(<span class="str">"  User"</span>);         <span class="cm">// → true</span>
+email.slice(<span class="num">2</span>, <span class="num">6</span>);                  <span class="cm">// → "User"</span>
+email.split(<span class="str">"@"</span>);                   <span class="cm">// → ["  User", "Example.COM  "]</span>
+
+<span class="cm">// Template literals — multi-line, expressions</span>
+<span class="kw">const</span> html = <span class="str">`
+  &lt;div class="card"&gt;
+    &lt;h2&gt;${user.name}&lt;/h2&gt;
+    &lt;p&gt;Orders: ${orders.length}&lt;/p&gt;
+  &lt;/div&gt;
+`</span>;
+
+<span class="cm">// Padding — format output tables, codes</span>
+String(<span class="num">42</span>).padStart(<span class="num">6</span>, <span class="str">"0"</span>);  <span class="cm">// → "000042"</span>
+<span class="str">"PKR"</span>.padEnd(<span class="num">10</span>, <span class="str">"-"</span>);         <span class="cm">// → "PKR-------"</span>
+
+<span class="cm">// replaceAll — replace every occurrence</span>
+<span class="str">"a.b.c.d"</span>.replaceAll(<span class="str">"."</span>, <span class="str">"/"</span>);  <span class="cm">// → "a/b/c/d"</span></pre>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-hash"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Symbol & BigInt</h3>
+              <span class="badge badge-es">ES2015 / ES2020</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Symbol — guaranteed unique identifier</span>
+<span class="kw">const</span> id = Symbol(<span class="str">"userId"</span>);
+<span class="kw">const</span> id2 = Symbol(<span class="str">"userId"</span>);
+id === id2; <span class="cm">// → false (always unique)</span>
+
+<span class="cm">// Use as truly private-ish object keys</span>
+<span class="kw">const</span> SECRET_KEY = Symbol(<span class="str">"secret"</span>);
+user[SECRET_KEY] = <span class="str">"token123"</span>; <span class="cm">// hidden from for...in / JSON.stringify</span>
+
+<span class="cm">// BigInt — integers beyond Number.MAX_SAFE_INTEGER</span>
+<span class="kw">const</span> bigNum = <span class="num">9007199254740993n</span>;  <span class="cm">// 'n' suffix</span>
+<span class="kw">const</span> sum = bigNum + <span class="num">1n</span>;           <span class="cm">// must use BigInt operations</span>
+
+<span class="cm">// Real use: transaction IDs, blockchain hashes, database IDs</span>
+<span class="kw">const</span> txId = BigInt(<span class="str">"923372036854775807"</span>);</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: iteration -->
+        <div id="sec-iteration" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Iteration, Generators & RegExp</h1>
+            <p>
+              The iterable protocol, ES2025 Iterator helpers, and RegExp with
+              the modern features.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-rotate-clockwise"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>ES2025 Iterator helpers</h3>
+              <span class="badge badge-new">ES2025</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Iterator.from() — wrap any iterable</span>
+<span class="kw">const</span> result = Iterator.from([<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>,<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>,<span class="num">10</span>])
+  .filter(n => n % <span class="num">2</span> === <span class="num">0</span>)   <span class="cm">// lazy — no array created yet</span>
+  .map(n => n * n)
+  .take(<span class="num">3</span>)                      <span class="cm">// stop after 3</span>
+  .toArray();                    <span class="cm">// → [4, 16, 36]</span>
+
+<span class="cm">// vs Array — Iterator chains are LAZY (no intermediate arrays)</span>
+<span class="cm">// Huge win for large datasets or infinite sequences</span>
+
+<span class="cm">// Custom iterable class</span>
+<span class="kw">class</span> <span class="fn">Range</span> {
+  <span class="fn">constructor</span>(start, end) { <span class="kw">this</span>.start = start; <span class="kw">this</span>.end = end; }
+  [Symbol.iterator]() {
+    <span class="kw">let</span> current = <span class="kw">this</span>.start;
+    <span class="kw">const</span> end = <span class="kw">this</span>.end;
+    <span class="kw">return</span> {
+      next() {
+        <span class="kw">return</span> current <= end
+          ? { value: current++, done: <span class="kw">false</span> }
+          : { done: <span class="kw">true</span> };
+      }
+    };
+  }
+}
+<span class="kw">for</span> (<span class="kw">const</span> n <span class="kw">of</span> <span class="kw">new</span> Range(<span class="num">1</span>, <span class="num">5</span>)) <span class="fn">console</span>.log(n); <span class="cm">// 1 2 3 4 5</span></pre>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-regex"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>RegExp — patterns + ES2025 escape</h3>
+              <span class="badge badge-js">Built-in</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Common patterns</span>
+<span class="kw">const</span> emailRe  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+<span class="kw">const</span> phoneRe  = /^(\+92|0)?[0-9]{10}$/;
+
+emailRe.test(<span class="str">"user@example.com"</span>); <span class="cm">// → true</span>
+
+<span class="cm">// Named capture groups</span>
+<span class="kw">const</span> dateRe = /(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/;
+<span class="kw">const</span> { groups } = <span class="str">"2025-06-15"</span>.match(dateRe);
+groups.year;  <span class="cm">// → "2025"</span>
+groups.month; <span class="cm">// → "06"</span>
+
+<span class="cm">// matchAll — all occurrences with capture groups</span>
+<span class="kw">const</span> tags = [...<span class="str">"&lt;h1&gt;Hi&lt;/h1&gt; &lt;p&gt;World&lt;/p&gt;"</span>.matchAll(/&lt;(\w+)&gt;/g)];
+
+<span class="cm">// ES2025: RegExp.escape() — safely use user input in patterns</span>
+<span class="kw">const</span> userInput = <span class="str">"C++ is great (really)"</span>;
+<span class="kw">const</span> safe = <span class="kw">new</span> RegExp(RegExp.escape(userInput), <span class="str">"gi"</span>);
+<span class="cm">// Without escape: C++ would break the regex!</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: modules -->
+        <div id="sec-modules" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>ES Modules</h1>
+            <p>
+              How modern JavaScript organizes code — static imports, dynamic
+              imports, top-level await, and JSON modules.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-puzzle"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Import / Export patterns</h3>
+              <span class="badge badge-es">ES2015+</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// ── Exporting ──────────────────────────────</span>
+<span class="kw">export const</span> PI = <span class="num">3.14159</span>;
+
+<span class="kw">export function</span> <span class="fn">add</span>(a, b) { <span class="kw">return</span> a + b; }
+
+<span class="kw">export default class</span> <span class="fn">Database</span> { <span class="cm">/* ... */</span> }
+
+<span class="kw">export</span> { add <span class="kw">as</span> sum };           <span class="cm">// alias</span>
+<span class="kw">export</span> * <span class="kw">from</span> <span class="str">"./utils.js"</span>;      <span class="cm">// re-export all</span>
+
+<span class="cm">// ── Importing ──────────────────────────────</span>
+<span class="kw">import</span> Database <span class="kw">from</span> <span class="str">"./db.js"</span>;          <span class="cm">// default</span>
+<span class="kw">import</span> { PI, add <span class="kw">as</span> plus } <span class="kw">from</span> <span class="str">"./math.js"</span>;
+<span class="kw">import</span> * <span class="kw">as</span> Utils <span class="kw">from</span> <span class="str">"./utils.js"</span>;    <span class="cm">// namespace</span>
+
+<span class="cm">// Dynamic import — code splitting / lazy loading</span>
+<span class="kw">const</span> { Chart } = <span class="kw">await</span> import(<span class="str">"./chart.js"</span>);
+<span class="cm">// Only loads when needed — key for performance</span>
+
+<span class="cm">// JSON modules (ES2025)</span>
+<span class="kw">import</span> config <span class="kw">from</span> <span class="str">"./config.json"</span> with { type: <span class="str">"json"</span> };
+
+<span class="cm">// Top-level await (modules only)</span>
+<span class="kw">const</span> db = <span class="kw">await</span> initDatabase();
+<span class="kw">export</span> { db };</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Dynamic import is how Next.js implements code splitting:
+                  <code
+                    >const Editor = dynamic(() =&gt; import('./Editor'), { ssr:
+                    false })</code
+                  >. Only loads the heavy editor bundle when needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: modern -->
+        <div id="sec-modern" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Modern JS — 2024 to 2026</h1>
+            <p>
+              The newest additions to the language — what's stable now and
+              what's coming.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-sparkles"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Temporal — the new Date API</h3>
+              <span class="badge badge-new">ES2026</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <div class="explain-block">
+                <div class="label">Why it matters</div>
+                <p>
+                  The legacy <code>Date</code> object is notoriously broken —
+                  inconsistent timezone handling, mutable values, confusing
+                  months (0-indexed!). <code>Temporal</code> replaces it
+                  entirely with an immutable, timezone-correct API.
+                </p>
+              </div>
+              <pre><span class="cm">// Old Date — problematic</span>
+<span class="kw">new</span> Date(<span class="str">"2025-01-01"</span>);  <span class="cm">// parsed as UTC, shown in local time — confusing</span>
+date.getMonth();        <span class="cm">// → 0 for January (0-indexed!)</span>
+
+<span class="cm">// Temporal — clean, immutable, timezone-aware</span>
+<span class="kw">const</span> today = Temporal.Now.plainDateISO();
+<span class="fn">console</span>.log(today.month);   <span class="cm">// → 6 (June, 1-indexed ✅)</span>
+<span class="fn">console</span>.log(today.year);    <span class="cm">// → 2025</span>
+
+<span class="kw">const</span> meeting = Temporal.ZonedDateTime.from(<span class="str">"2025-06-15T14:00[Asia/Karachi]"</span>);
+<span class="kw">const</span> inNY = meeting.withTimeZone(<span class="str">"America/New_York"</span>);
+
+<span class="cm">// Duration arithmetic — no more manual ms math</span>
+<span class="kw">const</span> deadline = today.add({ days: <span class="num">30</span> });
+<span class="kw">const</span> diff = deadline.since(today);
+diff.days; <span class="cm">// → 30</span></pre>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-at"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Decorators (Stage 3, ~2026)</h3>
+              <span class="badge badge-new">Proposal</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Decorators annotate/modify class behavior</span>
+
+<span class="cm">// @log — automatically log method calls</span>
+<span class="kw">function</span> <span class="fn">log</span>(target, context) {
+  <span class="kw">return function</span>(...args) {
+    <span class="fn">console</span>.log(<span class="str">`Calling ${context.name} with`</span>, args);
+    <span class="kw">return</span> target.apply(<span class="kw">this</span>, args);
+  };
+}
+
+<span class="kw">class</span> <span class="fn">OrderService</span> {
+  @log
+  <span class="kw">async</span> <span class="fn">createOrder</span>(items) { <span class="cm">/* ... */</span> }
+
+  @deprecated
+  <span class="fn">legacyMethod</span>() { <span class="cm">/* ... */</span> }
+}
+<span class="cm">// Used today in TypeScript & Angular — becoming native</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- NODE SECTIONS -->
+        <div id="sec-process" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Node.js Globals & Process</h1>
+            <p>
+              The objects available everywhere in Node — process info,
+              environment variables, console, and module metadata.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-terminal"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>process — the runtime environment</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// Environment variables</span>
+<span class="kw">const</span> port = process.env.PORT || <span class="num">3000</span>;
+<span class="kw">const</span> isDev = process.env.NODE_ENV === <span class="str">"development"</span>;
+
+<span class="cm">// Command-line args: node server.js --port=8080</span>
+<span class="kw">const</span> args = process.argv.slice(<span class="num">2</span>);
+<span class="cm">// → ["--port=8080"]</span>
+
+<span class="cm">// Graceful shutdown — critical for production</span>
+process.on(<span class="str">"SIGTERM"</span>, <span class="kw">async</span> () => {
+  <span class="fn">console</span>.log(<span class="str">"Shutting down gracefully..."</span>);
+  <span class="kw">await</span> db.disconnect();
+  server.close(() => process.exit(<span class="num">0</span>));
+});
+
+<span class="cm">// Unhandled errors — catch before crash</span>
+process.on(<span class="str">"unhandledRejection"</span>, (reason) => {
+  logger.error(<span class="str">"Unhandled promise rejection"</span>, reason);
+  process.exit(<span class="num">1</span>);
+});
+
+<span class="cm">// System info</span>
+process.platform;         <span class="cm">// → "linux" | "win32" | "darwin"</span>
+process.env.HOME;         <span class="cm">// → "/home/username"</span>
+process.memoryUsage();    <span class="cm">// → { rss, heapTotal, heapUsed, ... }</span>
+process.hrtime.bigint();  <span class="cm">// nanosecond-precision timer</span></pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Every production Node app handles <code>SIGTERM</code> for
+                  graceful shutdown during Kubernetes pod restarts or Docker
+                  deployments. Without it, in-flight requests get killed
+                  abruptly.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-fs" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>File System (fs)</h1>
+            <p>
+              Reading, writing, streaming files — and when to use each approach.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-folder-open"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>fs.promises — async file operations</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { readFile, writeFile, mkdir, readdir, stat } <span class="kw">from</span> <span class="str">"node:fs/promises"</span>;
+<span class="kw">import</span> path <span class="kw">from</span> <span class="str">"node:path"</span>;
+
+<span class="cm">// Read file</span>
+<span class="kw">const</span> content = <span class="kw">await</span> readFile(<span class="str">"config.json"</span>, <span class="str">"utf8"</span>);
+<span class="kw">const</span> config  = JSON.parse(content);
+
+<span class="cm">// Write file (creates or overwrites)</span>
+<span class="kw">await</span> writeFile(<span class="str">"output.json"</span>, JSON.stringify(data, null, <span class="num">2</span>));
+
+<span class="cm">// Create directory recursively</span>
+<span class="kw">await</span> mkdir(<span class="str">"uploads/images"</span>, { recursive: <span class="kw">true</span> });
+
+<span class="cm">// List files</span>
+<span class="kw">const</span> files = <span class="kw">await</span> readdir(<span class="str">"./src"</span>);
+
+<span class="cm">// Stream large files — don't load into memory</span>
+<span class="kw">import</span> { createReadStream, createWriteStream } <span class="kw">from</span> <span class="str">"node:fs"</span>;
+<span class="kw">import</span> { pipeline } <span class="kw">from</span> <span class="str">"node:stream/promises"</span>;
+<span class="kw">import</span> { createGzip } <span class="kw">from</span> <span class="str">"node:zlib"</span>;
+
+<span class="cm">// Compress a 1GB log file without using 1GB RAM</span>
+<span class="kw">await</span> pipeline(
+  createReadStream(<span class="str">"access.log"</span>),
+  createGzip(),
+  createWriteStream(<span class="str">"access.log.gz"</span>)
+);</pre>
+              <div class="gotcha">
+                <div class="g-label">Key rule</div>
+                <p>
+                  Never use <code>readFileSync</code> or
+                  <code>writeFileSync</code> in a web server — they block the
+                  entire event loop, freezing ALL requests while the file reads.
+                  Always use the async Promise API or streams.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-http" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>HTTP, HTTPS & Fetch</h1>
+            <p>
+              Building HTTP servers and making requests in Node — from the
+              low-level http module to the modern Fetch API.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-world"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>http.createServer — raw HTTP server</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { createServer } <span class="kw">from</span> <span class="str">"node:http"</span>;
+
+<span class="kw">const</span> server = createServer(<span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> url = <span class="kw">new</span> URL(req.url, <span class="str">`http://${req.headers.host}`</span>);
+
+  <span class="kw">if</span> (req.method === <span class="str">"GET"</span> && url.pathname === <span class="str">"/api/users"</span>) {
+    <span class="kw">const</span> users = <span class="kw">await</span> db.getUsers();
+    res.writeHead(<span class="num">200</span>, { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span> });
+    res.end(JSON.stringify(users));
+
+  } <span class="kw">else if</span> (req.method === <span class="str">"POST"</span> && url.pathname === <span class="str">"/api/users"</span>) {
+    <span class="kw">let</span> body = <span class="str">""</span>;
+    <span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> req) body += chunk;
+    <span class="kw">const</span> data = JSON.parse(body);
+    <span class="cm">/* ... */</span>
+
+  } <span class="kw">else</span> {
+    res.writeHead(<span class="num">404</span>);
+    res.end(<span class="str">"Not found"</span>);
+  }
+});
+
+server.listen(<span class="num">3000</span>, () => <span class="fn">console</span>.log(<span class="str">"Listening on :3000"</span>));</pre>
+              <div class="tip">
+                <div class="t-label">In practice</div>
+                <p>
+                  You rarely use raw <code>http.createServer</code> in
+                  production. Use Express, Fastify, or Hono — they add routing,
+                  middleware, body parsing, and error handling. But
+                  understanding the raw API helps you debug and write better
+                  frameworks.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-cloud-download"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>fetch (Node 18+) — making HTTP requests</h3>
+              <span class="badge badge-node">Node 18+</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// GET request</span>
+<span class="kw">const</span> res  = <span class="kw">await</span> fetch(<span class="str">"https://api.example.com/users"</span>);
+<span class="kw">const</span> users = <span class="kw">await</span> res.json();
+
+<span class="cm">// POST with JSON body</span>
+<span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">"https://api.example.com/orders"</span>, {
+  method: <span class="str">"POST"</span>,
+  headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>,
+             <span class="str">"Authorization"</span>: <span class="str">`Bearer ${token}`</span> },
+  body: JSON.stringify({ items, userId }),
+});
+<span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> Error(<span class="str">`HTTP ${res.status}`</span>);
+
+<span class="cm">// Timeout with AbortController</span>
+<span class="kw">const</span> ac = <span class="kw">new</span> AbortController();
+setTimeout(() => ac.abort(), <span class="num">5000</span>);
+
+<span class="kw">try</span> {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(url, { signal: ac.signal });
+} <span class="kw">catch</span> (err) {
+  <span class="kw">if</span> (err.name === <span class="str">"AbortError"</span>) <span class="fn">console</span>.log(<span class="str">"Request timed out"</span>);
+}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-events" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Events & Streams</h1>
+            <p>
+              Node's event-driven core — EventEmitter for pub/sub, and streams
+              for handling large data efficiently.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-broadcast"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>EventEmitter — custom pub/sub</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { EventEmitter } <span class="kw">from</span> <span class="str">"node:events"</span>;
+
+<span class="kw">class</span> <span class="fn">PaymentProcessor</span> <span class="kw">extends</span> EventEmitter {
+  <span class="kw">async</span> <span class="fn">process</span>(payment) {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> result = <span class="kw">await</span> chargeCard(payment);
+      <span class="kw">this</span>.emit(<span class="str">"success"</span>, result);
+    } <span class="kw">catch</span> (err) {
+      <span class="kw">this</span>.emit(<span class="str">"failure"</span>, err, payment);
+    }
+  }
+}
+
+<span class="kw">const</span> processor = <span class="kw">new</span> PaymentProcessor();
+
+processor.on(<span class="str">"success"</span>, (result) => {
+  sendReceipt(result.email);
+  updateDatabase(result);
+});
+
+processor.on(<span class="str">"failure"</span>, (err, payment) => {
+  logger.error(<span class="str">"Payment failed"</span>, { err, payment });
+  notifySupport(payment);
+});
+
+processor.once(<span class="str">"success"</span>, () => awardFirstPurchaseBadge());</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Node's <code>http.IncomingMessage</code>, file streams,
+                  database connections, and WebSocket clients all extend
+                  EventEmitter. Understanding it means understanding all of
+                  Node's async I/O.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-wave-sine"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Streams & pipeline</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { pipeline } <span class="kw">from</span> <span class="str">"node:stream/promises"</span>;
+<span class="kw">import</span> { createReadStream, createWriteStream } <span class="kw">from</span> <span class="str">"node:fs"</span>;
+<span class="kw">import</span> { createGzip } <span class="kw">from</span> <span class="str">"node:zlib"</span>;
+<span class="kw">import</span> { Transform } <span class="kw">from</span> <span class="str">"node:stream"</span>;
+
+<span class="cm">// Transform stream — process chunks as they flow</span>
+<span class="kw">const</span> uppercase = <span class="kw">new</span> Transform({
+  transform(chunk, enc, callback) {
+    callback(null, chunk.toString().toUpperCase());
+  }
+});
+
+<span class="cm">// pipeline — automatic error handling and cleanup</span>
+<span class="kw">await</span> pipeline(
+  createReadStream(<span class="str">"input.txt"</span>),
+  uppercase,
+  createGzip(),
+  createWriteStream(<span class="str">"output.txt.gz"</span>)
+);
+
+<span class="cm">// Async iteration over stream</span>
+<span class="kw">const</span> readable = createReadStream(<span class="str">"bigfile.csv"</span>);
+<span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> readable) {
+  processChunk(chunk.toString());
+}</pre>
+              <div class="gotcha">
+                <div class="g-label">Always use pipeline</div>
+                <p>
+                  Manually piping with <code>.pipe()</code> doesn't properly
+                  handle errors — a stream error can leave file handles open.
+                  <code>pipeline()</code> from
+                  <code>stream/promises</code> cleans up automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-nodemods" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Core Node.js Modules</h1>
+            <p>
+              The built-in modules you reach for constantly — crypto, os, path,
+              util, child_process, worker_threads.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-lock"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>crypto — hashing, encryption, random</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { createHash, randomBytes, createHmac } <span class="kw">from</span> <span class="str">"node:crypto"</span>;
+
+<span class="cm">// Hash a password (use bcrypt in real apps)</span>
+<span class="kw">const</span> hash = createHash(<span class="str">"sha256"</span>).update(password).digest(<span class="str">"hex"</span>);
+
+<span class="cm">// Generate a secure random token (API keys, reset links)</span>
+<span class="kw">const</span> token = randomBytes(<span class="num">32</span>).toString(<span class="str">"hex"</span>);
+
+<span class="cm">// HMAC — verify webhook signatures (Stripe, GitHub webhooks)</span>
+<span class="kw">function</span> <span class="fn">verifyWebhook</span>(payload, secret, signature) {
+  <span class="kw">const</span> expected = createHmac(<span class="str">"sha256"</span>, secret)
+    .update(payload)
+    .digest(<span class="str">"hex"</span>);
+  <span class="kw">return</span> expected === signature;
+}</pre>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-cpu"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>worker_threads — true parallelism</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// main.js — spawn a worker</span>
+<span class="kw">import</span> { Worker } <span class="kw">from</span> <span class="str">"node:worker_threads"</span>;
+
+<span class="kw">const</span> worker = <span class="kw">new</span> Worker(<span class="str">"./heavy-task.js"</span>, {
+  workerData: { imagePath: <span class="str">"photo.jpg"</span>, quality: <span class="num">80</span> }
+});
+
+worker.on(<span class="str">"message"</span>, (result) => <span class="fn">console</span>.log(<span class="str">"Done:"</span>, result));
+worker.on(<span class="str">"error"</span>,   (err)    => <span class="fn">console</span>.error(err));
+
+<span class="cm">// heavy-task.js — runs in separate thread</span>
+<span class="kw">import</span> { parentPort, workerData } <span class="kw">from</span> <span class="str">"node:worker_threads"</span>;
+<span class="kw">import</span> sharp <span class="kw">from</span> <span class="str">"sharp"</span>;
+
+<span class="kw">const</span> result = <span class="kw">await</span> sharp(workerData.imagePath)
+  .jpeg({ quality: workerData.quality })
+  .toBuffer();
+
+parentPort.postMessage({ size: result.byteLength });</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  CPU-intensive tasks like image processing, PDF generation,
+                  video transcoding, or ML inference should be offloaded to
+                  workers so the main event loop stays responsive to incoming
+                  requests.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-tools"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>util — promisify, inspect, format</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { promisify, inspect, callbackify } <span class="kw">from</span> <span class="str">"node:util"</span>;
+<span class="kw">import</span> { exec } <span class="kw">from</span> <span class="str">"node:child_process"</span>;
+
+<span class="cm">// promisify — convert callback-style to Promise</span>
+<span class="kw">const</span> execAsync = promisify(exec);
+<span class="kw">const</span> { stdout } = <span class="kw">await</span> execAsync(<span class="str">"ls -la"</span>);
+
+<span class="cm">// inspect — deep object printing for logs</span>
+<span class="fn">console</span>.log(inspect(complexObj, { depth: <span class="num">4</span>, colors: <span class="kw">true</span> }));</pre>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-nodemodules" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>CommonJS vs ES Modules</h1>
+            <p>
+              The two module systems in Node — when to use each, how to mix
+              them, and the 2025 status of <code>require(ESM)</code>.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-file-import"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>CommonJS vs ESM side by side</h3>
+              <span class="badge badge-node">Node</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="cm">// ──── CommonJS (CJS) ─────────────────────────</span>
+<span class="kw">const</span> fs      = require(<span class="str">"fs"</span>);
+<span class="kw">const</span> express = require(<span class="str">"express"</span>);
+<span class="kw">const</span> { helper } = require(<span class="str">"./utils"</span>);  <span class="cm">// destructure</span>
+
+module.exports = { myFunction };
+module.exports = MyClass;               <span class="cm">// default export</span>
+
+<span class="cm">// __dirname and __filename are globals in CJS</span>
+
+<span class="cm">// ──── ES Modules (ESM) ───────────────────────</span>
+<span class="cm">// Requires "type":"module" in package.json OR .mjs extension</span>
+<span class="kw">import</span> fs <span class="kw">from</span> <span class="str">"node:fs/promises"</span>;
+<span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
+<span class="kw">import</span> { helper } <span class="kw">from</span> <span class="str">"./utils.js"</span>;  <span class="cm">// .js required!</span>
+
+<span class="kw">export const</span> myFn = () => {};
+<span class="kw">export default class</span> MyClass {}
+
+<span class="cm">// __dirname is NOT available in ESM — use import.meta</span>
+<span class="kw">import</span> { fileURLToPath } <span class="kw">from</span> <span class="str">"node:url"</span>;
+<span class="kw">import</span> path <span class="kw">from</span> <span class="str">"node:path"</span>;
+<span class="kw">const</span> __dirname = path.dirname(fileURLToPath(import.meta.url));
+<span class="cm">// Node 20.11+: import.meta.dirname works directly</span></pre>
+              <div class="tip">
+                <div class="t-label">2025 recommendation</div>
+                <p>
+                  New projects: use ESM. Set <code>"type": "module"</code> in
+                  <code>package.json</code>. CJS still dominates npm but the
+                  ecosystem is shifting. Node 22+ allows
+                  <code>require()</code> of some ESM files experimentally.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-nodepatterns" class="section" style="display: none">
+          <div class="section-hero">
+            <h1>Node.js Patterns & Best Practices</h1>
+            <p>
+              The production patterns, frameworks, and tools the industry uses
+              in 2025–2026.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-layout-grid"
+                aria-hidden="true"
+                style="color: var(--accent)"
+              ></i>
+              <h3>Express.js — production server pattern</h3>
+              <span class="badge badge-node">Framework</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
+
+<span class="kw">const</span> app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: <span class="kw">true</span> }));
+
+<span class="cm">// asyncHandler — wraps async route to catch errors</span>
+<span class="kw">const</span> <span class="fn">asyncHandler</span> = fn => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+<span class="cm">// Route with validation + async DB call</span>
+app.post(<span class="str">"/api/orders"</span>, asyncHandler(<span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { userId, items } = req.body;
+  <span class="kw">if</span> (!userId || !items?.length) {
+    <span class="kw">return</span> res.status(<span class="num">400</span>).json({ error: <span class="str">"Invalid input"</span> });
+  }
+  <span class="kw">const</span> order = <span class="kw">await</span> db.orders.create({ data: { userId, items } });
+  res.status(<span class="num">201</span>).json(order);
+}));
+
+<span class="cm">// Global error middleware — always 4 params</span>
+app.use((err, req, res, next) => {
+  logger.error(err);
+  res.status(err.status || <span class="num">500</span>).json({ error: err.message });
+});
+
+app.listen(<span class="num">3000</span>);</pre>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-database"
+                aria-hidden="true"
+                style="color: var(--accent2)"
+              ></i>
+              <h3>Prisma ORM — type-safe database access</h3>
+              <span class="badge badge-node">ORM</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { PrismaClient } <span class="kw">from</span> <span class="str">"@prisma/client"</span>;
+<span class="kw">const</span> prisma = <span class="kw">new</span> PrismaClient();
+
+<span class="cm">// Find with relations — fully typed</span>
+<span class="kw">const</span> user = <span class="kw">await</span> prisma.user.findUnique({
+  where: { id: userId },
+  include: { orders: { where: { status: <span class="str">"active"</span> } } }
+});
+
+<span class="cm">// Create with nested writes</span>
+<span class="kw">const</span> order = <span class="kw">await</span> prisma.order.create({
+  data: {
+    user:  { connect: { id: userId } },
+    items: { createMany: { data: cartItems } },
+    total: cartItems.reduce((s, i) => s + i.price, <span class="num">0</span>),
+  }
+});
+
+<span class="cm">// Transaction</span>
+<span class="kw">await</span> prisma.$transaction([
+  prisma.account.update({ where: { id: fromId }, data: { balance: { decrement: amount } } }),
+  prisma.account.update({ where: { id: toId },   data: { balance: { increment: amount } } }),
+]);</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Prisma is the most popular ORM in the Node.js ecosystem
+                  (2025). Its auto-generated TypeScript types mean your editor
+                  catches wrong column names and type mismatches before runtime.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="card-header" onclick="toggle(this)">
+              <i
+                class="ti ti-shield"
+                aria-hidden="true"
+                style="color: var(--warn)"
+              ></i>
+              <h3>Zod — runtime type validation</h3>
+              <span class="badge badge-node">Validation</span>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+            <div class="card-body open">
+              <pre><span class="kw">import</span> { z } <span class="kw">from</span> <span class="str">"zod"</span>;
+
+<span class="kw">const</span> OrderSchema = z.object({
+  userId:   z.string().uuid(),
+  items:    z.array(z.object({
+    productId: z.string(),
+    quantity:  z.number().int().positive(),
+    price:     z.number().positive(),
+  })).min(<span class="num">1</span>),
+  promoCode: z.string().optional(),
+});
+
+app.post(<span class="str">"/api/orders"</span>, asyncHandler(<span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> validated = OrderSchema.safeParse(req.body);
+  <span class="kw">if</span> (!validated.success) {
+    <span class="kw">return</span> res.status(<span class="num">400</span>).json({ errors: validated.error.format() });
+  }
+  <span class="kw">const</span> { userId, items } = validated.data; <span class="cm">// fully typed ✅</span>
+}));
+
+<span class="cm">// Infer TypeScript type from schema</span>
+<span class="kw">type</span> Order = z.infer&lt;<span class="kw">typeof</span> OrderSchema&gt;;</pre>
+              <div class="real-world">
+                <div class="rw-label">Real-world use</div>
+                <p>
+                  Zod is the standard for validating API request bodies,
+                  environment variables (<code
+                    >z.object({ PORT: z.string().transform(Number)
+                    }).parse(process.env)</code
+                  >), and form data in t3 stack apps.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function show(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => (s.style.display = "none"));
+        const sec = document.getElementById("sec-" + id);
+        if (sec) sec.style.display = "block";
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        const clicked = [...document.querySelectorAll(".nav-item")].find(
+          (n) => n.getAttribute("onclick") === `show('${id}')`,
+        );
+        if (clicked) clicked.classList.add("active");
+        document.getElementById("mainContent").scrollTop = 0;
+      }
+
+      function toggle(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".ti-chevron-down");
+        const isOpen = body.classList.contains("open");
+        body.classList.toggle("open", !isOpen);
+        body.style.display = isOpen ? "none" : "block";
+        if (icon) icon.style.transform = isOpen ? "" : "rotate(180deg)";
+      }
+
+      function filterNav(q) {
+        const items = document.querySelectorAll(".nav-item");
+        const lq = q.toLowerCase();
+        items.forEach((item) => {
+          const text = (
+            item.textContent +
+            " " +
+            (item.dataset.search || "")
+          ).toLowerCase();
+          item.style.display = text.includes(lq) ? "flex" : "none";
+        });
+        const labels = document.querySelectorAll(".tab-group-label");
+        labels.forEach((l) => (l.style.display = lq ? "none" : ""));
+      }
+
+      document.querySelectorAll(".card-body").forEach((b) => {
+        if (!b.classList.contains("open")) b.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
