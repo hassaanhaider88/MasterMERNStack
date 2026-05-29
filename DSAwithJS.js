@@ -61,3 +61,26 @@
 // console.log(Math.min(12, 4, -12, 14)) // -12
 // console.log(Math.random()) // any number between 0 to 0.9999999999999999 ->16 digits
 // console.log(12.424221.toFixed(3)) // 12.424 after point
+
+// Area of Triangle by Heron's Formula
+// let a = 5;
+// let b = 4;
+// let c = 3;
+// let s = (a + b + c) / 2
+// console.log(Math.sqrt(s * (s - a) * (s - b) * (s - c)))
+
+// Circumference of Circle
+// let r = 12;
+// console.log(2 * Math.PI * r) // 75.39
+
+// Conditions
+// const age = Number(prompt("What is your age?"));
+// if (isNaN(age)) {
+//     console.log("Invalid Age")
+// }else if (age > 18) {
+//     console.log("Yes Your Are Able to Vote")
+// } else {
+//     console.log("No Your are not able to Vote")
+// }
+
+console.log(exec(2 + 4))
