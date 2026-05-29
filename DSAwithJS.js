@@ -83,4 +83,16 @@
 //     console.log("No Your are not able to Vote")
 // }
 
-console.log(exec(2 + 4))
+// // Shop Discount Counter  
+// let amount = 6000;
+// let dis = 0;
+// if (amount > 0 && amount <= 5000) {
+//     dis = 0;
+// } else if (amount > 5000 && amount <= 7000) {
+//     dis = 5;
+// } else if (amount > 7000 && amount <= 9000) {
+//     dis = 7;
+// } else if (amount > 9000) {
+//     dis = 20;
+// }
+// console.log(amount - Math.floor((amount * dis) / 100))
