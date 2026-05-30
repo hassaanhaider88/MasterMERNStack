@@ -323,9 +323,9 @@
 // }
 
 // *   *
-//  * * 
-//   *  
-//  * * 
+//  * *
+//   *
+//  * *
 // *   *
 // let n = 5;
 // for (let j = n; j >= 1; j--) {
@@ -340,10 +340,10 @@
 //     console.log()
 // }
 
-// *       * 
-//  *     *  
-//   *   *   
-//    * *    
+// *       *
+//  *     *
+//   *   *
+//    * *
 //     *
 // let n = 5;
 // for (let j = 1; j <= n; j++) {
@@ -356,3 +356,94 @@
 //     }
 //     console.log()
 // }
+
+// Mastering Array
+
+// let arr = ["Sannay"];
+
+// arr.push("Khan");
+// arr.push("Khan2");
+// arr.push("Khan3");
+// arr.push("Khan4");
+// arr.pop() // removing last element
+// arr[8] = "anyThing"
+// arr.shift() // removing first element
+// arr.unshift("Added") // adding first element
+// console.log(arr)
+
+// let arr = [12, 4, 2, 4, 2, 11, 34, 2];
+// let sum = 0;
+
+// // Sum Of Elements
+// for (let i = 0; i < arr.length; i++) {
+//     sum += arr[i];
+// }
+// console.log(sum);
+
+// // Max Val
+// let arr = [12, 4, 2, 4, 2, 11, 4, 2];
+// let max = arr[0];
+// for (let i = 1; i < arr.length; i++) {
+//     if (max < arr[i]) {
+//         max = arr[i]
+//     }
+// }
+
+// console.log(max)
+// // 2nd Max
+// let arr = [12, 4, 2, 4, 2, 11, 4,23, 2];
+// let max = Math.max(arr[0], arr[1]);
+// let sMax = Math.min(arr[0], arr[1]);
+// for (let i = 2; i < arr.length; i++) {
+//     if (arr[i] > max) {
+//         sMax = max
+//         max = arr[i];
+//     } else if (arr[i] > sMax) {
+//         sMax = arr[i]
+//     }
+// }
+
+// console.log(sMax)
+
+// Reverse the array 
+// let arr = [1,2,3,4,5,6,7];
+// let temp = new Array(arr.length);
+// let j = 0
+// for (let i = arr.length - 1; i >= 0; i--) {
+//     temp[j] = arr[i];
+//     j++
+// }
+// console.log(arr, "Old Arr")
+// console.log(temp, "New Arr")
+
+// without Extra space two point log
+// let arr = [1, 2, 3, 4, 5, 6, 7];
+// let i = 0;
+// let j = arr.length -1;
+// while(i != j){
+//     let temp = arr[i];
+//     arr[i] = arr[j];
+//     arr[j] = temp;
+//     i++;
+//     j--
+// }
+
+// console.log(arr)
+
+// Sorting 0 and 1 two point log
+// let arr = [1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0];
+// let i = 0;
+// let j = 0;
+
+// while (i < arr.length) {
+//     if (arr[i] == 0) {
+//         let temp = arr[i];
+//         arr[i] = arr[j];
+//         arr[j] = temp
+//         j++
+//     }
+//     i++
+// }
+// console.log(arr)
+
+// to be contiue inshallah 
