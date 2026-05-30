@@ -265,3 +265,94 @@
 //         console.log("Congrats 💖 Number was", guess)
 //     }
 // }
+
+// Pattern Programming
+
+// *****
+// ****
+// ***
+// **
+// *
+// for (let j = 5; j >= 1; j--) {
+//     for (let i = 1; i <= j; i++) {
+//         process.stdout.write(`*`)
+//     }
+//     console.log()
+// }
+
+//  1
+//  1  2
+//  1  2  3
+//  1  2  3  4
+//  1  2  3  4  5
+// for (let j = 1; j <= 5; j++) {
+//     for (let i = 1; i <= j; i++) {
+//         process.stdout.write(` ${i} `)
+//     }
+//     console.log()
+// }
+
+//  A
+//  A  B
+//  A  B  C
+//  A  B  C  D
+//  A  B  C  D  E
+// for (let j = 1; j <= 5; j++) {
+//     let ascii = 65;
+//     for (let i = 1; i <= j; i++) {
+//         process.stdout.write(` ${String.fromCharCode(ascii)} `)
+//         ascii++
+//     }
+//     console.log()
+// }
+
+//     *
+//    **
+//   ***
+//  ****
+// *****
+// let n = 5;
+// for (let i = 1; i <= n; i++) {
+//     for (let j = 1; j <= n - i; j++) {
+//         process.stdout.write(" ")
+//     }
+//     for (let j = 1; j <= i; j++) {
+//         process.stdout.write("*")
+//     }
+//     console.log()
+// }
+
+// *   *
+//  * * 
+//   *  
+//  * * 
+// *   *
+// let n = 5;
+// for (let j = n; j >= 1; j--) {
+//     for (let i = 1; i <= n; i++) {
+//         if (i == j || i + j == n + 1) {
+//             process.stdout.write(`*`)
+//         } else {
+//             process.stdout.write(` `)
+
+//         }
+//     }
+//     console.log()
+// }
+
+// *       * 
+//  *     *  
+//   *   *   
+//    * *    
+//     *
+// let n = 5;
+// for (let j = 1; j <= n; j++) {
+//     for (let i = 1; i <= n * 2; i++) {
+//         if (i == j || i + j == n * 2) {
+//             process.stdout.write(`*`)
+//         } else {
+//             process.stdout.write(` `)
+//         }
+//     }
+//     console.log()
+// }
