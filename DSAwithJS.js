@@ -62,18 +62,18 @@
 // console.log(Math.random()) // any number between 0 to 0.9999999999999999 ->16 digits
 // console.log(12.424221.toFixed(3)) // 12.424 after point
 
-// Area of Triangle by Heron's Formula
+// // Area of Triangle by Heron's Formula
 // let a = 5;
 // let b = 4;
 // let c = 3;
 // let s = (a + b + c) / 2
 // console.log(Math.sqrt(s * (s - a) * (s - b) * (s - c)))
 
-// Circumference of Circle
+// // Circumference of Circle
 // let r = 12;
 // console.log(2 * Math.PI * r) // 75.39
 
-// Conditions
+// // Conditions
 // const age = Number(prompt("What is your age?"));
 // if (isNaN(age)) {
 //     console.log("Invalid Age")
@@ -160,3 +160,108 @@
 //     amount = amount % 1;
 // }
 
+
+// // Loops
+// // table
+// let n = 5;
+// for (let i = 1; i <= 20; i++) {
+//     console.log(`${n} X ${i} = ${n * i}`)
+// }
+
+// // Sum Of N natural Numbers
+// let n = 4567;
+// let sum = 0;
+// for (let i = 1; i <= n; i++) {
+//     sum += i;
+// }
+// console.log(sum, "Total")
+
+// Factorial OF N
+// let n = 5;
+// let fac = 1;
+// for (let i = 1; i <= n; i++) {
+//     fac *= i;
+// }
+// console.log(fac, "Factorial")
+
+// // Factors
+// let n = 39;
+// for (let i = 1; i <= Math.floor(n / 2); i++) {
+//     if (n % i === 0) {
+//         console.log(i)
+//     }
+// }
+
+// // Prime Number
+// let n = 47;
+// for (let i = 2; i <= Math.floor(n / 2); i++) {
+//     if (n % i === 0) {
+//         console.log("Not Prime")
+//         return;
+//     }
+// }
+// console.log("Yes Prime")
+
+// // Prime Number Very Optimize Way
+// let n = 47;
+// for (let i = 2; i <= Math.floor(Math.sqrt(n)); i++) {
+//     if (n % i === 0) {
+//         console.log("Not Prime")
+//         return;
+//     }
+// }
+// console.log("Yes Prime")
+
+// // Sum Of Digits
+// let n = 3251;
+// let sum = 0;
+// while (n > 0) {
+//     n = Math.floor(n / 10);
+//     sum += Math.floor(n % 10);
+
+// }
+
+// console.log("Sum Is", sum)
+
+// // Number Reverse
+// let n = 23456;
+// let rev = 0;
+// while (n > 0) {
+//     rev = rev * 10 + (n%10)
+//     n = Math.floor(n / 10);
+// }
+
+// console.log(`Reverse Of ${n} is ${rev}`)
+
+// // Strong Number
+// // if 32 = 3! + 2! this is called strong number
+// let n = 145;
+// let copyN = n;
+// let sum = 0;
+// while (n > 0) {
+//     let fact = 1;
+//     for (let i = 1; i <= (n % 10); i++) {
+//         fact *= i;
+//     }
+//     sum += fact;
+//     n = Math.floor(n / 10);
+// }
+
+// console.log(sum == copyN ? "Yes Strong Number" : "Not Strong Nubmer")
+
+
+// // Guess a Random Number
+// let random = Math.floor(Math.random() * 100) + 1;
+// let guess = -1;
+// while (guess !== random) {
+//     guess = Number(prompt("Guess the number b/w 1-100"))
+//     if (isNaN(guess) || guess > 1 || guess < 100) {
+//         console.log("Try between 1 to 100 again")
+//     } else if (guess < random) {
+//         console.log("to Hight, Try again")
+//     } else if (guess > random) {
+//         console.log("To low, Try again")
+//     } else {
+//         console.log("Congrats 💖 Number was", guess)
+//     }
+// }
