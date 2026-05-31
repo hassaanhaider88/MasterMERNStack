@@ -247,7 +247,7 @@
 //     n = Math.floor(n / 10);
 // }
 
-// console.log(sum == copyN ? "Yes Strong Number" : "Not Strong Nubmer")
+// console.log(sum == copyN ? "Yes Strong Number" : "Not Strong Number")
 
 
 // // Guess a Random Number
@@ -405,7 +405,7 @@
 
 // console.log(sMax)
 
-// Reverse the array 
+// Reverse the array
 // let arr = [1,2,3,4,5,6,7];
 // let temp = new Array(arr.length);
 // let j = 0
@@ -460,3 +460,145 @@
 //     i++
 // }
 // console.log(arr)
+
+// // Advance Array Methods
+// // Left rotation by 1 element
+// let arr = [1, 2, 3, 4, 5];
+// let copy = arr[0];
+// for (let i = 0; i < arr.length - 1; i++) {
+//     arr[i] = arr[i + 1];
+// }
+// arr[arr.length - 1] = copy;
+// console.log(arr); // [ 2, 3, 4, 5, 1 ]
+
+// // Right rotation by 1 element
+// let arr = [1, 2, 3, 4, 5];
+// let copy = arr[arr.length - 1];
+// for (let i = arr.length - 1; i > 0; i--) {
+//     arr[i] = arr[i - 1]
+// }
+// arr[0] = copy;
+// console.log(arr); // [ 5, 1, 2, 3, 4 ]
+
+// // Left and Right rotation by k element -> user defined k value
+// let arr = [1, 2, 3, 4, 5]
+// let k = 7; // user defined
+// k = k % arr.length
+// for (let j = 1; j < k; j++) {
+//     let copy = arr[0];
+//     for (let i = 0; i <= arr.length - 1; i++) {
+//         arr[i] = arr[i + 1];
+//     }
+//     arr[arr.length - 1] = copy;
+// }
+// console.log(arr) // [ 4, 5, 1, 2, 3 ]
+
+//  // Test your Skill
+// let arr = [1, 2, 3, 4, 5]
+// let k = 2;
+// k = k % arr.length
+// for (let j = 0; j < k; j++) {
+//     let copy = arr[arr.length - 1]
+//     for (let i = arr.length - 1; i > 0; i--) {
+//         arr[i] = arr[i - 1]
+//     }
+//     arr[0] = copy;
+// }
+// console.log(arr) // [ 4, 5, 1, 2, 3 ]
+
+// // Modulo Arithmetic
+// let arr = [1, 2, 3, 4, 5];
+// let temp = new Array(arr.length)
+// let k = 2; // user defined
+// for (let i = 0; i <= arr.length - 1; i++) {
+//     temp[i] = arr[(i + k) % arr.length]
+// }
+// console.log(temp) //[ 3, 4, 5, 1, 2 ]
+
+// // Reversal Algorithm
+// let arr = [1, 2, 3, 4, 5, 7, 8, 9];
+// let k = 4;
+// reverse(0, k - 1)
+// reverse(k, arr.length - 1)
+// reverse(0, arr.length - 1)
+// console.log(arr) // [5, 7, 8, 9,1, 2, 3, 4]
+// function reverse(i, j) {
+//     while (i < j) {
+//         let temp = arr[i];
+//         arr[i] = arr[j];
+//         arr[j] = temp;
+//         i++;
+//         j--;
+//     }
+// }
+// // try it my own self
+// let arr = [1, 2, 3, 4, 5];
+// let k = 2;
+// reverse(0, k - 1)
+// reverse(k, arr.length - 1)
+// reverse(0, arr.length - 1)
+// console.log(arr)
+
+// function reverse(i, j) {
+//     while (i < j) {
+//         let temp = arr[i];
+//         arr[i] = arr[j];
+//         arr[j] = temp;
+//         j--;
+//         i++
+//     }
+// }
+
+
+// // Remove Duplicate From Sorted Array
+// let arr = [0, 1, 1, 2, 2, 2, 3];
+// const removeDuplicates = (arr) => {
+//     let j = 1;
+//     for (let i = 0; i < arr.length - 1; i++) {
+//         if (arr[i] != arr[i + 1]) {
+//             arr[j] = arr[i + 1];
+//             j++
+//         }
+//     }
+//     return j;
+// }
+
+// console.log(removeDuplicates(arr))
+
+// // Merge Two Sorted Arrays
+// let arr1 = [2, 5, 6];
+// let arr2 = [0,1, 3, 4, 8];
+// let marge = new Array(arr1.length + arr2.length);
+// let i = j = k = 0;
+// while (i < arr1.length && j < arr2.length) {
+//     if (arr1[i] < arr2[j]) {
+//         marge[k++] = arr1[i++]
+//     } else {
+//         marge[k++] = arr2[j++]
+//     }
+// }
+
+// while (j < arr2.length) {
+//     marge[k++] = arr2[j++]
+// }
+// while (i < arr1.length) {
+//     marge[k++] = arr1[i++]
+// }
+
+// console.log(marge)
+
+// Best time to Buy and sell stock;
+
+// const maxProfit = (prices) => {
+//     let maxProfitVar = 0;
+//     let min = prices[0];
+//     for (let i = 0; i < prices.length; i++) {
+//         if (prices[i] < min) min = prices[i];
+//         let profit = prices[i] - min;
+//         maxProfitVar = Math.max(maxProfitVar, profit)
+//     }
+//     return maxProfitVar;
+// }
+// console.log(maxProfit([7, 1, 5, 3, 6, 4]))
+
+
