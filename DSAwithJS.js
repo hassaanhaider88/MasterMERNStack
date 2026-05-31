@@ -611,7 +611,7 @@
 // console.log(s.toUpperCase()) //HI HOW ARE YOU
 // console.log(s.concat(""," Concat")) //Hi How are You Concat
 // console.log(s.trim()) // remove white space
-// console.log(s.charAt(3)) // H 
+// console.log(s.charAt(3)) // H
 // console.log(s.charCodeAt(3)) // 72 H ki Ascii value
 
 // let s = "Anything In String";
@@ -672,3 +672,16 @@
 //         console.log(String.fromCharCode(i) + " Appears At " + arr[i] + " Times")
 //     }
 // }
+
+// Time Complexity and Space Complexity
+// Big O -> Upper Bound
+// Theta -> Avg.
+// Mega -> Lower Bound
+// let n = 3;
+// console.log((n * (n + 1)) / 2)
+// O(n) or linear time complexity;
+// O(n2) (square of n) or Quadratic nested looping
+// O(log n) in Binary Search
+// Exponential Time Complexity 2 power n , 3 power n etc
+// n! or Factorial type Time Complexity
+// n log n 
