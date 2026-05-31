@@ -602,3 +602,73 @@
 // console.log(maxProfit([7, 1, 5, 3, 6, 4]))
 
 
+// Strings
+// let s = "Hi How are You";
+// console.log(s.length) // 14
+// console.log(s.slice(2,7)) // How
+// console.log(s.substring(0,3)) // Hi
+// console.log(s.toLocaleLowerCase()) //hi how are you
+// console.log(s.toUpperCase()) //HI HOW ARE YOU
+// console.log(s.concat(""," Concat")) //Hi How are You Concat
+// console.log(s.trim()) // remove white space
+// console.log(s.charAt(3)) // H 
+// console.log(s.charCodeAt(3)) // 72 H ki Ascii value
+
+// let s = "Anything In String";
+// for (let i = 0; i < s.length - 1; i++) {
+//     console.log(s[i])
+// }
+
+// let s = "This will Be Reversed";
+// let rev = "";
+// for (let i = s.length - 1; i >= 0; i--) {
+//     rev += s[i];
+// }
+// console.log(rev)
+
+// find Palindrome
+// let s = "Madam";
+// s = s.toLocaleLowerCase();
+// let i = 0; let j = s.length - 1;
+// let isPalindrome = true;
+// while (i < j) {
+//     if (s.charAt(i) != s.charAt(j)) {
+//         isPalindrome = false;
+//         break;
+//     }
+//     j--;
+//     i++;
+// }
+// if (isPalindrome) console.log("yes Palindrome")
+// else console.log("No Palindrome")
+
+// // toggle log
+// let s = "MaDam" // => mAdAM
+// let toggle = "";
+// for (let i = 0; i < s.length; i++) {
+//     let ch = s.charCodeAt(i);
+//     if (ch >= 65 && ch <= 90) {
+//         toggle = toggle + String.fromCharCode(ch + 32)
+//     } else if (ch >= 97 && ch <= 122) {
+//         toggle = toggle + String.fromCharCode(ch - 32)
+//     }
+
+// }
+
+// console.log(toggle)
+
+// Frequency Of Each Character
+
+// let s = "HelloWorld";
+// let arr = new Array(128).fill(0);
+
+// for (let i = 0; i < s.length; i++) {
+//     let index = s.charCodeAt(i);
+//     arr[index] = arr[index] + 1;
+// }
+
+// for (let i = 0; i < arr.length; i++) {
+//     if (arr[i] > 0) {
+//         console.log(String.fromCharCode(i) + " Appears At " + arr[i] + " Times")
+//     }
+// }
