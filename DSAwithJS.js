@@ -176,7 +176,7 @@
 // }
 // console.log(sum, "Total")
 
-// Factorial OF N
+// // Factorial OF N
 // let n = 5;
 // let fac = 1;
 // for (let i = 1; i <= n; i++) {
@@ -266,13 +266,13 @@
 //     }
 // }
 
-// Pattern Programming
+// // Pattern Programming
 
-// *****
-// ****
-// ***
-// **
-// *
+// // *****
+// // ****
+// // ***
+// // **
+// // *
 // for (let j = 5; j >= 1; j--) {
 //     for (let i = 1; i <= j; i++) {
 //         process.stdout.write(`*`)
@@ -280,11 +280,11 @@
 //     console.log()
 // }
 
-//  1
-//  1  2
-//  1  2  3
-//  1  2  3  4
-//  1  2  3  4  5
+// //  1
+// //  1  2
+// //  1  2  3
+// //  1  2  3  4
+// //  1  2  3  4  5
 // for (let j = 1; j <= 5; j++) {
 //     for (let i = 1; i <= j; i++) {
 //         process.stdout.write(` ${i} `)
@@ -292,11 +292,11 @@
 //     console.log()
 // }
 
-//  A
-//  A  B
-//  A  B  C
-//  A  B  C  D
-//  A  B  C  D  E
+// //  A
+// //  A  B
+// //  A  B  C
+// //  A  B  C  D
+// //  A  B  C  D  E
 // for (let j = 1; j <= 5; j++) {
 //     let ascii = 65;
 //     for (let i = 1; i <= j; i++) {
@@ -306,11 +306,11 @@
 //     console.log()
 // }
 
-//     *
-//    **
-//   ***
-//  ****
-// *****
+// //     *
+// //    **
+// //   ***
+// //  ****
+// // *****
 // let n = 5;
 // for (let i = 1; i <= n; i++) {
 //     for (let j = 1; j <= n - i; j++) {
@@ -322,11 +322,11 @@
 //     console.log()
 // }
 
-// *   *
-//  * *
-//   *
-//  * *
-// *   *
+// // *   *
+// //  * *
+// //   *
+// //  * *
+// // *   *
 // let n = 5;
 // for (let j = n; j >= 1; j--) {
 //     for (let i = 1; i <= n; i++) {
@@ -340,11 +340,11 @@
 //     console.log()
 // }
 
-// *       *
-//  *     *
-//   *   *
-//    * *
-//     *
+// // *       *
+// //  *     *
+// //   *   *
+// //    * *
+// //     *
 // let n = 5;
 // for (let j = 1; j <= n; j++) {
 //     for (let i = 1; i <= n * 2; i++) {
@@ -357,7 +357,7 @@
 //     console.log()
 // }
 
-// Mastering Array
+// // Mastering Array
 
 // let arr = ["Sannay"];
 
@@ -405,7 +405,7 @@
 
 // console.log(sMax)
 
-// Reverse the array
+// // Reverse the array
 // let arr = [1,2,3,4,5,6,7];
 // let temp = new Array(arr.length);
 // let j = 0
@@ -416,7 +416,7 @@
 // console.log(arr, "Old Arr")
 // console.log(temp, "New Arr")
 
-// without Extra space two point log
+// // without Extra space two point log
 // let arr = [1, 2, 3, 4, 5, 6, 7];
 // let i = 0;
 // let j = arr.length -1;
@@ -430,7 +430,7 @@
 
 // console.log(arr)
 
-// Sorting 0 and 1 two point log
+// // Sorting 0 and 1 two point log
 // let arr = [1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0];
 // let i = 0;
 // let j = 0;
@@ -446,7 +446,7 @@
 // }
 // console.log(arr)
 
-// sorting negative and positive Element
+// // sorting negative and positive Element
 // let arr = [1, 2, -4, 2, -2, 6, -9, 3, -5]
 // let i = 0;
 // let j = 0;
@@ -587,7 +587,7 @@
 
 // console.log(marge)
 
-// Best time to Buy and sell stock;
+// // Best time to Buy and sell stock;
 
 // const maxProfit = (prices) => {
 //     let maxProfitVar = 0;
@@ -602,7 +602,7 @@
 // console.log(maxProfit([7, 1, 5, 3, 6, 4]))
 
 
-// Strings
+// // Strings
 // let s = "Hi How are You";
 // console.log(s.length) // 14
 // console.log(s.slice(2,7)) // How
@@ -626,7 +626,7 @@
 // }
 // console.log(rev)
 
-// find Palindrome
+// // find Palindrome
 // let s = "Madam";
 // s = s.toLocaleLowerCase();
 // let i = 0; let j = s.length - 1;
@@ -657,7 +657,7 @@
 
 // console.log(toggle)
 
-// Frequency Of Each Character
+// // Frequency Of Each Character
 
 // let s = "HelloWorld";
 // let arr = new Array(128).fill(0);
@@ -673,22 +673,22 @@
 //     }
 // }
 
-// Time Complexity and Space Complexity
-// Big O -> Upper Bound
-// Theta -> Avg.
-// Mega -> Lower Bound
-// let n = 3;
-// console.log((n * (n + 1)) / 2)
-// O(n) or linear time complexity;
-// O(n2) (square of n) or Quadratic nested looping
-// O(log n) in Binary Search
-// Exponential Time Complexity 2 power n , 3 power n etc
-// n! or Factorial type Time Complexity
-// n log n 
+// // Time Complexity and Space Complexity
+// // Big O -> Upper Bound
+// // Theta -> Avg.
+// // Mega -> Lower Bound
+// // let n = 3;
+// // console.log((n * (n + 1)) / 2)
+// // O(n) or linear time complexity;
+// // O(n2) (square of n) or Quadratic nested looping
+// // O(log n) in Binary Search
+// // Exponential Time Complexity 2 power n , 3 power n etc
+// // n! or Factorial type Time Complexity
+// // n log n
 
 
-// All Sorting Algorithms
-// Bubble Sort
+// // All Sorting Algorithms
+// // Bubble Sort
 // let arr = [3, 10, 5, 1, 12];
 // for (let i = 0; i < arr.length - 1; i++) {
 //     for (let j = 0; j < arr.length - 1 - i; j++) {
@@ -713,9 +713,9 @@
 //     }
 // }
 
-// console.log(arr)a
+// console.log(arr)
 
-// Selection Sort
+// // Selection Sort
 // let arr = [3, 10, 5, 1, 12];
 // for (let i = 0; i < arr.length - 1; i++) {
 //     let minIndex = i;
@@ -732,3 +732,58 @@
 // console.log(arr)
 
 
+// // ReCursion
+// let n = 6;
+// let sum = 0;
+// let fact = 1;
+// function tmp(val) {
+//     if (val == 0) return;
+//     sum += val;
+//     fact *= val;
+//     tmp(val - 1)
+// }
+
+// tmp(n);
+// console.log(sum)
+// console.log(fact)
+
+// function sum(n) {
+//     if (n == 1) return 1;
+//     return n + sum(n - 1)
+// }
+
+// console.log(sum(6))
+
+// // Sieve Of Eratosthenes;
+// // HCF
+// let a = 233;
+// let b = 144;
+// while (a != b) {
+//     if (a > b) a = a - b;
+//     else b = b - a;
+// }
+// console.log(a)
+// const checkHCF = (a, b) => {
+//     if (b == 0) return a;
+//     return checkHCF(b, a % b)
+// }
+
+// console.log(checkHCF(a, b))
+// log (max(a,b))
+
+// // Binary Search
+// let arr = [2, 5, 8, 9, 12, 18, 20, 25, 67, 101, 125]
+// function binarySearch(arr, first, last, target) {
+//     while (first <= last) {
+//         let mid = Math.floor((first + last) / 2)
+//         if (arr[mid] == target) return mid;
+//         else if (arr[mid] > target) last = mid - 1;
+//         else first = mid + 1;
+//     }
+//     return -1
+// }
+
+// let index = binarySearch(arr, 0, arr.length - 1, 6);
+// console.log(index)
+
+// Merge Sort (Divide & Merge)
