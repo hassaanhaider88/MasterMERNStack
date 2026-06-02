@@ -279,6 +279,509 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
+React commonly used hooks
+1. State Management Hooks
+2. Side Effect Hooks
+3. Performance Hooks
+4. Advanced Hooks
+
+---
+
+# 1. useState
+
+Component-level state manage karta hai.
+
+```jsx
+const [count, setCount] = useState(0);
+```
+
+Example:
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+Use when:
+
+* Counter
+* Form inputs
+* Toggle states
+* Modal open/close
+
+---
+
+# 2. useEffect
+
+Side effects perform karta hai.
+
+Examples:
+
+* API calls
+* Event listeners
+* Timers
+* LocalStorage
+
+```jsx
+useEffect(() => {
+  console.log("Component Mounted");
+}, []);
+```
+
+Runs once.
+
+Dependency example:
+
+```jsx
+useEffect(() => {
+  console.log(count);
+}, [count]);
+```
+
+Cleanup:
+
+```jsx
+useEffect(() => {
+  const id = setInterval(() => {}, 1000);
+
+  return () => clearInterval(id);
+}, []);
+```
+
+Lifecycle mapping:
+
+```jsx
+componentDidMount
+componentDidUpdate
+componentWillUnmount
+```
+
+---
+
+# 3. useContext
+
+Prop drilling avoid karta hai.
+
+Create Context:
+
+```jsx
+const ThemeContext = createContext();
+```
+
+Provider:
+
+```jsx
+<ThemeContext.Provider value="dark">
+  <App />
+</ThemeContext.Provider>
+```
+
+Consume:
+
+```jsx
+const theme = useContext(ThemeContext);
+```
+
+Use when:
+
+* Theme
+* Auth
+* Language
+* Global settings
+
+---
+
+# 4. useReducer
+
+Complex state management ke liye.
+
+Reducer:
+
+```jsx
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+
+    default:
+      return state;
+  }
+}
+```
+
+Hook:
+
+```jsx
+const [state, dispatch] = useReducer(reducer, {
+  count: 0
+});
+```
+
+Dispatch:
+
+```jsx
+dispatch({ type: "increment" });
+```
+
+Use when:
+
+* Multiple related states
+* Complex logic
+* Redux-like patterns
+
+---
+
+# 5. useRef
+
+Value store karta hai without re-render.
+
+```jsx
+const inputRef = useRef(null);
+```
+
+DOM Access:
+
+```jsx
+inputRef.current.focus();
+```
+
+Attach:
+
+```jsx
+<input ref={inputRef} />
+```
+
+Store mutable value:
+
+```jsx
+const renderCount = useRef(0);
+```
+
+Use when:
+
+* DOM manipulation
+* Timers
+* Previous values
+
+---
+
+# 6. useMemo
+
+Expensive calculations cache karta hai.
+
+```jsx
+const total = useMemo(() => {
+  return heavyCalculation(data);
+}, [data]);
+```
+
+Without useMemo:
+
+```jsx
+heavyCalculation()
+```
+
+Har render me run karega.
+
+Use when:
+
+* Filtering
+* Sorting
+* Large calculations
+
+---
+
+# 7. useCallback
+
+Function memoize karta hai.
+
+```jsx
+const handleClick = useCallback(() => {
+  console.log("clicked");
+}, []);
+```
+
+Why?
+
+```jsx
+const fn = () => {};
+```
+
+Har render pe new function banta hai.
+
+useCallback same reference preserve karta hai.
+
+Useful with:
+
+```jsx
+React.memo()
+```
+
+---
+
+# 8. useLayoutEffect
+
+`useEffect` jaisa hai lekin browser paint se pehle run hota hai.
+
+```jsx
+useLayoutEffect(() => {
+  console.log("Before Paint");
+}, []);
+```
+
+Use when:
+
+* Measuring DOM size
+* Position calculations
+* Prevent UI flicker
+
+Example:
+
+```jsx
+const width = divRef.current.offsetWidth;
+```
+
+---
+
+# 9. useImperativeHandle
+
+Parent ko custom methods expose karta hai.
+
+Child:
+
+```jsx
+useImperativeHandle(ref, () => ({
+  focusInput() {
+    inputRef.current.focus();
+  }
+}));
+```
+
+Parent:
+
+```jsx
+childRef.current.focusInput();
+```
+
+Mostly with:
+
+```jsx
+forwardRef
+```
+
+---
+
+# 10. useId
+
+Unique IDs generate karta hai.
+
+```jsx
+const id = useId();
+```
+
+Example:
+
+```jsx
+<label htmlFor={id}>Email</label>
+<input id={id} />
+```
+
+Benefits:
+
+* Accessibility
+* SSR safe IDs
+
+---
+
+# 11. useTransition
+
+Non-urgent updates ko background me bhejta hai.
+
+```jsx
+const [isPending, startTransition] =
+  useTransition();
+```
+
+Example:
+
+```jsx
+startTransition(() => {
+  setUsers(bigList);
+});
+```
+
+UI responsive rehti hai.
+
+Use when:
+
+* Search filtering
+* Huge lists
+* Expensive rendering
+
+---
+
+# 12. useDeferredValue
+
+Value ka delayed version deta hai.
+
+```jsx
+const deferredQuery =
+  useDeferredValue(query);
+```
+
+Example:
+
+```jsx
+const filteredUsers =
+  users.filter(user =>
+    user.name.includes(deferredQuery)
+  );
+```
+
+Typing smooth rehti hai.
+
+Useful:
+
+* Search bars
+* Live filtering
+
+---
+
+# 13. useSyncExternalStore
+
+External store subscribe karne ke liye.
+
+```jsx
+const state = useSyncExternalStore(
+  subscribe,
+  getSnapshot
+);
+```
+
+Used by:
+
+* Redux internals
+* Zustand internals
+* Custom stores
+
+Example:
+
+```jsx
+window.addEventListener(...)
+```
+
+based subscriptions.
+
+---
+
+# 14. useDebugValue
+
+Custom hooks debugging ke liye.
+
+```jsx
+useDebugValue("Online");
+```
+
+Example:
+
+```jsx
+function useOnlineStatus() {
+  useDebugValue("Online");
+}
+```
+
+React DevTools me visible hota hai.
+
+Production me rarely needed.
+
+---
+
+# 15. useInsertionEffect
+
+CSS injection ke liye.
+
+Runs before:
+
+```jsx
+useLayoutEffect
+```
+
+Example:
+
+```jsx
+useInsertionEffect(() => {
+  injectCSS();
+}, []);
+```
+
+Mostly libraries use karti hain:
+
+* Emotion
+* Styled Components
+
+Normal apps me almost never.
+
+---
+
+# Custom Hook (Most Important)
+
+Khud ka reusable hook banana.
+
+Example:
+
+```jsx
+function useCounter(initial = 0) {
+  const [count, setCount] =
+    useState(initial);
+
+  const increment = () =>
+    setCount(c => c + 1);
+
+  return {
+    count,
+    increment
+  };
+}
+```
+
+Usage:
+
+```jsx
+const { count, increment } =
+  useCounter();
+```
+
+---
+
+Real-world importance ranking:
+
+| Hook                 | Usage Frequency |
+| -------------------- | --------------- |
+| useState             | Daily           |
+| useEffect            | Daily           |
+| useContext           | Very High       |
+| useRef               | Very High       |
+| useReducer           | High            |
+| useMemo              | High            |
+| useCallback          | High            |
+| useId                | Medium          |
+| useTransition        | Medium          |
+| useDeferredValue     | Medium          |
+| useLayoutEffect      | Low-Medium      |
+| useImperativeHandle  | Low             |
+| useSyncExternalStore | Low             |
+| useDebugValue        | Very Low        |
+| useInsertionEffect   | Very Low        |
+
+
+
 ## 3. Node.js
 
 ### 🟢 Basic
