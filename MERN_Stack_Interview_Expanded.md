@@ -1,16 +1,16 @@
 # 🚀 MERN Stack Interview Questions: Deep Dive with Examples
 
-This document provides a detailed, interview-style explanation for the MERN stack questions [cite: 1]. It includes in-depth explanations and practical code examples to help you prepare for your technical interview [cite: 1].
+This document provides a detailed, interview-style explanation for the MERN stack questions. It includes in-depth explanations and practical code examples to help you prepare for your technical interview.
 
 ---
 
-## 1. JavaScript (Core & Modern ES6+) [cite: 1]
+## 1. JavaScript (Core & Modern ES6+)
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q1. What is the difference between `var`, `let`, and `const`?** [cite: 1]
+**Q1. What is the difference between `var`, `let`, and `const`?**
 
-- **Explanation:** In an interview, explain that this is about scope and mutability. `var` is function-scoped (or globally scoped), meaning it exists throughout the function it's declared in, regardless of block boundaries. It is also hoisted with an initial value of `undefined`. `let` and `const` were introduced in ES6 and are block-scoped (e.g., inside an `if` statement or `for` loop). `let` can be reassigned, while `const` creates a read-only reference to a value (though if it's an object, its properties can still be mutated) [cite: 1].
+- **Explanation:** In an interview, explain that this is about scope and mutability. `var` is function-scoped (or globally scoped), meaning it exists throughout the function it's declared in, regardless of block boundaries. It is also hoisted with an initial value of `undefined`. `let` and `const` were introduced in ES6 and are block-scoped (e.g., inside an `if` statement or `for` loop). `let` can be reassigned, while `const` creates a read-only reference to a value (though if it's an object, its properties can still be mutated).
 - **Example:**
 
   ```javascript
@@ -30,9 +30,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   }
   ```
 
-**Q2. What is hoisting in JavaScript?** [cite: 1]
+**Q2. What is hoisting in JavaScript?**
 
-- **Explanation:** Hoisting is JavaScript's default behavior of moving declarations to the top of the current scope (script or function) before code execution [cite: 1]. It's crucial to mention that _only declarations_ are hoisted, not initializations [cite: 1]. `var` declarations are hoisted and initialized to `undefined`. `let` and `const` are hoisted but remain uninitialized in the "Temporal Dead Zone" until their definition is evaluated.
+- **Explanation:** Hoisting is JavaScript's default behavior of moving declarations to the top of the current scope (script or function) before code execution. It's crucial to mention that _only declarations_ are hoisted, not initializations. `var` declarations are hoisted and initialized to `undefined`. `let` and `const` are hoisted but remain uninitialized in the "Temporal Dead Zone" until their definition is evaluated.
 - **Example:**
 
   ```javascript
@@ -48,9 +48,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   }
   ```
 
-**Q3. Explain `==` vs `===`.** [cite: 1]
+**Q3. Explain `==` vs `===`.**
 
-- **Explanation:** `==` is the abstract equality operator. It attempts to resolve data types before comparing them, a process called "type coercion" [cite: 1]. `===` is the strict equality operator. It checks both the value and the type [cite: 1]. In modern JS, always use `===` to prevent unexpected bugs.
+- **Explanation:** `==` is the abstract equality operator. It attempts to resolve data types before comparing them, a process called "type coercion". `===` is the strict equality operator. It checks both the value and the type. In modern JS, always use `===` to prevent unexpected bugs.
 - **Example:**
   ```javascript
   console.log(5 == "5"); // true (string "5" is coerced to number 5)
@@ -59,9 +59,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   console.log(0 === false); // false
   ```
 
-**Q4. What are the primitive data types in JavaScript?** [cite: 1]
+**Q4. What are the primitive data types in JavaScript?**
 
-- **Explanation:** Primitives are basic data types that are not objects and have no methods. There are 7 of them: `String`, `Number`, `BigInt`, `Boolean`, `undefined`, `null`, and `Symbol` [cite: 1]. Everything else (Arrays, Functions, etc.) is an Object.
+- **Explanation:** Primitives are basic data types that are not objects and have no methods. There are 7 of them: `String`, `Number`, `BigInt`, `Boolean`, `undefined`, `null`, and `Symbol`. Everything else (Arrays, Functions, etc.) is an Object.
 - **Example:**
   ```javascript
   const str = "Hello"; // String
@@ -73,9 +73,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   const sym = Symbol("id"); // Symbol
   ```
 
-**Q5. What is the difference between `null` and `undefined`?** [cite: 1]
+**Q5. What is the difference between `null` and `undefined`?**
 
-- **Explanation:** `undefined` is a variable that has been declared but not assigned a value. It's the default state of variables [cite: 1]. `null` is an assignment value that represents no value or no object. It is intentional [cite: 1].
+- **Explanation:** `undefined` is a variable that has been declared but not assigned a value. It's the default state of variables. `null` is an assignment value that represents no value or no object. It is intentional.
 - **Example:**
 
   ```javascript
@@ -89,9 +89,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   console.log(a === b); // false (different types)
   ```
 
-**Q6. What is a closure in JavaScript?** [cite: 1]
+**Q6. What is a closure in JavaScript?**
 
-- **Explanation:** A closure occurs when a function "remembers" the variables from its lexical scope even after the outer function has finished executing [cite: 1]. This is heavily used for data privacy, callbacks, and functional programming patterns.
+- **Explanation:** A closure occurs when a function "remembers" the variables from its lexical scope even after the outer function has finished executing. This is heavily used for data privacy, callbacks, and functional programming patterns.
 - **Example:**
   ```javascript
   function createCounter() {
@@ -106,9 +106,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   console.log(counter()); // 2
   ```
 
-**Q7. What is the event loop?** [cite: 1]
+**Q7. What is the event loop?**
 
-- **Explanation:** JavaScript is single-threaded. The event loop is what allows JS to perform non-blocking asynchronous operations [cite: 1]. It constantly checks the Call Stack. If the Call Stack is empty, it looks at the Microtask Queue (Promises) and the Callback/Macrotask Queue (setTimeout, DOM events) and pushes the next pending callback onto the stack to be executed [cite: 1].
+- **Explanation:** JavaScript is single-threaded. The event loop is what allows JS to perform non-blocking asynchronous operations. It constantly checks the Call Stack. If the Call Stack is empty, it looks at the Microtask Queue (Promises) and the Callback/Macrotask Queue (setTimeout, DOM events) and pushes the next pending callback onto the stack to be executed.
 - **Example:**
   ```javascript
   console.log("1. Sync");
@@ -118,13 +118,13 @@ This document provides a detailed, interview-style explanation for the MERN stac
   // Output Order: 1, 2, 3, 4
   ```
 
-**Q8. What is the difference between `forEach`, `map`, `filter`, and `reduce`?** [cite: 1]
+**Q8. What is the difference between `forEach`, `map`, `filter`, and `reduce`?**
 
-- **Explanation:** These are all Array iteration methods, but they serve different purposes [cite: 1].
-  - `forEach`: Just loops. Returns `undefined` [cite: 1].
-  - `map`: Loops and returns a _new_ array with transformed elements [cite: 1].
-  - `filter`: Loops and returns a _new_ array containing only elements that pass a boolean test [cite: 1].
-  - `reduce`: Loops and accumulates the array values down into a single final value (like a sum or an object) [cite: 1].
+- **Explanation:** These are all Array iteration methods, but they serve different purposes.
+  - `forEach`: Just loops. Returns `undefined`.
+  - `map`: Loops and returns a _new_ array with transformed elements.
+  - `filter`: Loops and returns a _new_ array containing only elements that pass a boolean test.
+  - `reduce`: Loops and accumulates the array values down into a single final value (like a sum or an object).
 - **Example:**
 
   ```javascript
@@ -143,9 +143,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   const sum = nums.reduce((acc, curr) => acc + curr, 0); // 10
   ```
 
-**Q9. What is a promise in JavaScript?** [cite: 1]
+**Q9. What is a promise in JavaScript?**
 
-- **Explanation:** A Promise is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value [cite: 1]. It prevents "callback hell" [cite: 1]. A promise has three states: `pending` (initial state), `fulfilled` (operation successful), and `rejected` (operation failed) [cite: 1].
+- **Explanation:** A Promise is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. It prevents "callback hell". A promise has three states: `pending` (initial state), `fulfilled` (operation successful), and `rejected` (operation failed).
 - **Example:**
 
   ```javascript
@@ -162,9 +162,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
     .catch((error) => console.error(error));
   ```
 
-**Q10. What is the difference between synchronous and asynchronous code?** [cite: 1]
+**Q10. What is the difference between synchronous and asynchronous code?**
 
-- **Explanation:** Synchronous code runs top-to-bottom, blocking the main thread [cite: 1]. If line 2 takes 5 seconds, line 3 must wait. Asynchronous code runs in the background (via Web APIs in the browser or libuv in Node.js), allowing the main thread to continue executing subsequent lines of code [cite: 1]. Once the async operation completes, a callback is triggered [cite: 1].
+- **Explanation:** Synchronous code runs top-to-bottom, blocking the main thread. If line 2 takes 5 seconds, line 3 must wait. Asynchronous code runs in the background (via Web APIs in the browser or libuv in Node.js), allowing the main thread to continue executing subsequent lines of code. Once the async operation completes, a callback is triggered.
 - **Example:**
 
   ```javascript
@@ -182,18 +182,18 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
-## 2. React.js [cite: 1]
+## 2. React.js
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q35. What is React and what problem does it solve?** [cite: 1]
+**Q35. What is React and what problem does it solve?**
 
-- **Explanation:** React is a declarative, component-based UI library developed by Meta [cite: 1]. Before React, manipulating the DOM using vanilla JS or jQuery was slow and complex to maintain. React solves this by using a Virtual DOM, which computes the minimal number of changes required to update the actual DOM, making UI rendering highly efficient [cite: 1].
+- **Explanation:** React is a declarative, component-based UI library developed by Meta. Before React, manipulating the DOM using vanilla JS or jQuery was slow and complex to maintain. React solves this by using a Virtual DOM, which computes the minimal number of changes required to update the actual DOM, making UI rendering highly efficient.
 - **Example:** Imagine an app with 100 list items. In vanilla JS, changing one item might re-render the whole list. In React, only the specific changed DOM node is updated.
 
-**Q36. What is JSX?** [cite: 1]
+**Q36. What is JSX?**
 
-- **Explanation:** JSX stands for JavaScript XML. It's a syntax extension that allows developers to write HTML-like markup directly inside JavaScript files [cite: 1]. Under the hood, Babel transpiles JSX into `React.createElement()` function calls [cite: 1].
+- **Explanation:** JSX stands for JavaScript XML. It's a syntax extension that allows developers to write HTML-like markup directly inside JavaScript files. Under the hood, Babel transpiles JSX into `React.createElement()` function calls.
 - **Example:**
 
   ```javascript
@@ -208,9 +208,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   );
   ```
 
-**Q37. What is the difference between state and props?** [cite: 1]
+**Q37. What is the difference between state and props?**
 
-- **Explanation:** `props` (short for properties) are immutable data passed down from a parent component to a child component [cite: 1]. `state` is mutable data managed internally by the component itself [cite: 1]. When `state` changes, the component automatically re-renders [cite: 1].
+- **Explanation:** `props` (short for properties) are immutable data passed down from a parent component to a child component. `state` is mutable data managed internally by the component itself. When `state` changes, the component automatically re-renders.
 - **Example:**
 
   ```javascript
@@ -226,13 +226,13 @@ This document provides a detailed, interview-style explanation for the MERN stac
   }
   ```
 
-**Q38. What is the virtual DOM and how does React use it?** [cite: 1]
+**Q38. What is the virtual DOM and how does React use it?**
 
-- **Explanation:** The Virtual DOM is a lightweight JavaScript representation of the actual DOM [cite: 1]. When state or props change, React creates a new Virtual DOM tree. It then compares (diffs) this new tree with the previous one (a process called Reconciliation) [cite: 1]. React calculates the exact differences and applies _only_ those updates to the real DOM, avoiding expensive full-page reflows [cite: 1].
+- **Explanation:** The Virtual DOM is a lightweight JavaScript representation of the actual DOM. When state or props change, React creates a new Virtual DOM tree. It then compares (diffs) this new tree with the previous one (a process called Reconciliation). React calculates the exact differences and applies _only_ those updates to the real DOM, avoiding expensive full-page reflows.
 
-**Q40. What is `useState`?** [cite: 1]
+**Q40. What is `useState`?**
 
-- **Explanation:** `useState` is a React Hook that allows functional components to maintain local state [cite: 1]. It takes an initial state value as an argument and returns an array containing two elements: the current state value and a setter function to update it [cite: 1].
+- **Explanation:** `useState` is a React Hook that allows functional components to maintain local state. It takes an initial state value as an argument and returns an array containing two elements: the current state value and a setter function to update it.
 - **Example:**
 
   ```javascript
@@ -250,9 +250,9 @@ This document provides a detailed, interview-style explanation for the MERN stac
   }
   ```
 
-**Q41. What is `useEffect`?** [cite: 1]
+**Q41. What is `useEffect`?**
 
-- **Explanation:** `useEffect` allows you to perform side effects in functional components [cite: 1]. Side effects include data fetching, manual DOM manipulation, and setting up subscriptions [cite: 1]. It runs after every render by default, but you can control when it runs by passing an array of dependencies as the second argument [cite: 1].
+- **Explanation:** `useEffect` allows you to perform side effects in functional components. Side effects include data fetching, manual DOM manipulation, and setting up subscriptions. It runs after every render by default, but you can control when it runs by passing an array of dependencies as the second argument.
 - **Example:**
 
   ```javascript
@@ -279,31 +279,31 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
-## 3. Node.js [cite: 1]
+## 3. Node.js
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q71. What is Node.js and why is it used for backend?** [cite: 1]
+**Q71. What is Node.js and why is it used for backend?**
 
-- **Explanation:** Node.js is a runtime environment built on Chrome's V8 JavaScript engine that allows developers to run JavaScript on the server [cite: 1]. It is heavily used for backends because of its event-driven, non-blocking I/O model, which makes it incredibly fast and efficient for data-intensive, highly concurrent applications (like APIs, chat apps, and streaming services) [cite: 1].
+- **Explanation:** Node.js is a runtime environment built on Chrome's V8 JavaScript engine that allows developers to run JavaScript on the server. It is heavily used for backends because of its event-driven, non-blocking I/O model, which makes it incredibly fast and efficient for data-intensive, highly concurrent applications (like APIs, chat apps, and streaming services).
 
-**Q79. Explain Node.js event-driven architecture.** [cite: 1]
+**Q79. Explain Node.js event-driven architecture.**
 
-- **Explanation:** Node operates heavily on the `EventEmitter` pattern [cite: 1]. Certain objects (emitters) emit named events that cause corresponding functions (listeners) to be called asynchronously. This means Node doesn't wait for a process to finish (like reading a file). Instead, it delegates the task to the OS and continues executing code [cite: 1]. When the OS finishes, an event is emitted, and the callback is queued in the Event Loop [cite: 1].
+- **Explanation:** Node operates heavily on the `EventEmitter` pattern. Certain objects (emitters) emit named events that cause corresponding functions (listeners) to be called asynchronously. This means Node doesn't wait for a process to finish (like reading a file). Instead, it delegates the task to the OS and continues executing code. When the OS finishes, an event is emitted, and the callback is queued in the Event Loop.
 
 ---
 
-## 4. Express.js [cite: 1]
+## 4. Express.js
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q95. What is Express.js?** [cite: 1]
+**Q95. What is Express.js?**
 
-- **Explanation:** Express.js is a minimal, unopinionated framework for Node.js [cite: 1]. It simplifies the process of building web applications and RESTful APIs by providing a robust set of features like routing, middleware support, and simplified request/response handling over the native Node HTTP module [cite: 1].
+- **Explanation:** Express.js is a minimal, unopinionated framework for Node.js. It simplifies the process of building web applications and RESTful APIs by providing a robust set of features like routing, middleware support, and simplified request/response handling over the native Node HTTP module.
 
-**Q96. What is middleware in Express?** [cite: 1]
+**Q96. What is middleware in Express?**
 
-- **Explanation:** Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the `next` function in the application's request-response cycle [cite: 1]. They can execute any code, modify req/res objects, end the response cycle, or call `next()` to pass control to the next middleware. They are used for tasks like logging, authentication, and parsing JSON [cite: 1].
+- **Explanation:** Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the `next` function in the application's request-response cycle. They can execute any code, modify req/res objects, end the response cycle, or call `next()` to pass control to the next middleware. They are used for tasks like logging, authentication, and parsing JSON.
 - **Example:**
 
   ```javascript
@@ -325,17 +325,17 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
-## 5. MongoDB [cite: 1]
+## 5. MongoDB
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q116. What is MongoDB?** [cite: 1]
+**Q116. What is MongoDB?**
 
-- **Explanation:** MongoDB is a popular NoSQL database [cite: 1]. Unlike traditional relational databases (SQL) that use tables and rows, MongoDB is document-oriented [cite: 1]. It stores data in flexible, JSON-like documents (called BSON) inside collections [cite: 1]. This makes it highly scalable and flexible for applications with rapidly changing data schemas [cite: 1].
+- **Explanation:** MongoDB is a popular NoSQL database. Unlike traditional relational databases (SQL) that use tables and rows, MongoDB is document-oriented. It stores data in flexible, JSON-like documents (called BSON) inside collections. This makes it highly scalable and flexible for applications with rapidly changing data schemas.
 
-**Q125. What are MongoDB aggregation pipelines?** [cite: 1]
+**Q125. What are MongoDB aggregation pipelines?**
 
-- **Explanation:** The aggregation framework is a way to process documents and return computed results [cite: 1]. It's similar to SQL's `GROUP BY` but much more powerful. Data passes through a "pipeline" of stages, where each stage transforms the data (e.g., `$match` to filter, `$group` to aggregate, `$sort` to order, `$project` to format) before passing it to the next stage [cite: 1].
+- **Explanation:** The aggregation framework is a way to process documents and return computed results. It's similar to SQL's `GROUP BY` but much more powerful. Data passes through a "pipeline" of stages, where each stage transforms the data (e.g., `$match` to filter, `$group` to aggregate, `$sort` to order, `$project` to format) before passing it to the next stage.
 - **Example:**
   ```javascript
   db.orders.aggregate([
@@ -347,17 +347,17 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
-## 6. Mongoose [cite: 1]
+## 6. Mongoose
 
-### 🟢 Basic [cite: 1]
+### 🟢 Basic
 
-**Q139. What is Mongoose?** [cite: 1]
+**Q139. What is Mongoose?**
 
-- **Explanation:** Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js [cite: 1]. While MongoDB is schemaless, applications often require structure. Mongoose provides a rigorous modeling environment for your data, allowing you to define Schemas with strict data types, validation, and lifecycle hooks (middleware) [cite: 1].
+- **Explanation:** Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. While MongoDB is schemaless, applications often require structure. Mongoose provides a rigorous modeling environment for your data, allowing you to define Schemas with strict data types, validation, and lifecycle hooks (middleware).
 
-**Q145. What are Mongoose middleware (hooks)?** [cite: 1]
+**Q145. What are Mongoose middleware (hooks)?**
 
-- **Explanation:** Middleware in Mongoose are functions that execute at specific stages of a document's lifecycle (like `save`, `validate`, `remove`) [cite: 1]. You can have `pre` hooks (run before the event) and `post` hooks (run after) [cite: 1]. This is commonly used in interviews to discuss password hashing before saving a user.
+- **Explanation:** Middleware in Mongoose are functions that execute at specific stages of a document's lifecycle (like `save`, `validate`, `remove`). You can have `pre` hooks (run before the event) and `post` hooks (run after). This is commonly used in interviews to discuss password hashing before saving a user.
 - **Example:**
   ```javascript
   userSchema.pre("save", async function (next) {
@@ -371,55 +371,55 @@ This document provides a detailed, interview-style explanation for the MERN stac
 
 ---
 
-## 7. Full Stack Integration & Architecture [cite: 1]
+## 7. Full Stack Integration & Architecture
 
-**Q163. What is JWT (JSON Web Token)?** [cite: 1]
+**Q163. What is JWT (JSON Web Token)?**
 
-- **Explanation:** JWT is an open standard for securely transmitting information between parties as a JSON object [cite: 1]. In MERN apps, it's the standard for stateless authentication [cite: 1]. It consists of a Header (alg type), a Payload (user data/claims), and a Signature (verifies integrity). Because the server signs the token, it doesn't need to look up session IDs in the database on every request—it just validates the token's cryptographic signature [cite: 1].
-
----
-
-## 8. AI Integration with MERN [cite: 1]
-
-**Q173. What is Retrieval-Augmented Generation (RAG)?** [cite: 1]
-
-- **Explanation:** RAG is an architectural pattern used to improve the accuracy of Large Language Models (LLMs) [cite: 1]. Instead of relying solely on the LLM's pre-trained knowledge (which might be outdated or hallucinated), RAG first retrieves relevant data from your own database (often via Vector Search in MongoDB Atlas) [cite: 1]. It then injects this exact data into the prompt sent to the LLM, effectively telling the AI: "Answer the user's question using ONLY the following context." [cite: 1].
+- **Explanation:** JWT is an open standard for securely transmitting information between parties as a JSON object. In MERN apps, it's the standard for stateless authentication. It consists of a Header (alg type), a Payload (user data/claims), and a Signature (verifies integrity). Because the server signs the token, it doesn't need to look up session IDs in the database on every request—it just validates the token's cryptographic signature.
 
 ---
 
-## 9. Security & Authentication [cite: 1]
+## 8. AI Integration with MERN
 
-**Q185. What is XSS and how do you prevent it?** [cite: 1]
+**Q173. What is Retrieval-Augmented Generation (RAG)?**
 
-- **Explanation:** Cross-Site Scripting (XSS) is a vulnerability where an attacker injects malicious JavaScript into a website, which is then executed in the browsers of other users [cite: 1]. In React, JSX automatically escapes variables, offering strong built-in protection. To prevent it entirely, avoid using `dangerouslySetInnerHTML`, sanitize all user inputs, and implement a strict Content-Security-Policy (CSP) header [cite: 1].
+- **Explanation:** RAG is an architectural pattern used to improve the accuracy of Large Language Models (LLMs). Instead of relying solely on the LLM's pre-trained knowledge (which might be outdated or hallucinated), RAG first retrieves relevant data from your own database (often via Vector Search in MongoDB Atlas). It then injects this exact data into the prompt sent to the LLM, effectively telling the AI: "Answer the user's question using ONLY the following context.".
 
 ---
 
-## 10. Testing & DevOps [cite: 1]
+## 9. Security & Authentication
 
-**Q189. What is the difference between unit, integration, and e2e tests?** [cite: 1]
+**Q185. What is XSS and how do you prevent it?**
+
+- **Explanation:** Cross-Site Scripting (XSS) is a vulnerability where an attacker injects malicious JavaScript into a website, which is then executed in the browsers of other users. In React, JSX automatically escapes variables, offering strong built-in protection. To prevent it entirely, avoid using `dangerouslySetInnerHTML`, sanitize all user inputs, and implement a strict Content-Security-Policy (CSP) header.
+
+---
+
+## 10. Testing & DevOps
+
+**Q189. What is the difference between unit, integration, and e2e tests?**
 
 - **Explanation:**
-  - **Unit Tests:** Test the smallest piece of code in isolation (e.g., testing if a math utility function returns the right number) [cite: 1].
-  - **Integration Tests:** Test how multiple units work together (e.g., testing if an Express route correctly queries the database and returns a 200 response) [cite: 1].
-  - **E2E (End-to-End) Tests:** Simulate a real user interacting with the application in a browser (e.g., using Cypress to programmatically click "Login", type credentials, and verify the dashboard loads) [cite: 1].
+  - **Unit Tests:** Test the smallest piece of code in isolation (e.g., testing if a math utility function returns the right number).
+  - **Integration Tests:** Test how multiple units work together (e.g., testing if an Express route correctly queries the database and returns a 200 response).
+  - **E2E (End-to-End) Tests:** Simulate a real user interacting with the application in a browser (e.g., using Cypress to programmatically click "Login", type credentials, and verify the dashboard loads).
 
 ---
 
-## 11. Performance & Optimization [cite: 1]
+## 11. Performance & Optimization
 
-**Q197. What is Redis and how is it used in MERN apps?** [cite: 1]
+**Q197. What is Redis and how is it used in MERN apps?**
 
-- **Explanation:** Redis is an in-memory key-value data store [cite: 1]. Because it reads from RAM instead of disk, it is blazing fast. In MERN applications, it is commonly used for caching database queries to reduce MongoDB load, managing user sessions, and rate-limiting API endpoints [cite: 1].
+- **Explanation:** Redis is an in-memory key-value data store. Because it reads from RAM instead of disk, it is blazing fast. In MERN applications, it is commonly used for caching database queries to reduce MongoDB load, managing user sessions, and rate-limiting API endpoints.
 
 ---
 
-## 12. System Design & Scalability [cite: 1]
+## 12. System Design & Scalability
 
-**Q204. How do you scale a MERN application horizontally?** [cite: 1]
+**Q204. How do you scale a MERN application horizontally?**
 
-- **Explanation:** Horizontal scaling means adding more servers (instances) rather than upgrading a single server's hardware (vertical scaling) [cite: 1]. To do this in MERN:
-  1. Make the Express servers stateless (don't store sessions in server memory; use Redis) [cite: 1].
-  2. Put a Load Balancer (like AWS ALB or Nginx) in front of the Express servers to distribute traffic [cite: 1].
-  3. Scale MongoDB using Replica Sets for read operations and Sharding for massive write loads [cite: 1].
-  4. Offload static assets (React bundle, images) to a CDN [cite: 1].
+- **Explanation:** Horizontal scaling means adding more servers (instances) rather than upgrading a single server's hardware (vertical scaling). To do this in MERN:
+  1. Make the Express servers stateless (don't store sessions in server memory; use Redis).
+  2. Put a Load Balancer (like AWS ALB or Nginx) in front of the Express servers to distribute traffic.
+  3. Scale MongoDB using Replica Sets for read operations and Sharding for massive write loads.
+  4. Offload static assets (React bundle, images) to a CDN.
