@@ -881,3 +881,8 @@
 // }
 
 // console.log(factorial(5))
+
+// // IIFE -> Immediately Invoked Function Expression
+// ((...n) => {
+//     console.log("Run as soon as possible", n)
+// })(40, 4, 40, 2, 2, 3, 3, 3, 34)
