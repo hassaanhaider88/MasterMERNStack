@@ -873,3 +873,11 @@
 // }
 // arrowFunc()
 // console.log("end") 
+
+// // Recursion Interview Question
+// function factorial(n) {
+//     if (n <= 1) return 1;  // Base Case -> if not present this will throw Stack Overflow Error
+//     return n * factorial(n - 1)
+// }
+
+// console.log(factorial(5))
