@@ -818,3 +818,58 @@
 // let arr = [8, 2, 1, 9, 5, 12, 4, 20]
 // Divide(arr, 0, arr.length - 1)
 // console.log(arr)
+
+// // Cyclic Sort
+// let arr = [7, 5, 8, 2, 1, 4, 3, 6];
+// let i = 0;
+// while (i < arr.length) {
+//     let correctIdx = arr[i] - 1;
+//     if (arr[i] != arr[correctIdx]) {
+//         let temp = arr[i];
+//         arr[i] = arr[correctIdx];
+//         arr[correctIdx] = temp;
+//     }
+//     else i++;
+// }
+
+// console.log(arr)
+// O(n)
+// Missing Number 
+// const arr = [3, 0, 1];
+// let i = 0
+// while (i < arr.length) {
+//   let correctIdx = arr[i];
+//   if (arr[i] < arr.length && arr[i] !== arr[correctIdx]) {
+//     let temp = arr[i];
+//     arr[i] = arr[correctIdx];
+//     arr[correctIdx] = temp;
+//   } else {
+//     i++;
+//   }
+// }
+
+// for (let j = 0; j < arr.length; j++) {
+//   if (arr[j] !== j) {
+//     console.log(j, "is missing");
+//     break;
+//   }
+// }
+
+// if (arr.every((v, i) => v === i)) {
+//   console.log(arr.length, "is missing");
+// }
+
+
+// // Event Loop Interview Question
+// console.log("start") // Call Stack
+// function arrowFunc() {
+//     console.log("Middle")
+//     setTimeout(() => {
+//         console.log("Call after 0 milliseconds") // Macro Task
+//     }, 0);
+//     new Promise((resolve, reject) => {
+//         resolve("Promise Resolved") // Micro Task
+//     }).then((res) => console.log(res))
+// }
+// arrowFunc()
+// console.log("end") 
