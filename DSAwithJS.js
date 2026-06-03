@@ -886,3 +886,13 @@
 // ((...n) => {
 //     console.log("Run as soon as possible", n)
 // })(40, 4, 40, 2, 2, 3, 3, 3, 34)
+
+//  // Function Currying
+// function sum(a) {
+//     return function (b) {
+//         return function (c) {
+//             return a + b + c;
+//         };
+//     }
+// }
+// console.log(sum(5)(6)(9))
