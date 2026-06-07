@@ -1,6 +1,6 @@
 # HTML
 
-### From Basic to Advanced (A to Z Reference)
+Hyper Text Markup language by Tim Berners Lee in 1991
 
 #### Declaration (Essential – Not a Tag)
 
@@ -18,6 +18,7 @@
 |-- accesskey
     |-- Explanation: Keyboard shortcut hint (e.g., Alt + key on Windows).
     |-- Possible values: Space-separated list of characters (e.g., "a", "s", "ctrl+a" – but single printable chars preferred).
+    |-- <button accesskey="c" onclick="alert('hello')">Alt + C</button> click alt + c
 |-- anchor
     |-- Explanation: Links a positioned popover/anchored element to another element’s ID.
     |-- Possible values: Any valid ID string (must match an existing element’s id).
@@ -113,7 +114,7 @@
     |-- Possible values: JavaScript code string (e.g., `onclick="alert('hi')"`). Full list: onabort, onanimation*, onclick, ondrag*, onfocus*, onkeydown, onload, onpointer*, onscroll, onsubmit, ontouch*, etc. (only relevant events fire on relevant elements).
 ```
 
-### Tags (Categorized: Basic → Advanced)
+### Tags
 
 Every tag includes:
 
@@ -413,8 +414,6 @@ These trigger warnings or quirks mode.
 - Comments: `<!-- -->`.
 - Entities: `&lt;`, `&amp;`, `&nbsp;`, etc.
 
-
-
 # CSS
 
 ### From Basic to Advanced
@@ -422,14 +421,14 @@ These trigger warnings or quirks mode.
 CSS
 |-- At-rules (@...)
 |-- Properties (grouped by category)
- |-- Property name
- |-- Explanation
- |-- Possible values / syntax / types
- |-- Initial value
- |-- Applies to
- |-- Inherited?
- |-- Percentages?
- |-- Animation type (for transitions / @keyframes)
+|-- Property name
+|-- Explanation
+|-- Possible values / syntax / types
+|-- Initial value
+|-- Applies to
+|-- Inherited?
+|-- Percentages?
+|-- Animation type (for transitions / @keyframes)
 
 ### 1. At-rules (Rules that start with @)
 
@@ -703,8 +702,6 @@ The most frequently used / changed / discussed properties in modern CSS (2024–
 - @starting-style
 - field-sizing
 
-
-
 # JavaScript
 
 ### From Basic to Advanced
@@ -716,11 +713,11 @@ JavaScript
 |-- Functions & Closures
 |-- Objects & Classes
 |-- Built-in Global Objects / Types
- |-- Primitive wrappers & constructors
- |-- Collections
- |-- Async & Promises
- |-- Iteration & Generators
- |-- Intl & new 2025–2026
+|-- Primitive wrappers & constructors
+|-- Collections
+|-- Async & Promises
+|-- Iteration & Generators
+|-- Intl & new 2025–2026
 |-- Modules
 |-- New & Experimental (2025–2026)
 
@@ -1014,8 +1011,6 @@ JavaScript
 - **Decorators** — @decorator syntax (stage 3 → likely 2026+)
 - **Pattern matching** — match expr { when … } (early proposal)
 
-
-
 # ReactJs
 
 ### From Basic to Advanced
@@ -1023,7 +1018,7 @@ JavaScript
 React
 |-- Core Concepts & JSX
 |-- Components (Class vs Function)
-|-- Built-in Hooks (use*)
+|-- Built-in Hooks (use\*)
 |-- React DOM APIs
 |-- Server Components & React Server Components (RSC)
 |-- New React 19 Features
@@ -1076,7 +1071,7 @@ React
 |-- StrictMode               → <React.StrictMode> wraps app → double renders in dev, catches issues
 ```
 
-### 3. Built-in Hooks (use*)
+### 3. Built-in Hooks (use\*)
 
 ```
 |-- useState
@@ -1270,9 +1265,6 @@ export default function ClientCounter() {
   )
 }
 ```
-
-
-
 
 # NodeJs
 
@@ -1512,21 +1504,21 @@ Node.js
 
 ```js
 // server.js   (with "type": "module" in package.json)
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const server = createServer(async (req, res) => {
-  if (req.url === '/') {
-    const html = await readFile(path.join(__dirname, 'index.html'), 'utf8');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+  if (req.url === "/") {
+    const html = await readFile(path.join(__dirname, "index.html"), "utf8");
+    res.writeHead(200, { "Content-Type": "text/html" });
     res.end(html);
   } else {
     res.writeHead(404);
-    res.end('Not Found');
+    res.end("Not Found");
   }
 });
 
@@ -1535,8 +1527,6 @@ server.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 ```
-
-
 
 # ExpressJs
 
@@ -1777,30 +1767,30 @@ Express.js
 
 ```js
 // app.js
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 
 const app = express();
 
 app.use(helmet());
 app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json({ limit: '1mb' }));
+app.use(morgan("dev"));
+app.use(express.json({ limit: "1mb" }));
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Express 2026' });
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to Express 2026" });
 });
 
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', uptime: process.uptime() });
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", uptime: process.uptime() });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
+  res.status(404).json({ error: "Not Found" });
 });
 
 // Error handler
@@ -1808,8 +1798,8 @@ app.use((err, req, res, next) => {
   console.error(err);
   const status = err.status || 500;
   res.status(status).json({
-    error: status === 500 ? 'Internal Server Error' : err.message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    error: status === 500 ? "Internal Server Error" : err.message,
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 });
 
@@ -1818,7 +1808,6 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 ```
-
 
 # MongoDB
 
@@ -2053,34 +2042,31 @@ MongoDB
 
 ```js
 // server.js
-import { MongoClient } from 'mongodb';
-import express from 'express';
+import { MongoClient } from "mongodb";
+import express from "express";
 
-const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const client = new MongoClient(uri);
 
 const app = express();
 app.use(express.json());
 
 await client.connect();
-const db = client.db('mydb');
-const users = db.collection('users');
+const db = client.db("mydb");
+const users = db.collection("users");
 
-app.post('/users', async (req, res) => {
+app.post("/users", async (req, res) => {
   const result = await users.insertOne(req.body);
   res.status(201).json({ id: result.insertedId });
 });
 
-app.get('/users/:id', async (req, res) => {
+app.get("/users/:id", async (req, res) => {
   const user = await users.findOne({ _id: new ObjectId(req.params.id) });
-  user ? res.json(user) : res.status(404).json({ error: 'Not found' });
+  user ? res.json(user) : res.status(404).json({ error: "Not found" });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(3000, () => console.log("Server running on port 3000"));
 ```
-
-
-
 
 # MongooseJs
 
@@ -2267,7 +2253,7 @@ Mongoose
 
 ```ts
 // models/user.ts
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
 
 interface IUser extends Document {
   name: string;
@@ -2276,39 +2262,39 @@ interface IUser extends Document {
   createdAt: Date;
 }
 
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true, trim: true },
-  email: { type: String, required: true, unique: true, lowercase: true },
-  age: { type: Number, min: 0 },
-}, {
-  timestamps: true,
-  toJSON: { virtuals: true, versionKey: false }
-});
+const userSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    age: { type: Number, min: 0 },
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true, versionKey: false },
+  },
+);
 
-userSchema.virtual('isAdult').get(function() {
+userSchema.virtual("isAdult").get(function () {
   return this.age >= 18;
 });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre("save", async function (next) {
   // example: hash password if added
   next();
 });
 
-export const User = model<IUser>('User', userSchema);
+export const User = model<IUser>("User", userSchema);
 
 // db.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export async function connectDB() {
   await mongoose.connect(process.env.MONGODB_URI!, {
     maxPoolSize: 20,
   });
-  console.log('MongoDB connected');
+  console.log("MongoDB connected");
 }
 ```
-
-
-
 
 # PostgreSQL
 
@@ -2551,7 +2537,7 @@ PostgreSQL
 
 ```ts
 // db.ts
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -2561,7 +2547,7 @@ export const pool = new Pool({
 });
 
 // users.ts
-import { pool } from './db';
+import { pool } from "./db";
 
 export interface User {
   id: number;
@@ -2584,14 +2570,11 @@ export async function getRecentUsers(): Promise<User[]> {
 export async function createUser(email: string, name: string): Promise<User> {
   const result = await pool.query<User>(
     `INSERT INTO users (email, name) VALUES ($1, $2) RETURNING *`,
-    [email, name]
+    [email, name],
   );
   return result.rows[0];
 }
 ```
-
-
-
 
 # Prisma
 
@@ -2893,11 +2876,6 @@ process.on('SIGTERM', async () => {
 });
 ```
 
-
-
-
-
-
 # TypeScript
 
 ### From Basic to Advanced
@@ -3146,7 +3124,7 @@ TypeScript
 
 ```ts
 // src/index.ts
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 
 interface User {
   id: number;
@@ -3164,18 +3142,24 @@ const app = express();
 app.use(express.json());
 
 const users: User[] = [
-  { id: 1, name: "Hassaan", email: "hassaan@example.com" }
+  { id: 1, name: "Hassaan", email: "hassaan@example.com" },
 ];
 
-app.get('/api/users', (req: Request, res: Response<ApiResponse<User[]>>) => {
+app.get("/api/users", (req: Request, res: Response<ApiResponse<User[]>>) => {
   res.json({ success: true, data: users });
 });
 
-app.post('/api/users', (req: Request<{}, {}, Omit<User, 'id'>>, res: Response<ApiResponse<User>>) => {
-  const newUser: User = { id: users.length + 1, ...req.body };
-  users.push(newUser);
-  res.status(201).json({ success: true, data: newUser });
-});
+app.post(
+  "/api/users",
+  (
+    req: Request<{}, {}, Omit<User, "id">>,
+    res: Response<ApiResponse<User>>,
+  ) => {
+    const newUser: User = { id: users.length + 1, ...req.body };
+    users.push(newUser);
+    res.status(201).json({ success: true, data: newUser });
+  },
+);
 
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, () => {
