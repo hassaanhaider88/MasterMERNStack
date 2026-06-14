@@ -1,7 +1,9 @@
-const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+import TimerCounter from "./Topics/TimerCounter";
 
-export default App
+const App = () => {
+  return <div>
+    <TimerCounter/>
+  </div>;
+};
+
+export default App;
