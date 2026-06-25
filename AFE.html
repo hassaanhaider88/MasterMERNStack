@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alhamdulilah For Everything – Prayer Times</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-pale: #F5E6B8;
+      --dark-green: #1B3A2D;
+      --mid-green: #234D3B;
+      --light-green: #2E6B50;
+      --off-white: #FAF8F3;
+      --warm-white: #FDF9EF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Lato', sans-serif; background: var(--off-white); color: #1a1a1a; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-amiri { font-family: 'Amiri', serif; }
+
+    /* Arabesque geometric SVG background */
+    .arabesque-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='none' stroke='%23C9A84C' stroke-width='0.4' opacity='0.15'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z' fill='none' stroke='%23C9A84C' stroke-width='0.3' opacity='0.12'/%3E%3Ccircle cx='40' cy='40' r='8' fill='none' stroke='%23C9A84C' stroke-width='0.3' opacity='0.1'/%3E%3C/svg%3E");
+    }
+
+    /* Gold shimmer gradient */
+    .gold-gradient { background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%); }
+    .green-gradient { background: linear-gradient(135deg, #1B3A2D 0%, #234D3B 60%, #1B3A2D 100%); }
+
+    /* Diamond prayer card */
+    .diamond-card {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      background: var(--gold-pale);
+      transition: all 0.3s ease;
+    }
+    .diamond-card:hover {
+      background: var(--gold);
+      transform: scale(1.05);
+    }
+    .diamond-card:hover .prayer-text { color: white; }
+
+    /* Mosque silhouette hero */
+    .hero-section {
+      background: linear-gradient(180deg, #0a1a12 0%, #1B3A2D 40%, #0f2318 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400'%3E%3Crect width='1200' height='400' fill='none'/%3E%3C!-- Mosque silhouette --%3E%3C!-- Main dome --%3E%3Cellipse cx='600' cy='300' rx='110' ry='110' fill='%230a1a12'/%3E%3Crect x='490' y='300' width='220' height='100' fill='%230a1a12'/%3E%3C!-- Left minaret --%3E%3Crect x='390' y='180' width='30' height='220' fill='%230a1a12'/%3E%3Cellipse cx='405' cy='178' rx='18' ry='25' fill='%230a1a12'/%3E%3Cpolygon points='405,140 420,178 390,178' fill='%230a1a12'/%3E%3C!-- Right minaret --%3E%3Crect x='780' y='180' width='30' height='220' fill='%230a1a12'/%3E%3Cellipse cx='795' cy='178' rx='18' ry='25' fill='%230a1a12'/%3E%3Cpolygon points='795,140 810,178 780,178' fill='%230a1a12'/%3E%3C!-- Far left minaret --%3E%3Crect x='200' y='220' width='22' height='180' fill='%230a1a12'/%3E%3Cpolygon points='211,195 222,220 200,220' fill='%230a1a12'/%3E%3C!-- Far right minaret --%3E%3Crect x='978' y='220' width='22' height='180' fill='%230a1a12'/%3E%3Cpolygon points='989,195 1000,220 978,220' fill='%230a1a12'/%3E%3C!-- Arched windows --%3E%3Cellipse cx='560' cy='340' rx='18' ry='22' fill='%23C9A84C' opacity='0.3'/%3E%3Cellipse cx='600' cy='340' rx='18' ry='22' fill='%23C9A84C' opacity='0.3'/%3E%3Cellipse cx='640' cy='340' rx='18' ry='22' fill='%23C9A84C' opacity='0.3'/%3E%3C/svg%3E") center bottom / cover no-repeat;
+      opacity: 0.6;
+    }
+
+    /* Crescent moon icon */
+    .crescent { display: inline-block; font-size: 1.5rem; color: var(--gold); }
+
+    /* Countdown timer */
+    .countdown-box {
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 8px;
+      padding: 10px 18px;
+      text-align: center;
+      min-width: 72px;
+    }
+
+    /* Prayer time pill (top bar) */
+    .prayer-pill {
+      background: rgba(201,168,76,0.18);
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      color: var(--gold-light);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .prayer-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); display: inline-block; }
+    .prayer-pill.active-prayer { background: rgba(201,168,76,0.35); }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 999; }
+    .nav-dropdown { display: none; position: absolute; top: 100%; left: 0; min-width: 180px; background: var(--dark-green); border: 1px solid rgba(201,168,76,0.25); border-radius: 8px; padding: 8px 0; z-index: 99; }
+    .nav-item:hover .nav-dropdown { display: block; }
+    .nav-dropdown a { display: block; padding: 8px 16px; color: #d4c89a; font-size: 0.875rem; transition: background 0.2s; }
+    .nav-dropdown a:hover { background: rgba(201,168,76,0.15); color: var(--gold); }
+
+    /* Location permission modal */
+    #locationModal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.75);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .modal-card {
+      background: var(--warm-white);
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 440px; width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      border: 1px solid rgba(201,168,76,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    }
+
+    /* Ornament divider */
+    .ornament {
+      display: flex; align-items: center; gap: 16px; margin: 0 auto;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);
+    }
+
+    /* Next prayer highlight */
+    .next-prayer-banner {
+      background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 16px;
+      padding: 20px 28px;
+    }
+
+    /* Smooth fade-in */
+    .fade-in { animation: fadeIn 0.7s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Prayer card hover */
+    .prayer-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(201,168,76,0.2);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    .prayer-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(201,168,76,0.2);
+      border-color: rgba(201,168,76,0.5);
+    }
+    .prayer-card.active-prayer-card {
+      border-color: var(--gold);
+      box-shadow: 0 8px 32px rgba(201,168,76,0.25);
+    }
+    .prayer-card.active-prayer-card .prayer-card-top {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    }
+    .prayer-card-top {
+      background: linear-gradient(135deg, var(--dark-green), var(--mid-green));
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Mobile menu */
+    #mobileMenu { display: none; }
+    #mobileMenu.open { display: block; }
+
+    /* Scroll behavior */
+    html { scroll-behavior: smooth; }
+
+    /* Quran verse styling */
+    .arabic-text { direction: rtl; font-family: 'Amiri', serif; line-height: 2; }
+
+    /* Star/rating */
+    .star { color: var(--gold); }
+
+    /* Footer */
+    footer a:hover { color: var(--gold-light); transition: color 0.2s; }
+
+    /* Loading spinner */
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(201,168,76,0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Pulse next prayer */
+    .pulse-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    @media (max-width: 768px) {
+      .diamond-card-wrapper { transform: scale(0.85); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== LOCATION PERMISSION MODAL ==================== -->
+<div id="locationModal">
+  <div class="modal-card fade-in">
+    <!-- Crescent + Star icon -->
+    <div class="mb-5">
+      <div style="font-size:3.5rem; line-height:1;" class="mb-1">🕌</div>
+      <div style="color:var(--gold); font-size:1.1rem; font-family:'Amiri',serif;">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+    </div>
+    <h2 class="font-cinzel text-2xl mb-2" style="color:var(--dark-green);">Alhamdulilah For Everything</h2>
+    <p class="text-gray-500 mb-5 text-sm leading-relaxed">
+      To show accurate prayer times for your location, we need permission to access your device's location.<br/>
+      <span style="color:var(--gold);" class="font-semibold">Your location is never stored on any server.</span>
+    </p>
+    <div class="ornament mb-5">
+      <span style="color:var(--gold); font-size:1.2rem;">✦</span>
+    </div>
+    <button id="allowLocationBtn" onclick="requestLocation()" 
+      class="w-full py-3 rounded-xl font-cinzel font-semibold text-sm tracking-wider text-white mb-3 transition-all hover:opacity-90 active:scale-95"
+      style="background: linear-gradient(135deg, var(--dark-green), var(--light-green)); letter-spacing:0.08em;">
+      <i class="fas fa-location-dot mr-2"></i> Allow Location Access
+    </button>
+    <button id="skipLocationBtn" onclick="useDefaultLocation()"
+      class="w-full py-2 rounded-xl text-sm text-gray-400 hover:text-gray-600 transition-colors">
+      Use Makkah as default instead
+    </button>
+    <p id="locationError" class="text-red-500 text-xs mt-3 hidden">Could not get location. Using Makkah as default.</p>
+  </div>
+</div>
+
+<!-- ==================== TOPBAR ==================== -->
+<div class="green-gradient py-2 px-4" style="font-size:0.78rem; color:#b5c9be;">
+  <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center gap-4">
+      <span><i class="fas fa-phone mr-1" style="color:var(--gold);"></i> <span id="topbarCity">Detecting location...</span></span>
+      <span class="hidden sm:inline"><i class="fas fa-mosque mr-1" style="color:var(--gold);"></i> Alhamdulilah For Everything</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="topbarDate" class="hidden sm:block"></span>
+      <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="green-gradient shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, var(--gold), var(--gold-light));">
+        <span style="font-size:1.4rem;">☪</span>
+      </div>
+      <div>
+        <div class="font-cinzel font-bold text-white text-sm leading-tight tracking-wide">Alhamdulilah</div>
+        <div style="color:var(--gold); font-size:0.65rem; letter-spacing:0.12em;" class="uppercase">For Everything</div>
+      </div>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden lg:flex items-center gap-1">
+      <div class="nav-item relative px-3 py-2 cursor-pointer text-white hover:text-yellow-300 text-sm font-medium transition flex items-center gap-1">
+        Home <i class="fas fa-chevron-down text-xs"></i>
+        <div class="nav-dropdown">
+          <a href="#"><i class="fas fa-home mr-2"></i>Main Page</a>
+          <a href="#prayers"><i class="fas fa-clock mr-2"></i>Prayer Times</a>
+          <a href="#quran"><i class="fas fa-book mr-2"></i>Quran Verse</a>
+        </div>
+      </div>
+      <div class="nav-item relative px-3 py-2 cursor-pointer text-white hover:text-yellow-300 text-sm font-medium transition flex items-center gap-1">
+        Prayers <i class="fas fa-chevron-down text-xs"></i>
+        <div class="nav-dropdown">
+          <a href="#prayers"><i class="fas fa-sun mr-2"></i>Fajr</a>
+          <a href="#prayers"><i class="fas fa-cloud-sun mr-2"></i>Dhuhr</a>
+          <a href="#prayers"><i class="fas fa-cloud mr-2"></i>Asr</a>
+          <a href="#prayers"><i class="fas fa-moon mr-2"></i>Maghrib</a>
+          <a href="#prayers"><i class="fas fa-star-and-crescent mr-2"></i>Isha</a>
+        </div>
+      </div>
+      <a href="#events" class="px-3 py-2 text-white hover:text-yellow-300 text-sm font-medium transition">Events</a>
+      <a href="#calendar" class="px-3 py-2 text-white hover:text-yellow-300 text-sm font-medium transition">Calendar</a>
+      <a href="#quran" class="px-3 py-2 text-white hover:text-yellow-300 text-sm font-medium transition">Verses</a>
+      <a href="#contact" class="px-3 py-2 text-white hover:text-yellow-300 text-sm font-medium transition">Contact</a>
+    </div>
+
+    <!-- CTA + Hamburger -->
+    <div class="flex items-center gap-3">
+      <div id="nextPrayerPill" class="prayer-pill hidden lg:flex">
+        <span class="pulse-dot"></span>
+        <span id="nextPrayerLabel">Loading...</span>
+      </div>
+      <button onclick="toggleMobileMenu()" class="lg:hidden text-white text-xl p-1">
+        <i class="fas fa-bars" id="hamburgerIcon"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="lg:hidden px-4 pb-4" style="border-top: 1px solid rgba(201,168,76,0.2);">
+    <div class="pt-3 flex flex-col gap-1">
+      <a href="#" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition">Home</a>
+      <a href="#prayers" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition" onclick="closeMobileMenu()">Prayer Times</a>
+      <a href="#events" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition" onclick="closeMobileMenu()">Events</a>
+      <a href="#calendar" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition" onclick="closeMobileMenu()">Calendar</a>
+      <a href="#quran" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition" onclick="closeMobileMenu()">Verses</a>
+      <a href="#contact" class="py-2 px-3 text-white hover:text-yellow-300 text-sm rounded-lg hover:bg-white/5 transition" onclick="closeMobileMenu()">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero-section arabesque-bg" style="min-height: 520px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 80px 20px 120px;">
+  <!-- Stars effect -->
+  <div id="heroStars" style="position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none; overflow:hidden;" aria-hidden="true"></div>
+
+  <div style="position:relative; z-index:2;">
+    <div class="mb-4" style="color:var(--gold); font-family:'Amiri',serif; font-size:1.5rem; opacity:0.85;">
+      ﷽
+    </div>
+    <h1 class="font-cinzel text-white mb-3" style="font-size: clamp(2rem, 6vw, 3.8rem); font-weight:700; letter-spacing:0.03em; text-shadow: 0 2px 20px rgba(0,0,0,0.5);">
+      SALAT TIMINGS
+    </h1>
+    <div class="ornament mb-4 max-w-xs mx-auto">
+      <span style="color:var(--gold);">✦</span>
+    </div>
+    <p class="font-cinzel text-xs tracking-widest mb-6" style="color:var(--gold-light); letter-spacing:0.18em;">
+      ALHAMDULILAH FOR EVERYTHING
+    </p>
+    <p id="heroLocation" class="text-sm mb-8" style="color:#7fb89a;">
+      <i class="fas fa-location-dot mr-2" style="color:var(--gold);"></i>Detecting your location...
+    </p>
+
+    <!-- Live time display -->
+    <div class="inline-flex flex-col items-center">
+      <div id="liveTime" class="font-cinzel text-white mb-1" style="font-size:clamp(2.5rem,8vw,5rem); font-weight:700; letter-spacing:0.05em; text-shadow:0 0 40px rgba(201,168,76,0.3);">
+        00:00:00
+      </div>
+      <div id="liveDate" class="text-sm" style="color:var(--gold-light); letter-spacing:0.1em;"></div>
+    </div>
+
+    <!-- Next prayer countdown -->
+    <div id="nextPrayerBar" class="next-prayer-banner mt-8 max-w-md mx-auto hidden">
+      <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold);">Next Prayer</div>
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <div id="nextPrayerName" class="font-cinzel text-white text-xl font-bold"></div>
+          <div id="nextPrayerTime" class="text-sm" style="color:#7fb89a;"></div>
+        </div>
+        <div class="flex gap-3">
+          <div class="countdown-box">
+            <div id="cdHours" class="font-cinzel text-2xl font-bold" style="color:var(--gold);">00</div>
+            <div class="text-xs" style="color:#7fb89a; letter-spacing:0.08em;">HRS</div>
+          </div>
+          <div class="countdown-box">
+            <div id="cdMins" class="font-cinzel text-2xl font-bold" style="color:var(--gold);">00</div>
+            <div class="text-xs" style="color:#7fb89a; letter-spacing:0.08em;">MIN</div>
+          </div>
+          <div class="countdown-box">
+            <div id="cdSecs" class="font-cinzel text-2xl font-bold" style="color:var(--gold);">00</div>
+            <div class="text-xs" style="color:#7fb89a; letter-spacing:0.08em;">SEC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mosque arch shape separator -->
+<div style="margin-top:-2px; line-height:0;">
+  <svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;display:block;" fill="var(--off-white)">
+    <path d="M0,80 L0,40 Q300,0 600,40 Q900,80 1200,40 L1200,80 Z"/>
+  </svg>
+</div>
+
+<!-- ==================== WELCOME SECTION ==================== -->
+<section class="py-16 px-4" style="background:var(--off-white);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold); font-family:'Cinzel',serif;">Welcome</div>
+      <h2 class="font-cinzel text-3xl md:text-5xl font-bold mb-4 leading-tight" style="color:var(--dark-green);">
+        Alhamdulilah For Everything
+      </h2>
+      <div class="ornament max-w-xs mx-auto mb-4">
+        <span style="color:var(--gold); font-size:1.1rem;">☪</span>
+      </div>
+      <p class="arabic-text text-2xl mb-4" style="color:var(--dark-green);">
+        إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا
+      </p>
+      <p class="text-sm text-gray-500 italic">
+        "Indeed, prayer has been decreed upon the believers at specified times." — Quran 4:103
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <p class="text-gray-600 leading-relaxed mb-5">
+          Prayer (Salat) is the second pillar of Islam and one of the most important acts of worship. It connects the believer directly with Allah ﷻ five times every day, keeping the heart in remembrance and the soul in peace.
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          Our platform provides accurate, real-time prayer schedules based on your exact GPS location using trusted astronomical calculation methods — so you never miss a prayer, wherever you are in the world.
+        </p>
+        <div class="grid grid-cols-2 gap-3 mb-8">
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--gold);">
+              <i class="fas fa-location-dot text-white text-sm"></i>
+            </div>
+            <span class="text-sm text-gray-700 font-medium">GPS Accuracy</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--gold);">
+              <i class="fas fa-bell text-white text-sm"></i>
+            </div>
+            <span class="text-sm text-gray-700 font-medium">Live Timings</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--gold);">
+              <i class="fas fa-globe text-white text-sm"></i>
+            </div>
+            <span class="text-sm text-gray-700 font-medium">Worldwide</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--gold);">
+              <i class="fas fa-moon text-white text-sm"></i>
+            </div>
+            <span class="text-sm text-gray-700 font-medium">Hijri Calendar</span>
+          </div>
+        </div>
+        <a href="#prayers" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-sm font-semibold text-white tracking-wider transition-all hover:opacity-90 hover:translate-y-px" style="background:linear-gradient(135deg,var(--dark-green),var(--light-green));">
+          View Prayer Times <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Prayer time widget -->
+      <div class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-2xl" style="background:linear-gradient(145deg,var(--dark-green),var(--mid-green)); border:1px solid rgba(201,168,76,0.25);">
+          <div class="p-6 pb-0 text-center" style="border-bottom:1px solid rgba(201,168,76,0.15);">
+            <div class="text-xs uppercase tracking-widest mb-1" style="color:var(--gold);">Today's</div>
+            <div class="font-cinzel text-xl font-bold text-white mb-1">PRAYER TIMES</div>
+            <div id="widgetLocation" class="text-xs mb-4" style="color:#7fb89a;">
+              <i class="fas fa-location-dot mr-1" style="color:var(--gold);"></i>Detecting...
+            </div>
+          </div>
+          <div class="p-4">
+            <div id="sidebarPrayers" class="space-y-1">
+              <!-- Filled by JS -->
+              <div class="flex items-center justify-center py-8">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Gold decorative ring -->
+        <div style="position:absolute; top:-12px; right:-12px; width:80px; height:80px; border-radius:50%; border:2px solid rgba(201,168,76,0.25); pointer-events:none;"></div>
+        <div style="position:absolute; bottom:-8px; left:-8px; width:50px; height:50px; border-radius:50%; border:2px solid rgba(201,168,76,0.2); pointer-events:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MAIN PRAYER CARDS ==================== -->
+<section id="prayers" class="py-16 px-4 arabesque-bg" style="background-color: var(--warm-white);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold); font-family:'Cinzel',serif;">
+        <i class="fas fa-location-dot mr-1"></i><span id="prayersLocationLabel">Your Location</span>
+      </div>
+      <h2 class="font-cinzel text-3xl md:text-4xl font-bold mb-3" style="color:var(--dark-green);">OUR NAMAZ TIMINGS</h2>
+      <div class="ornament max-w-xs mx-auto">
+        <span style="color:var(--gold);">✦</span>
+      </div>
+      <p id="hijriDate" class="mt-3 text-sm text-gray-500"></p>
+    </div>
+
+    <!-- Loading state -->
+    <div id="prayerCardsLoading" class="flex justify-center py-16">
+      <div class="text-center">
+        <div class="spinner mx-auto mb-4"></div>
+        <p class="text-sm text-gray-400">Fetching prayer times for your location...</p>
+      </div>
+    </div>
+
+    <!-- Prayer cards grid -->
+    <div id="prayerCardsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 hidden">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Sunnah timings info -->
+    <div id="sunnahInfo" class="mt-8 p-5 rounded-xl hidden" style="background:rgba(27,58,45,0.06); border:1px solid rgba(201,168,76,0.2);">
+      <div class="flex flex-wrap gap-6 justify-around text-sm">
+        <div class="text-center">
+          <div class="text-xs uppercase tracking-wider mb-1" style="color:var(--gold);">Sunrise</div>
+          <div id="sunriseTime" class="font-cinzel font-bold" style="color:var(--dark-green);">—</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xs uppercase tracking-wider mb-1" style="color:var(--gold);">Sunset</div>
+          <div id="sunsetTime" class="font-cinzel font-bold" style="color:var(--dark-green);">—</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xs uppercase tracking-wider mb-1" style="color:var(--gold);">Midnight</div>
+          <div id="midnightTime" class="font-cinzel font-bold" style="color:var(--dark-green);">—</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xs uppercase tracking-wider mb-1" style="color:var(--gold);">Imsak</div>
+          <div id="imsakTime" class="font-cinzel font-bold" style="color:var(--dark-green);">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== UPCOMING EVENT (countdown) ==================== -->
+<section id="events" class="py-16 px-4 green-gradient arabesque-bg relative overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <!-- Decorative dates image replaced with arabesque pattern -->
+      <div class="relative flex items-center justify-center">
+        <div style="width:260px; height:260px; background:rgba(201,168,76,0.08); border:2px solid rgba(201,168,76,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:200px; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:5rem;">
+            🌙
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs uppercase tracking-widest mb-3" style="color:var(--gold-light); letter-spacing:0.15em;">Upcoming Event</div>
+        <h2 class="font-cinzel text-3xl md:text-4xl font-bold text-white mb-3 leading-snug">
+          GRAND ISLAMIC<br/>GATHERING 2026
+        </h2>
+        <div class="flex items-center gap-4 mb-2 text-sm" style="color:#7fb89a;">
+          <span><i class="fas fa-location-dot mr-1" style="color:var(--gold);"></i>International Islamic Centre</span>
+        </div>
+        <div class="flex items-center gap-4 mb-6 text-sm" style="color:#7fb89a;">
+          <span><i class="far fa-clock mr-1" style="color:var(--gold);"></i>9:30 am to 1:15 pm</span>
+        </div>
+        <div class="flex gap-4 mb-6">
+          <div class="countdown-box">
+            <div id="evDays" class="font-cinzel text-3xl font-bold" style="color:var(--gold);">—</div>
+            <div class="text-xs mt-1" style="color:#7fb89a; letter-spacing:0.1em;">DAYS</div>
+          </div>
+          <div class="countdown-box">
+            <div id="evHours" class="font-cinzel text-3xl font-bold" style="color:var(--gold);">—</div>
+            <div class="text-xs mt-1" style="color:#7fb89a; letter-spacing:0.1em;">HOURS</div>
+          </div>
+          <div class="countdown-box">
+            <div id="evMins" class="font-cinzel text-3xl font-bold" style="color:var(--gold);">—</div>
+            <div class="text-xs mt-1" style="color:#7fb89a; letter-spacing:0.1em;">MINS</div>
+          </div>
+          <div class="countdown-box">
+            <div id="evSecs" class="font-cinzel text-3xl font-bold" style="color:var(--gold);">—</div>
+            <div class="text-xs mt-1" style="color:#7fb89a; letter-spacing:0.1em;">SECS</div>
+          </div>
+        </div>
+        <a href="#" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-sm font-bold tracking-wider transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--dark-green);">
+          Register Now <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HIJRI CALENDAR ==================== -->
+<section id="calendar" class="py-16 px-4" style="background:var(--off-white);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold);">Islamic Calendar</div>
+      <h2 class="font-cinzel text-3xl md:text-4xl font-bold" style="color:var(--dark-green);">HIJRI DATE TODAY</h2>
+      <div class="ornament max-w-xs mx-auto mt-3">
+        <span style="color:var(--gold);">☪</span>
+      </div>
+    </div>
+    <div class="max-w-2xl mx-auto">
+      <div class="rounded-2xl overflow-hidden shadow-xl" style="border:1px solid rgba(201,168,76,0.25);">
+        <!-- Calendar header -->
+        <div style="background:linear-gradient(135deg,var(--dark-green),var(--mid-green)); padding:28px 24px; text-align:center;">
+          <div id="hijriMonthYear" class="font-cinzel text-2xl font-bold text-white mb-1">Loading...</div>
+          <div id="hijriDay" class="text-4xl font-bold mt-2" style="color:var(--gold); font-family:'Cinzel',serif;">—</div>
+          <div id="gregorianFull" class="text-sm mt-2" style="color:#7fb89a;"></div>
+        </div>
+        <!-- Calendar grid placeholder -->
+        <div class="p-6" style="background:var(--warm-white);">
+          <div id="miniCalendar" class="grid grid-cols-7 gap-1 text-center text-sm">
+            <!-- Days header -->
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Su</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Mo</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Tu</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">We</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Th</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Fr</div>
+            <div class="font-bold py-1 text-xs" style="color:var(--gold);">Sa</div>
+          </div>
+          <div id="miniCalendarDays" class="grid grid-cols-7 gap-1 text-center text-sm mt-1"></div>
+          <div class="mt-4 text-center">
+            <div id="islamicMonthDesc" class="text-xs text-gray-500 leading-relaxed"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QURAN VERSE ==================== -->
+<section id="quran" class="py-16 px-4 arabesque-bg" style="background-color: var(--warm-white);">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold);">Verse of the Day</div>
+    <h2 class="font-cinzel text-3xl font-bold mb-8" style="color:var(--dark-green);">QURAN VERSES ON PRAYER</h2>
+    <div id="verseSlider" class="relative overflow-hidden rounded-2xl shadow-xl" style="background:linear-gradient(135deg,var(--dark-green),var(--mid-green)); border:1px solid rgba(201,168,76,0.3); padding:40px 32px;">
+      <div class="arabic-text text-2xl md:text-3xl mb-6 text-white leading-loose" id="verseArabic"></div>
+      <div class="ornament max-w-xs mx-auto mb-4">
+        <span style="color:var(--gold);">✦</span>
+      </div>
+      <p id="verseTranslation" class="text-base md:text-lg leading-relaxed mb-4" style="color:#c5d9d0; font-style:italic;">"..."</p>
+      <p id="verseRef" class="text-xs uppercase tracking-widest" style="color:var(--gold);">— Quran —</p>
+    </div>
+    <!-- Verse nav dots -->
+    <div class="flex justify-center gap-2 mt-5" id="verseDots"></div>
+    <div class="flex justify-center gap-3 mt-4">
+      <button onclick="prevVerse()" class="w-10 h-10 rounded-full border flex items-center justify-center transition hover:bg-white/10" style="border-color:rgba(201,168,76,0.4); color:var(--gold);">
+        <i class="fas fa-chevron-left text-sm"></i>
+      </button>
+      <button onclick="nextVerse()" class="w-10 h-10 rounded-full border flex items-center justify-center transition hover:bg-white/10" style="border-color:rgba(201,168,76,0.4); color:var(--gold);">
+        <i class="fas fa-chevron-right text-sm"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== JOIN COMMUNITY CTA ==================== -->
+<section class="py-14 px-4 green-gradient">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4);">
+        <span style="font-size:1.8rem;">🕌</span>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-widest mb-1" style="color:var(--gold-light);">Become Part of Our Community</div>
+        <div class="font-cinzel text-2xl md:text-3xl font-bold text-white">INSPIRED? JOIN US RIGHT NOW!</div>
+      </div>
+    </div>
+    <a href="#contact" class="flex-shrink-0 px-7 py-3 rounded-xl font-cinzel font-bold text-sm tracking-wider transition-all hover:opacity-90 hover:-translate-y-0.5" style="background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--dark-green);">
+      Join Community
+    </a>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section id="contact" class="py-16 px-4" style="background:var(--off-white);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="text-xs uppercase tracking-widest mb-2" style="color:var(--gold);">Get In Touch</div>
+      <h2 class="font-cinzel text-3xl font-bold" style="color:var(--dark-green);">CONTACT US</h2>
+      <div class="ornament max-w-xs mx-auto mt-3"><span style="color:var(--gold);">✦</span></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
+      <div class="text-center p-6 rounded-2xl" style="background:white; border:1px solid rgba(201,168,76,0.2); box-shadow:0 4px 20px rgba(0,0,0,0.05);">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(201,168,76,0.12);">
+          <i class="fas fa-phone" style="color:var(--gold); font-size:1.3rem;"></i>
+        </div>
+        <h4 class="font-cinzel font-bold mb-1" style="color:var(--dark-green);">Hotline</h4>
+        <p class="text-sm text-gray-500">1800-123-456-7</p>
+        <p class="text-xs text-gray-400">Mon – Sat: 9:00 am – 6:00 pm</p>
+      </div>
+      <div class="text-center p-6 rounded-2xl" style="background:white; border:1px solid rgba(201,168,76,0.2); box-shadow:0 4px 20px rgba(0,0,0,0.05);">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(201,168,76,0.12);">
+          <i class="fas fa-envelope" style="color:var(--gold); font-size:1.3rem;"></i>
+        </div>
+        <h4 class="font-cinzel font-bold mb-1" style="color:var(--dark-green);">Email</h4>
+        <p class="text-sm text-gray-500">info@alhamdulilah.com</p>
+        <p class="text-xs text-gray-400">We reply within 24 hours</p>
+      </div>
+      <div class="text-center p-6 rounded-2xl" style="background:white; border:1px solid rgba(201,168,76,0.2); box-shadow:0 4px 20px rgba(0,0,0,0.05);">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(201,168,76,0.12);">
+          <i class="fas fa-mosque" style="color:var(--gold); font-size:1.3rem;"></i>
+        </div>
+        <h4 class="font-cinzel font-bold mb-1" style="color:var(--dark-green);">Location</h4>
+        <p id="contactLocation" class="text-sm text-gray-500">Your local mosque</p>
+        <p class="text-xs text-gray-400">Jummah every Friday</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="green-gradient pt-12 pb-6 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8" style="border-bottom:1px solid rgba(201,168,76,0.2);">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));">
+            <span style="font-size:1.6rem;">☪</span>
+          </div>
+          <div>
+            <div class="font-cinzel font-bold text-white text-sm">Alhamdulilah</div>
+            <div style="color:var(--gold); font-size:0.65rem; letter-spacing:0.12em;" class="uppercase">For Everything</div>
+          </div>
+        </div>
+        <p class="text-xs leading-relaxed mb-4" style="color:#7fb89a;">
+          Providing accurate, real-time Islamic prayer times for Muslims worldwide. May Allah ﷻ accept our prayers.
+        </p>
+        <div class="flex gap-3">
+          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110" style="background:rgba(201,168,76,0.2); color:var(--gold);"><i class="fab fa-twitter text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110" style="background:rgba(201,168,76,0.2); color:var(--gold);"><i class="fab fa-facebook-f text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110" style="background:rgba(201,168,76,0.2); color:var(--gold);"><i class="fab fa-instagram text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110" style="background:rgba(201,168,76,0.2); color:var(--gold);"><i class="fab fa-youtube text-xs"></i></a>
+        </div>
+      </div>
+
+      <!-- Information -->
+      <div>
+        <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4" style="color:var(--gold);">Information</h4>
+        <ul class="space-y-2 text-xs" style="color:#7fb89a;">
+          <li>Providing accurate prayer schedules for Muslims worldwide using trusted astronomical calculations and real-time GPS-based detection.</li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="font-cinzel font-bold text-sm uppercase tracking-wider mb-4" style="color:var(--gold);">Contact Info</h4>
+        <ul class="space-y-3 text-xs" style="color:#7fb89a;">
+          <li class="flex items-start gap-2"><i class="fas fa-phone mt-0.5" style="color:var(--gold); width:14px;"></i>1800-123-456-7<br/>Mon – Sat 9am–6pm</li>
+          <li class="flex items-start gap-2"><i class="fas fa-envelope mt-0.5" style="color:var(--gold); width:14px;"></i>info@alhamdulilah.com</li>
+          <li class="flex items-start gap-2"><i class="fas fa-mosque mt-0.5" style="color:var(--gold); width:14px;"></i><span id="footerLocation">Your nearest mosque</span></li>
+        </ul>
+      </div>
+
+      <!-- Quick links -->
+      <div>
+        <h4 class="font-cinzel font-bold text-sm uppercase tracking-wider mb-4" style="color:var(--gold);">Quick Links</h4>
+        <ul class="space-y-2 text-xs" style="color:#7fb89a;">
+          <li><a href="#prayers" class="flex items-center gap-2 hover:text-yellow-300 transition"><i class="fas fa-chevron-right text-xs" style="color:var(--gold);"></i> Salat Timings</a></li>
+          <li><a href="#quran" class="flex items-center gap-2 hover:text-yellow-300 transition"><i class="fas fa-chevron-right text-xs" style="color:var(--gold);"></i> Quran Verses</a></li>
+          <li><a href="#calendar" class="flex items-center gap-2 hover:text-yellow-300 transition"><i class="fas fa-chevron-right text-xs" style="color:var(--gold);"></i> Hijri Calendar</a></li>
+          <li><a href="#events" class="flex items-center gap-2 hover:text-yellow-300 transition"><i class="fas fa-chevron-right text-xs" style="color:var(--gold);"></i> Events</a></li>
+          <li><a href="#contact" class="flex items-center gap-2 hover:text-yellow-300 transition"><i class="fas fa-chevron-right text-xs" style="color:var(--gold);"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row items-center justify-between pt-6 gap-3 text-xs" style="color:#7fb89a;">
+      <div>Alhamdulilah For Everything &copy; <span id="footerYear"></span> <span style="color:var(--gold);">All Rights Reserved</span></div>
+      <div>www.alhamdulilahforeverything.com</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== JS ==================== -->
+<script>
+// ===== CONFIG =====
+const PRAYER_NAMES = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+const PRAYER_ICONS = {
+  Fajr: 'fa-star-and-crescent',
+  Sunrise: 'fa-sun',
+  Dhuhr: 'fa-cloud-sun',
+  Asr: 'fa-cloud',
+  Maghrib: 'fa-moon',
+  Isha: 'fa-star',
+  Jummah: 'fa-mosque'
+};
+const PRAYER_LABELS = {
+  Fajr: 'Dawn Prayer',
+  Sunrise: 'Sunrise',
+  Dhuhr: 'Midday Prayer',
+  Asr: 'Afternoon Prayer',
+  Maghrib: 'Sunset Prayer',
+  Isha: 'Night Prayer'
+};
+
+// Quran verses about prayer
+const VERSES = [
+  {
+    arabic: 'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا',
+    translation: 'Indeed, prayer has been decreed upon the believers at specified times.',
+    ref: 'Quran 4:103'
+  },
+  {
+    arabic: 'وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ وَارْكَعُوا مَعَ الرَّاكِعِينَ',
+    translation: 'Establish prayer, give Zakat, and bow with those who bow (in prayer).',
+    ref: 'Quran 2:43'
+  },
+  {
+    arabic: 'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ',
+    translation: 'Seek help through patience and prayer. Indeed, it is difficult except for the humble.',
+    ref: 'Quran 2:45'
+  },
+  {
+    arabic: 'حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ وَقُومُوا لِلَّهِ قَانِتِينَ',
+    translation: 'Maintain with care the prayers and the middle prayer and stand before Allah devoutly obedient.',
+    ref: 'Quran 2:238'
+  },
+  {
+    arabic: 'إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ',
+    translation: 'Indeed, prayer prohibits immorality and wrongdoing.',
+    ref: 'Quran 29:45'
+  }
+];
+
+// ===== STATE =====
+let prayerTimings = null;
+let userLocation = null;
+let currentVerse = 0;
+let verseTimer = null;
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+  setTopbarDate();
+  startLiveClock();
+  initVerses();
+  startEventCountdown();
+  buildMiniCalendar();
+
+  // Stars in hero
+  generateStars();
+
+  // Check localStorage for saved location
+  const saved = localStorage.getItem('prayerLocation');
+  if (saved) {
+    try {
+      userLocation = JSON.parse(saved);
+      document.getElementById('locationModal').style.display = 'none';
+      initWithLocation(userLocation);
+    } catch(e) {
+      showLocationModal();
+    }
+  } else {
+    showLocationModal();
+  }
+});
+
+function showLocationModal() {
+  document.getElementById('locationModal').style.display = 'flex';
+}
+
+// ===== LOCATION =====
+function requestLocation() {
+  const btn = document.getElementById('allowLocationBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Detecting...';
+  btn.disabled = true;
+
+  if (!navigator.geolocation) {
+    showLocationError();
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const loc = {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        cityName: null
+      };
+      // Reverse geocode
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${loc.lat}&lon=${loc.lon}&format=json`);
+        const data = await res.json();
+        const a = data.address;
+        loc.cityName = a.city || a.town || a.village || a.county || 'Your City';
+        loc.country = a.country || '';
+      } catch(e) {
+        loc.cityName = `${loc.lat.toFixed(2)}°, ${loc.lon.toFixed(2)}°`;
+      }
+
+      localStorage.setItem('prayerLocation', JSON.stringify(loc));
+      userLocation = loc;
+      document.getElementById('locationModal').style.display = 'none';
+      initWithLocation(loc);
+    },
+    (err) => {
+      showLocationError();
+    },
+    { timeout: 10000, maximumAge: 300000 }
+  );
+}
+
+function useDefaultLocation() {
+  // Makkah default
+  const loc = { lat: 21.3891, lon: 39.8579, cityName: 'Makkah', country: 'Saudi Arabia' };
+  localStorage.setItem('prayerLocation', JSON.stringify(loc));
+  userLocation = loc;
+  document.getElementById('locationModal').style.display = 'none';
+  initWithLocation(loc);
+}
+
+function showLocationError() {
+  document.getElementById('locationError').classList.remove('hidden');
+  setTimeout(useDefaultLocation, 2000);
+}
+
+// ===== FETCH PRAYER TIMES =====
+async function initWithLocation(loc) {
+  const cityDisplay = loc.cityName + (loc.country ? `, ${loc.country}` : '');
+
+  document.getElementById('topbarCity').textContent = cityDisplay;
+  document.getElementById('heroLocation').innerHTML = `<i class="fas fa-location-dot mr-2" style="color:var(--gold);"></i>${cityDisplay}`;
+  document.getElementById('prayersLocationLabel').textContent = cityDisplay;
+  document.getElementById('widgetLocation').innerHTML = `<i class="fas fa-location-dot mr-1" style="color:var(--gold);"></i>${cityDisplay}`;
+  document.getElementById('contactLocation').textContent = cityDisplay;
+  document.getElementById('footerLocation').textContent = cityDisplay;
+
+  try {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2,'0');
+    const mm = String(today.getMonth()+1).padStart(2,'0');
+    const yyyy = today.getFullYear();
+    const dateStr = `${dd}-${mm}-${yyyy}`;
+
+    const url = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.lat}&longitude=${loc.lon}&method=3`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.code === 200) {
+      prayerTimings = data.data.timings;
+      const meta = data.data.meta;
+      const hijri = data.data.date.hijri;
+
+      renderPrayerCards(prayerTimings, meta);
+      renderSidebarPrayers(prayerTimings);
+      renderHijriDate(hijri);
+      updateNextPrayer(prayerTimings);
+    }
+  } catch(e) {
+    // Fallback if API fails
+    renderFallback();
+  }
+}
+
+// ===== RENDER PRAYER CARDS =====
+function renderPrayerCards(timings, meta) {
+  const grid = document.getElementById('prayerCardsGrid');
+  const loading = document.getElementById('prayerCardsLoading');
+  loading.classList.add('hidden');
+  grid.classList.remove('hidden');
+  document.getElementById('sunnahInfo').classList.remove('hidden');
+
+  const prayers = [
+    { key: 'Fajr', label: 'Fajr', icon: 'fa-star-and-crescent', sub: 'Dawn' },
+    { key: 'Sunrise', label: 'Sunrise', icon: 'fa-sun', sub: 'Ishraaq' },
+    { key: 'Dhuhr', label: 'Zuhr', icon: 'fa-cloud-sun', sub: 'Midday' },
+    { key: 'Asr', label: 'Asr', icon: 'fa-cloud', sub: 'Afternoon' },
+    { key: 'Maghrib', label: 'Maghrib', icon: 'fa-moon', sub: 'Sunset' },
+    { key: 'Isha', label: 'Isha', icon: 'fa-star', sub: 'Night' }
+  ];
+
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const prayerMins = prayers.map(p => timeToMins(timings[p.key]));
+  const nextIdx = prayerMins.findIndex(m => m > nowMins);
+  const activeIdx = nextIdx === -1 ? prayers.length - 1 : (nextIdx === 0 ? prayers.length - 1 : nextIdx - 1);
+
+  grid.innerHTML = prayers.map((p, i) => {
+    const isActive = i === activeIdx;
+    const isNext = i === nextIdx || (nextIdx === -1 && i === 0);
+    return `
+      <div class="prayer-card ${isActive ? 'active-prayer-card' : ''}">
+        <div class="prayer-card-top ${isActive ? '' : ''}">
+          <i class="fas ${p.icon} mb-2 text-xl" style="color:${isActive ? 'var(--dark-green)' : 'var(--gold)'}"></i>
+          <div class="font-cinzel font-bold text-white text-sm">${p.label.toUpperCase()}</div>
+          <div class="text-xs mt-0.5" style="color:${isActive ? 'rgba(27,58,45,0.7)' : 'rgba(197,217,208,0.7)'};">${p.sub}</div>
+        </div>
+        <div class="p-4 text-center">
+          <div class="font-cinzel font-bold text-lg" style="color:var(--dark-green);">${formatTime(timings[p.key])}</div>
+          ${isActive ? '<div class="text-xs mt-1 px-2 py-0.5 rounded-full inline-block font-medium" style="background:rgba(201,168,76,0.15);color:var(--gold);">Current</div>' : ''}
+          ${isNext ? '<div class="text-xs mt-1 px-2 py-0.5 rounded-full inline-block font-medium" style="background:rgba(27,58,45,0.1);color:var(--dark-green);">Up Next</div>' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Extra timings
+  document.getElementById('sunriseTime').textContent = formatTime(timings['Sunrise']);
+  document.getElementById('sunsetTime').textContent = formatTime(timings['Sunset'] || timings['Maghrib']);
+  document.getElementById('midnightTime').textContent = formatTime(timings['Midnight'] || '—');
+  document.getElementById('imsakTime').textContent = formatTime(timings['Imsak']);
+}
+
+function renderSidebarPrayers(timings) {
+  const container = document.getElementById('sidebarPrayers');
+  const prayers = [
+    { key: 'Fajr', icon: 'fa-star-and-crescent' },
+    { key: 'Sunrise', icon: 'fa-sun' },
+    { key: 'Dhuhr', icon: 'fa-cloud-sun' },
+    { key: 'Asr', icon: 'fa-cloud' },
+    { key: 'Maghrib', icon: 'fa-moon' },
+    { key: 'Isha', icon: 'fa-star' }
+  ];
+
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+
+  container.innerHTML = prayers.map(p => {
+    const mins = timeToMins(timings[p.key]);
+    const isPast = mins < nowMins;
+    const isCurrent = isCurrentPrayer(p.key, timings, nowMins);
+    return `
+      <div class="flex items-center justify-between px-4 py-2 rounded-lg ${isCurrent ? 'gold-gradient' : 'hover:bg-white/5'} transition" style="${isCurrent ? '' : ''}">
+        <div class="flex items-center gap-3">
+          <i class="fas ${p.icon} text-sm" style="color:${isCurrent ? 'var(--dark-green)' : 'var(--gold)'}; width:14px;"></i>
+          <span class="text-sm font-medium" style="color:${isCurrent ? 'var(--dark-green)' : isPast ? '#5a8070' : 'white'};">${p.key}</span>
+        </div>
+        <span class="font-cinzel text-sm font-bold" style="color:${isCurrent ? 'var(--dark-green)' : isPast ? '#5a8070' : 'var(--gold)'};">${formatTime(timings[p.key])}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderHijriDate(hijri) {
+  const months = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Sha\'ban','Ramadan','Shawwal','Dhul Qidah','Dhul Hijjah'];
+  const monthDescs = {
+    'Ramadan': 'The blessed month of fasting and increased worship.',
+    'Dhul Hijjah': 'The month of Hajj — the last 10 days are especially sacred.',
+    'Muharram': 'One of the four sacred months. The 10th day (Ashura) is significant.',
+    'Rajab': 'One of the four sacred months. Night Journey (Isra & Miraj) occurred in this month.',
+    'Sha\'ban': 'The month before Ramadan. Night of Mid-Sha\'ban is blessed.',
+    'default': 'May Allah ﷻ bless this month for you.'
+  };
+
+  const monthName = hijri.month.en || months[parseInt(hijri.month.number)-1] || hijri.month.en;
+  const dayNum = hijri.day;
+  const year = hijri.year;
+  const greg = new Date();
+
+  document.getElementById('hijriMonthYear').textContent = `${monthName} ${year} AH`;
+  document.getElementById('hijriDay').textContent = dayNum;
+  document.getElementById('hijriDate').textContent = `${dayNum} ${monthName} ${year} AH`;
+  document.getElementById('gregorianFull').textContent = greg.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('hijriDate').textContent = `${dayNum} ${monthName} ${year} AH`;
+  document.getElementById('islamicMonthDesc').textContent = monthDescs[monthName] || monthDescs['default'];
+
+  buildMiniCalendar(parseInt(dayNum));
+}
+
+function buildMiniCalendar(todayDay) {
+  const container = document.getElementById('miniCalendarDays');
+  const days = todayDay || new Date().getDate();
+  // Build a 30-day Hijri month starting from day offset (simplified)
+  const startOffset = Math.floor(Math.random() * 3); // cosmetic only
+  let html = '';
+  for (let i = 0; i < startOffset; i++) html += '<div></div>';
+  for (let d = 1; d <= 30; d++) {
+    const isToday = d === parseInt(days);
+    const isFriday = (startOffset + d - 1) % 7 === 5;
+    html += `<div class="py-1 text-xs rounded-md font-medium cursor-pointer transition ${isToday ? 'text-white font-bold' : isFriday ? '' : 'hover:bg-yellow-50'}" 
+      style="${isToday ? 'background:var(--gold);' : isFriday ? 'color:var(--gold);' : 'color:#555;'}">${d}</div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ===== NEXT PRAYER & COUNTDOWN =====
+function updateNextPrayer(timings) {
+  const prayers = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+  document.getElementById('nextPrayerBar').classList.remove('hidden');
+  document.getElementById('nextPrayerPill').classList.remove('hidden');
+
+  function tick() {
+    const now = new Date();
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+    let nextPrayer = null, nextMins = 0;
+
+    for (const p of prayers) {
+      const m = timeToMins(timings[p]);
+      if (m > nowMins) { nextPrayer = p; nextMins = m; break; }
+    }
+    if (!nextPrayer) { nextPrayer = 'Fajr'; nextMins = timeToMins(timings['Fajr']) + 1440; }
+
+    const diffSecs = (nextMins - nowMins) * 60 - now.getSeconds();
+    const h = Math.floor(diffSecs / 3600);
+    const m = Math.floor((diffSecs % 3600) / 60);
+    const s = diffSecs % 60;
+
+    document.getElementById('nextPrayerName').textContent = nextPrayer;
+    document.getElementById('nextPrayerTime').textContent = formatTime(timings[nextPrayer] || timings['Fajr']);
+    document.getElementById('nextPrayerLabel').textContent = `${nextPrayer} in ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cdSecs').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+function isCurrentPrayer(key, timings, nowMins) {
+  const prayers = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+  const idx = prayers.indexOf(key);
+  if (idx === -1) return false;
+  const start = timeToMins(timings[key]);
+  const nextKey = prayers[idx+1];
+  const end = nextKey ? timeToMins(timings[nextKey]) : 1440;
+  return nowMins >= start && nowMins < end;
+}
+
+// ===== LIVE CLOCK =====
+function startLiveClock() {
+  function tick() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('liveTime').textContent = `${h}:${m}:${s}`;
+    document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ===== TOPBAR DATE =====
+function setTopbarDate() {
+  const d = new Date();
+  document.getElementById('topbarDate').textContent = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+}
+
+// ===== EVENT COUNTDOWN =====
+function startEventCountdown() {
+  const target = new Date('2026-12-31T09:30:00');
+  function tick() {
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) return;
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+    document.getElementById('evDays').textContent = String(days).padStart(3,'0');
+    document.getElementById('evHours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('evMins').textContent = String(mins).padStart(2,'0');
+    document.getElementById('evSecs').textContent = String(secs).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ===== VERSES =====
+function initVerses() {
+  const dots = document.getElementById('verseDots');
+  dots.innerHTML = VERSES.map((_, i) => `<button onclick="goToVerse(${i})" class="w-2 h-2 rounded-full transition-all" style="background:${i===0 ? 'var(--gold)' : 'rgba(201,168,76,0.3)'};"></button>`).join('');
+  showVerse(0);
+  verseTimer = setInterval(nextVerse, 8000);
+}
+function showVerse(i) {
+  const v = VERSES[i];
+  document.getElementById('verseArabic').textContent = v.arabic;
+  document.getElementById('verseTranslation').textContent = `"${v.translation}"`;
+  document.getElementById('verseRef').textContent = `— ${v.ref} —`;
+  document.querySelectorAll('#verseDots button').forEach((b, j) => {
+    b.style.background = j === i ? 'var(--gold)' : 'rgba(201,168,76,0.3)';
+    b.style.transform = j === i ? 'scale(1.4)' : 'scale(1)';
+  });
+  currentVerse = i;
+}
+function nextVerse() { goToVerse((currentVerse + 1) % VERSES.length); }
+function prevVerse() { goToVerse((currentVerse - 1 + VERSES.length) % VERSES.length); }
+function goToVerse(i) { clearInterval(verseTimer); showVerse(i); verseTimer = setInterval(nextVerse, 8000); }
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const icon = document.getElementById('hamburgerIcon');
+  menu.classList.toggle('open');
+  icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburgerIcon').className = 'fas fa-bars';
+}
+
+// ===== HERO STARS =====
+function generateStars() {
+  const container = document.getElementById('heroStars');
+  const count = 80;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    const size = Math.random() * 2.5 + 0.5;
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const delay = Math.random() * 4;
+    const dur = Math.random() * 3 + 2;
+    star.style.cssText = `
+      position:absolute; left:${x}%; top:${y}%;
+      width:${size}px; height:${size}px;
+      background:white; border-radius:50%;
+      opacity:${Math.random() * 0.7 + 0.1};
+      animation: starTwinkle ${dur}s ${delay}s ease-in-out infinite alternate;
+    `;
+    container.appendChild(star);
+  }
+  const style = document.createElement('style');
+  style.textContent = `@keyframes starTwinkle { from { opacity:0.1; transform:scale(0.8); } to { opacity:0.9; transform:scale(1.2); } }`;
+  document.head.appendChild(style);
+}
+
+// ===== FALLBACK =====
+function renderFallback() {
+  const fallback = {
+    Fajr: '04:45', Sunrise: '06:15', Dhuhr: '13:00',
+    Asr: '16:30', Maghrib: '19:45', Isha: '21:15'
+  };
+  prayerTimings = fallback;
+  renderPrayerCards(fallback, {});
+  renderSidebarPrayers(fallback);
+  updateNextPrayer(fallback);
+  document.getElementById('hijriDate').textContent = 'Hijri date unavailable';
+}
+
+// ===== UTILS =====
+function formatTime(t) {
+  if (!t || t === '—') return '—';
+  const parts = t.split(':');
+  if (parts.length < 2) return t;
+  let h = parseInt(parts[0]), m = parts[1].replace(/\s*(AM|PM)/i,'');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${m} ${ampm}`;
+}
+
+function timeToMins(t) {
+  if (!t) return 0;
+  const match = t.match(/(\d+):(\d+)/);
+  if (!match) return 0;
+  return parseInt(match[1]) * 60 + parseInt(match[2]);
+}
+</script>
+</body>
+</html>
+HTMLEOF
