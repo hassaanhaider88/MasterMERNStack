@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextScan — Offline OCR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --obsidian: #0A0B0D;
+    --surface: #111318;
+    --panel: #16191F;
+    --border: #1E2330;
+    --border-bright: #2A3248;
+    --cyan: #00E5C8;
+    --cyan-dim: #00B09B;
+    --cyan-glow: rgba(0,229,200,0.15);
+    --cyan-subtle: rgba(0,229,200,0.06);
+    --text: #E8EBF2;
+    --text-muted: #6B7280;
+    --text-dim: #9CA3AF;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --green: #10B981;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--obsidian);
+    color: var(--text);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,200,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,200,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+  }
+
+  .drop-zone {
+    border: 2px dashed var(--border-bright);
+    border-radius: 16px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .drop-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cyan-subtle);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .drop-zone:hover::before,
+  .drop-zone.drag-over::before { opacity: 1; }
+  .drop-zone:hover,
+  .drop-zone.drag-over {
+    border-color: var(--cyan);
+    box-shadow: 0 0 30px var(--cyan-glow), inset 0 0 30px var(--cyan-glow);
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--obsidian);
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.02em;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover::after { opacity: 0.1; }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-primary:disabled {
+    background: var(--border-bright);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .btn-primary:disabled::after { display: none; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border-bright);
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: var(--cyan-subtle);
+  }
+  .btn-ghost:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Progress bar */
+  .progress-track {
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--cyan-dim), var(--cyan));
+    transition: width 0.3s ease;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  /* Result textarea */
+  .result-area {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    padding: 20px;
+  }
+  .result-area:focus { border-color: var(--border-bright); }
+  .result-area::placeholder { color: var(--text-muted); }
+
+  /* Confidence badge */
+  .conf-high { color: var(--green); }
+  .conf-med { color: var(--amber); }
+  .conf-low { color: var(--red); }
+
+  /* Image preview */
+  .img-preview {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    object-fit: contain;
+    max-height: 280px;
+    width: 100%;
+  }
+
+  /* Lang pill */
+  .lang-select {
+    background: var(--panel);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    padding: 8px 32px 8px 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s;
+  }
+  .lang-select:focus { border-color: var(--cyan); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border-bright);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    color: var(--text);
+    z-index: 1000;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Scan line animation on image during OCR */
+  @keyframes scanline {
+    0% { top: 0%; }
+    100% { top: 100%; }
+  }
+  .scan-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 12px;
+    display: none;
+  }
+  .scan-overlay.active { display: block; }
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    box-shadow: 0 0 16px var(--cyan), 0 0 40px var(--cyan-glow);
+    animation: scanline 1.5s linear infinite;
+  }
+  .scan-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,229,200,0.04) 0%, transparent 100%);
+  }
+
+  /* Chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--cyan-subtle);
+    border: 1px solid rgba(0,229,200,0.2);
+    color: var(--cyan);
+  }
+
+  /* Shimmer loading state */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .shimmer {
+    background: linear-gradient(90deg, var(--panel) 25%, var(--border) 50%, var(--panel) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Wordmark */
+  .wordmark-dot { color: var(--cyan); }
+
+  /* Stats row */
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+
+  /* Hidden file input */
+  #fileInput { display: none; }
+
+  /* Selection color */
+  ::selection { background: var(--cyan); color: var(--obsidian); }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .result-area { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="relative z-10 max-w-5xl mx-auto px-4 py-10">
+
+  <!-- Header -->
+  <header class="mb-10 text-center">
+    <div class="inline-flex items-center gap-2 mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#00E5C8" fill-opacity="0.12"/>
+        <path d="M8 9h4v14H8V9zm6 0h2l6 7-6 7h-2l6-7-6-7zm8 5h2v2h-2v-2zm0 4h2v2h-2v-2z" fill="#00E5C8"/>
+      </svg>
+      <span class="text-2xl font-bold tracking-tight">TextScan<span class="wordmark-dot">.</span></span>
+      <span class="chip ml-1">Offline</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-3" style="letter-spacing:-0.02em">
+      Extract text from<br>
+      <span style="color:var(--cyan)">any image</span> — zero uploads
+    </h1>
+    <p class="text-base" style="color:var(--text-muted)">
+      Powered by Tesseract WASM · runs entirely in your browser · no server ever sees your image
+    </p>
+  </header>
+
+  <!-- Main layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+    <!-- LEFT PANEL: Input -->
+    <div class="flex flex-col gap-4">
+
+      <!-- Drop zone -->
+      <div
+        class="drop-zone flex flex-col items-center justify-center text-center"
+        style="min-height:220px; padding:40px 30px;"
+        id="dropZone"
+        onclick="document.getElementById('fileInput').click()"
+      >
+        <input type="file" id="fileInput" accept="image/*,.pdf">
+        <div id="dzIcon" style="color:var(--text-muted)">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto 16px">
+            <rect width="48" height="48" rx="12" fill="currentColor" fill-opacity="0.07"/>
+            <path d="M14 32l8-10 6 7 4-5 6 8H14z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <circle cx="32" cy="18" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M24 6v10m-4-6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="font-semibold mb-1" style="color:var(--text)">Drop image here</p>
+          <p class="text-sm" style="color:var(--text-muted)">or click to browse · PNG, JPG, WEBP, BMP, TIFF</p>
+        </div>
+      </div>
+
+      <!-- Image preview (hidden until loaded) -->
+      <div id="previewWrap" class="relative hidden">
+        <img id="preview" class="img-preview" alt="Preview">
+        <div class="scan-overlay" id="scanOverlay">
+          <div class="scan-line"></div>
+        </div>
+        <button
+          id="clearBtn"
+          class="btn-ghost absolute top-3 right-3 text-sm"
+          style="padding:5px 12px;"
+          onclick="clearAll()"
+        >✕ Clear</button>
+      </div>
+
+      <!-- Options row -->
+      <div class="glass p-4 flex flex-wrap gap-3 items-center">
+        <div class="flex-1 min-w-[140px]">
+          <label class="block text-xs mb-1.5" style="color:var(--text-muted); letter-spacing:0.05em; font-weight:600; text-transform:uppercase">Language</label>
+          <select class="lang-select w-full text-sm" id="langSelect">
+            <option value="eng">English</option>
+            <option value="ara">Arabic</option>
+            <option value="chi_sim">Chinese (Simplified)</option>
+            <option value="chi_tra">Chinese (Traditional)</option>
+            <option value="fra">French</option>
+            <option value="deu">German</option>
+            <option value="hin">Hindi</option>
+            <option value="ita">Italian</option>
+            <option value="jpn">Japanese</option>
+            <option value="kor">Korean</option>
+            <option value="por">Portuguese</option>
+            <option value="rus">Russian</option>
+            <option value="spa">Spanish</option>
+            <option value="tur">Turkish</option>
+            <option value="urd">Urdu</option>
+          </select>
+        </div>
+        <div class="flex-1 min-w-[140px]">
+          <label class="block text-xs mb-1.5" style="color:var(--text-muted); letter-spacing:0.05em; font-weight:600; text-transform:uppercase">OCR Mode</label>
+          <select class="lang-select w-full text-sm" id="modeSelect">
+            <option value="3">Auto (Best)</option>
+            <option value="6">Uniform Block</option>
+            <option value="4">Single Column</option>
+            <option value="7">Single Line</option>
+            <option value="8">Single Word</option>
+            <option value="1">Auto + OSD</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Image enhancement options -->
+      <div class="glass p-4">
+        <p class="text-xs mb-3" style="color:var(--text-muted); letter-spacing:0.05em; font-weight:600; text-transform:uppercase">Image Enhancement</p>
+        <div class="flex flex-wrap gap-2">
+          <label class="flex items-center gap-2 cursor-pointer select-none text-sm" style="color:var(--text-dim)">
+            <input type="checkbox" id="enhContrast" class="accent-cyan-400" checked>
+            Boost contrast
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer select-none text-sm" style="color:var(--text-dim)">
+            <input type="checkbox" id="enhGrayscale" class="accent-cyan-400" checked>
+            Grayscale
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer select-none text-sm" style="color:var(--text-dim)">
+            <input type="checkbox" id="enhSharpen" class="accent-cyan-400">
+            Sharpen
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer select-none text-sm" style="color:var(--text-dim)">
+            <input type="checkbox" id="enhDenoise" class="accent-cyan-400">
+            Denoise
+          </label>
+        </div>
+      </div>
+
+      <!-- Extract button -->
+      <button
+        class="btn-primary text-base"
+        style="padding:16px;"
+        id="extractBtn"
+        disabled
+        onclick="startOCR()"
+      >
+        ▶ &nbsp;Extract Text
+      </button>
+
+    </div>
+
+    <!-- RIGHT PANEL: Output -->
+    <div class="flex flex-col gap-4">
+
+      <!-- Status / progress -->
+      <div class="glass p-4" id="statusPanel" style="display:none">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-medium" id="statusText" style="color:var(--cyan)">Initializing…</span>
+          <span class="mono text-sm" id="progressPct" style="color:var(--text-muted)">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Stats (hidden until result) -->
+      <div id="statsRow" class="grid grid-cols-3 gap-3 hidden">
+        <div class="stat-card text-center">
+          <p class="text-xs mb-1" style="color:var(--text-muted)">Characters</p>
+          <p class="text-xl font-bold mono" id="statChars" style="color:var(--text)">—</p>
+        </div>
+        <div class="stat-card text-center">
+          <p class="text-xs mb-1" style="color:var(--text-muted)">Words</p>
+          <p class="text-xl font-bold mono" id="statWords" style="color:var(--text)">—</p>
+        </div>
+        <div class="stat-card text-center">
+          <p class="text-xs mb-1" style="color:var(--text-muted)">Confidence</p>
+          <p class="text-xl font-bold mono" id="statConf">—</p>
+        </div>
+      </div>
+
+      <!-- Result area -->
+      <div class="flex-1 flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <label class="text-xs font-semibold" style="color:var(--text-muted); letter-spacing:0.05em; text-transform:uppercase">Extracted Text</label>
+          <div class="flex gap-2" id="resultActions" style="display:none!important">
+            <button class="btn-ghost text-xs" style="padding:5px 12px;" onclick="copyText()">Copy</button>
+            <button class="btn-ghost text-xs" style="padding:5px 12px;" onclick="downloadText()">Download .txt</button>
+          </div>
+        </div>
+        <textarea
+          class="result-area flex-1"
+          id="resultArea"
+          rows="16"
+          placeholder="Extracted text will appear here…&#10;&#10;← Drop or upload an image to get started"
+          readonly
+        ></textarea>
+      </div>
+
+      <!-- Word confidence view (bonus) -->
+      <div id="confPanel" class="glass p-4 hidden">
+        <p class="text-xs mb-3 font-semibold" style="color:var(--text-muted); letter-spacing:0.05em; text-transform:uppercase">Per-Word Confidence</p>
+        <div id="confWords" class="text-sm leading-relaxed" style="font-family:'JetBrains Mono',monospace; max-height:120px; overflow-y:auto;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-10 text-center text-xs" style="color:var(--text-muted)">
+    No data leaves your device · Tesseract.js 5 · WASM OCR engine · Works offline after first load
+  </footer>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toastIcon">✓</span>
+  <span id="toastMsg">Copied!</span>
+</div>
+
+<!-- Hidden canvas for image enhancement -->
+<canvas id="enhCanvas" style="display:none"></canvas>
+
+<script>
+/* ===== STATE ===== */
+let currentFile = null;
+let worker = null;
+let isProcessing = false;
+
+/* ===== FILE INPUT ===== */
+const fileInput = document.getElementById('fileInput');
+const dropZone = document.getElementById('dropZone');
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handleFile(f);
+  else showToast('⚠ Please drop an image file', 'warn');
+});
+
+// Paste from clipboard
+document.addEventListener('paste', e => {
+  const items = e.clipboardData?.items || [];
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      handleFile(item.getAsFile());
+      break;
+    }
+  }
+});
+
+function handleFile(file) {
+  currentFile = file;
+  const url = URL.createObjectURL(file);
+  const preview = document.getElementById('preview');
+  preview.src = url;
+  document.getElementById('previewWrap').classList.remove('hidden');
+  document.getElementById('dropZone').style.display = 'none';
+  document.getElementById('extractBtn').disabled = false;
+  document.getElementById('resultArea').value = '';
+  document.getElementById('statsRow').classList.add('hidden');
+  document.getElementById('confPanel').classList.add('hidden');
+  document.getElementById('resultActions').style.setProperty('display', 'none', 'important');
+  document.getElementById('statusPanel').style.display = 'none';
+}
+
+function clearAll() {
+  currentFile = null;
+  document.getElementById('preview').src = '';
+  document.getElementById('previewWrap').classList.add('hidden');
+  document.getElementById('dropZone').style.display = '';
+  document.getElementById('extractBtn').disabled = true;
+  document.getElementById('resultArea').value = '';
+  document.getElementById('statsRow').classList.add('hidden');
+  document.getElementById('confPanel').classList.add('hidden');
+  document.getElementById('resultActions').style.setProperty('display', 'none', 'important');
+  document.getElementById('statusPanel').style.display = 'none';
+  document.getElementById('scanOverlay').classList.remove('active');
+  fileInput.value = '';
+}
+
+/* ===== IMAGE ENHANCEMENT ===== */
+function enhanceImage(imgEl) {
+  const canvas = document.getElementById('enhCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = imgEl.naturalWidth;
+  canvas.height = imgEl.naturalHeight;
+
+  const doGray = document.getElementById('enhGrayscale').checked;
+  const doContrast = document.getElementById('enhContrast').checked;
+  const doSharpen = document.getElementById('enhSharpen').checked;
+  const doDenoise = document.getElementById('enhDenoise').checked;
+
+  if (!doGray && !doContrast && !doSharpen && !doDenoise) {
+    return imgEl; // no enhancement
+  }
+
+  ctx.filter = buildFilter(doGray, doContrast);
+  ctx.drawImage(imgEl, 0, 0);
+
+  if (doSharpen) applySharpen(ctx, canvas.width, canvas.height);
+  if (doDenoise) applyBoxBlur(ctx, canvas.width, canvas.height);
+
+  return canvas;
+}
+
+function buildFilter(gray, contrast) {
+  let f = '';
+  if (gray) f += 'grayscale(1) ';
+  if (contrast) f += 'contrast(1.5) brightness(1.1) ';
+  return f.trim() || 'none';
+}
+
+function applySharpen(ctx, w, h) {
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const d = imageData.data;
+  const kernel = [0,-1,0,-1,5,-1,0,-1,0];
+  const tmp = new Uint8ClampedArray(d);
+  for (let y=1; y<h-1; y++) {
+    for (let x=1; x<w-1; x++) {
+      for (let c=0; c<3; c++) {
+        let sum = 0;
+        for (let ky=-1; ky<=1; ky++)
+          for (let kx=-1; kx<=1; kx++)
+            sum += tmp[((y+ky)*w+(x+kx))*4+c] * kernel[(ky+1)*3+(kx+1)];
+        d[(y*w+x)*4+c] = Math.max(0, Math.min(255, sum));
+      }
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function applyBoxBlur(ctx, w, h) {
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const d = imageData.data;
+  const tmp = new Uint8ClampedArray(d);
+  const k = [1/9,1/9,1/9,1/9,1/9,1/9,1/9,1/9,1/9];
+  for (let y=1; y<h-1; y++) {
+    for (let x=1; x<w-1; x++) {
+      for (let c=0; c<3; c++) {
+        let sum = 0;
+        for (let ky=-1; ky<=1; ky++)
+          for (let kx=-1; kx<=1; kx++)
+            sum += tmp[((y+ky)*w+(x+kx))*4+c] * k[(ky+1)*3+(kx+1)];
+        d[(y*w+x)*4+c] = Math.max(0, Math.min(255, sum));
+      }
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+/* ===== OCR ===== */
+async function startOCR() {
+  if (!currentFile || isProcessing) return;
+  isProcessing = true;
+
+  const lang = document.getElementById('langSelect').value;
+  const psm = document.getElementById('modeSelect').value;
+  const extractBtn = document.getElementById('extractBtn');
+  const statusPanel = document.getElementById('statusPanel');
+  const statusText = document.getElementById('statusText');
+  const progressFill = document.getElementById('progressFill');
+  const progressPct = document.getElementById('progressPct');
+
+  extractBtn.disabled = true;
+  statusPanel.style.display = 'block';
+  document.getElementById('scanOverlay').classList.add('active');
+
+  const setStatus = (msg, pct) => {
+    statusText.textContent = msg;
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+  };
+
+  try {
+    setStatus('Loading OCR engine…', 5);
+
+    // Terminate old worker if exists
+    if (worker) { await worker.terminate(); worker = null; }
+
+    worker = await Tesseract.createWorker(lang, 1, {
+      logger: m => {
+        if (m.status === 'loading tesseract core') setStatus('Loading Tesseract core…', 10);
+        else if (m.status === 'initializing tesseract') setStatus('Initializing engine…', 20);
+        else if (m.status === 'loading language traineddata') setStatus(`Loading language data (${lang})…`, 35);
+        else if (m.status === 'initializing api') setStatus('Setting up API…', 50);
+        else if (m.status === 'recognizing text') {
+          const pct = Math.round(50 + (m.progress || 0) * 45);
+          setStatus('Recognizing text…', pct);
+        }
+      }
+    });
+
+    // Set PSM
+    await worker.setParameters({ tessedit_pageseg_mode: parseInt(psm) });
+
+    setStatus('Enhancing image…', 55);
+    const imgEl = document.getElementById('preview');
+    const source = enhanceImage(imgEl);
+
+    setStatus('Recognizing text…', 60);
+    const result = await worker.recognize(source);
+
+    setStatus('Processing results…', 98);
+    const text = result.data.text.trim();
+    const conf = Math.round(result.data.confidence);
+    const words = result.data.words || [];
+
+    // Show result
+    document.getElementById('resultArea').removeAttribute('readonly');
+    document.getElementById('resultArea').value = text || '(No text detected — try a different mode or higher contrast image)';
+    document.getElementById('resultArea').setAttribute('readonly', '');
+
+    // Stats
+    const charCount = text.length;
+    const wordCount = text.split(/\s+/).filter(Boolean).length;
+    document.getElementById('statChars').textContent = charCount.toLocaleString();
+    document.getElementById('statWords').textContent = wordCount.toLocaleString();
+    const confEl = document.getElementById('statConf');
+    confEl.textContent = conf + '%';
+    confEl.className = 'text-xl font-bold mono ' +
+      (conf >= 75 ? 'conf-high' : conf >= 50 ? 'conf-med' : 'conf-low');
+    document.getElementById('statsRow').classList.remove('hidden');
+
+    // Per-word confidence
+    if (words.length > 0) {
+      const confWords = document.getElementById('confWords');
+      confWords.innerHTML = words.map(w => {
+        const c = Math.round(w.confidence);
+        const cls = c >= 75 ? 'conf-high' : c >= 50 ? 'conf-med' : 'conf-low';
+        return `<span class="${cls}" title="${c}% confidence" style="margin-right:6px;margin-bottom:4px;display:inline-block">${escapeHtml(w.text)}</span>`;
+      }).join('');
+      document.getElementById('confPanel').classList.remove('hidden');
+    }
+
+    // Show actions
+    document.getElementById('resultActions').style.removeProperty('display');
+
+    setStatus('Done ✓', 100);
+    setTimeout(() => { statusPanel.style.display = 'none'; }, 1500);
+    showToast(`✓ Extracted ${wordCount} words (${conf}% confidence)`, 'success');
+
+    await worker.terminate();
+    worker = null;
+
+  } catch (err) {
+    console.error(err);
+    setStatus('Error: ' + err.message, 0);
+    showToast('✕ OCR failed: ' + err.message, 'error');
+    if (worker) { await worker.terminate(); worker = null; }
+  } finally {
+    isProcessing = false;
+    extractBtn.disabled = false;
+    document.getElementById('scanOverlay').classList.remove('active');
+  }
+}
+
+/* ===== UTILITIES ===== */
+function copyText() {
+  const text = document.getElementById('resultArea').value;
+  navigator.clipboard.writeText(text).then(() => showToast('✓ Copied to clipboard', 'success'));
+}
+
+function downloadText() {
+  const text = document.getElementById('resultArea').value;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'extracted-text.txt';
+  a.click();
+  showToast('✓ Downloaded', 'success');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  const toastIcon = document.getElementById('toastIcon');
+  toastMsg.textContent = msg;
+  toastIcon.textContent = type === 'success' ? '✓' : type === 'warn' ? '⚠' : '✕';
+  toast.style.borderColor = type === 'success' ? 'rgba(0,229,200,0.3)' : type === 'warn' ? 'rgba(245,158,11,0.3)' : 'rgba(239,68,68,0.3)';
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Keyboard shortcut: Ctrl/Cmd+Enter = extract
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && currentFile && !isProcessing) {
+    startOCR();
+  }
+});
+</script>
+</body>
+</html>
