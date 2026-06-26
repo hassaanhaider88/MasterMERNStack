@@ -143,4 +143,56 @@
 // -> dynamic language
 // -> imperative  (step by step guide how code work) / procedural Programming
 // -> Declartive / functional programming
-// https://www.youtube.com/watch?v=0qF-UcV2sX8&list=PL7ersPsTyYt1t3I-ehKTNsRj8tSAdofZC&index=4
+
+// function count() {
+//     count.counter++;
+// }
+// count.counter = 0;
+// debugger
+// count()
+// count()
+// count()
+// debugger
+// count()
+
+// console.log(count.counter) // 4
+// https://www.youtube.com/watch?v=NcQ5UUteZvY&list=PL7ersPsTyYt1t3I-ehKTNsRj8tSAdofZC&index=8
+// http://pagefy.io/system-design-interview-by-alex-xu
+
+// BitWise operator
+// & And
+// | Or
+// ^ Xor
+// ~ Not
+// << Left shift
+// >> right shift
+// >>> Unsigned right shift
+
+// const a = 12 & 10;
+// console.log(a) // 8
+
+
+// // Date Time 
+// let d1 = new Date();
+// let d2 = new Date("2007-03-01");
+
+// console.log(d1.getFullYear())
+// console.log(d1.getMonth())
+// console.log(d1.getDate())
+// console.log(d1.getDay())
+// console.log("Hours", Math.floor(d2.getTime() / 1000 / 60 / 60 / 24))
+// console.log(d1.getHours())
+// console.log(d1.getMinutes())
+// console.log(d1.getSeconds())
+// console.log(d1.getSeconds())
+
+// console.log(d1.toLocaleString("default", {
+//     weekday: "long", // Long -> Frinday , short -> Fri , Narrow -> F
+//     day: "2-digit",
+//     month : "short",
+//     year : "numeric"
+// }))
+
+// let diff = d1 - d2;
+// console.log(diff / 1000 / 60 / 60 /24)
+
