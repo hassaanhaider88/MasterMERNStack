@@ -196,3 +196,72 @@
 // let diff = d1 - d2;
 // console.log(diff / 1000 / 60 / 60 /24)
 
+
+// const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+// for (const element in arr) {
+//     if (element % 2 === 0) {
+//         console.log(element) // string
+//     }
+// }
+// for (const element of arr) {
+//     if (element % 2 === 0) {
+//         console.log(element) // number
+//     }
+// }
+
+// Functions in Depth
+// function f2(a,b,c,d,e){
+//     return "nothing.."
+// }
+
+// console.log(f2.length) // return number of argues a function takes
+
+// f2(function (a, b) { // anonymous function
+//     console.log(a ** b)
+// })
+
+// function f2(fnc) {
+//     fnc(2, 5)
+// }
+
+// console.log("1")
+// setTimeout(() => {
+//     console.log("SetTimeOut After 300")
+// }, 3000);
+// console.log("2")
+// fetchData()
+// console.log("3")
+// setTimeout(() => {
+//     console.log("SetTimeOut")
+// }, 0);
+// console.log("4")
+
+// // function fetchData() {
+// //     const res = "somthing";
+// //     console.log(res) // print at 3rd line
+// // }
+// async function fetchData() {
+//     const res = await fetch("https://dummyjson.com/comment");
+//     console.log(await res.json()) // print at last line
+// }
+
+//  DOM Document Object Model
+const body = document.querySelector("body");
+const btn = document.getElementById("btn")
+
+body.addEventListener("click", () => {
+    console.log("Body is clicked")
+})
+btn.addEventListener("click", (e) => {
+    e.stopPropagation()
+    console.log("Butn is click")
+})
+
+const Btn2 = document.createElement("button");
+Btn2.innerText = "Button ho"
+body.appendChild(Btn2)
+
+Btn2.addEventListener("click", (e) => {
+    e.stopPropagation()
+    btn.toggleAttribute("hidden")
+})
