@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Catcher Game</title>
+    <style>
+      body {
+        font-family:
+          "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        text-align: center;
+        background-color: #f0f0f0;
+      }
+      .game-container {
+        max-width: 600px;
+        background-color: white;
+        margin: auto;
+        padding: 20px;
+        box-shadow: 0 0 15px;
+      }
+      #grid {
+        display: grid;
+        grid-template-columns: repeat(4, 60px);
+        gap: 10px;
+      }
+      .color-box {
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        border-radius: 4px;
+        border: 2px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mode"></div>
+    <div class="game-container">
+      <h1>Colour Catcher 🍭</h1>
+      <p>
+        Click on:
+        <span
+          id="target-color"
+          style="width: 60px; height: 60px; padding: 5px"
+        ></span>
+      </p>
+      <div id="grid" class="color-grid"></div>
+      <p>Time Left <span id="time">30</span>Sec</p>
+      <p>Score <span id="score">0</span></p>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+  </body>
+  <script>
+    let targetColor = "";
+    let score = 0;
+    let time = 30;
+    let timer;
+    let colorsArr = [
+      "red",
+      "yellow",
+      "blue",
+      "green",
+      "orange",
+      "purple",
+      "pink",
+      "black",
+      "white",
+      "gray",
+      "brown",
+      "cyan",
+      "magenta",
+      "lime",
+      "indigo",
+      "violet",
+      "teal",
+      "navy",
+      "maroon",
+      "gold",
+    ];
+    const grid = document.getElementById("grid");
+    const targetColorDisplay = document.getElementById("target-color");
+    const scoreDisplay = document.getElementById("score");
+    const timeDisplay = document.getElementById("time");
+
+    function handleClick(color) {
+      if (color == targetColor) {
+        score++;
+        scoreDisplay.textContent = score;
+        createGrid();
+      }
+    }
+
+    function getShuffledArray(arr) {
+      const shuffled = [...arr];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[randomIndex]] = [
+          shuffled[randomIndex],
+          shuffled[i],
+        ];
+      }
+      return shuffled;
+    }
+
+    function createGrid() {
+      grid.innerHTML = "";
+      colors = getShuffledArray(colorsArr);
+      targetColor = colors[Math.floor(Math.random() * colorsArr.length)];
+      targetColorDisplay.style.backgroundColor = targetColor;
+      targetColorDisplay.textContent = targetColor;
+      colorsArr.forEach((color) => {
+        const box = document.createElement("div");
+        box.className = "color-box";
+        box.style.backgroundColor = color;
+        box.addEventListener("click", () => {
+          handleClick(color);
+        });
+        grid.appendChild(box);
+      });
+    }
+
+    function startGame() {
+      score = 0;
+      time = 30;
+      scoreDisplay.textContent = score;
+      timeDisplay.textContent = time;
+      createGrid();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        time--;
+        timeDisplay.textContent = time;
+        if (time === 0) {
+          clearInterval(timer);
+          alert("Times up", score);
+        }
+      }, 1000);
+    }
+  </script>
+</html>

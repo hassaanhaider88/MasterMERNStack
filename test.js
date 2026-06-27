@@ -245,23 +245,24 @@
 //     console.log(await res.json()) // print at last line
 // }
 
-//  DOM Document Object Model
-const body = document.querySelector("body");
-const btn = document.getElementById("btn")
+// //  DOM Document Object Model
+// const body = document.querySelector("body");
+// const btn = document.getElementById("btn")
 
-body.addEventListener("click", () => {
-    console.log("Body is clicked")
-})
-btn.addEventListener("click", (e) => {
-    e.stopPropagation()
-    console.log("Butn is click")
-})
+// body.addEventListener("click", () => {
+//     console.log("Body is clicked")
+// })
+// btn.addEventListener("click", (e) => {
+//     e.stopPropagation()
+//     console.log("Butn is click")
+// })
 
-const Btn2 = document.createElement("button");
-Btn2.innerText = "Button ho"
-body.appendChild(Btn2)
+// const Btn2 = document.createElement("button");
+// Btn2.innerText = "Button ho"
+// body.appendChild(Btn2)
 
-Btn2.addEventListener("click", (e) => {
-    e.stopPropagation()
-    btn.toggleAttribute("hidden")
-})
+// Btn2.addEventListener("click", (e) => {
+//     e.stopPropagation()
+//     btn.toggleAttribute("hidden")
+// })
+
