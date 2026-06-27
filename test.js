@@ -172,7 +172,7 @@
 // console.log(a) // 8
 
 
-// // Date Time 
+// // Date Time
 // let d1 = new Date();
 // let d2 = new Date("2007-03-01");
 
@@ -266,3 +266,61 @@
 //     btn.toggleAttribute("hidden")
 // })
 
+
+// function createCounter() {
+//     let count = 0;
+
+//     return {
+//         increment() {
+//             count++;
+//             console.log(count);
+//         },
+
+//         delayedIncrement() {
+//             setTimeout(() => {
+//                 count++;
+//                 console.log("Delayed:", count);
+//             }, 1000);
+//         }
+//     };
+// }
+
+// const counter1 = createCounter();
+// const counter2 = createCounter();
+
+// counter1.increment();
+// counter1.delayedIncrement();
+
+// counter2.increment();
+
+// setTimeout(() => {
+//     counter1.increment();
+// }, 500);
+
+// // Argumental Objects
+// function meraFunc() {
+//     console.log([arguments])
+// }
+
+// meraFunc(1, 2, 3) //{ '0': 1, '1': 2, '2': 3 }
+
+// // constructor function
+// function Perso(name, age) {
+//     this.name = name;
+//     this.age = age;
+//     return `Hi ${this.name}! You are ${this.age} Old`
+// }
+// console.log(Perso("HMK", 20))
+// console.log(Perso("HMKCode WEb", 3))
+
+// // Generator Function
+// function* counter() {
+//     yield 1;
+//     yield 2;
+//     yield 3;
+// }
+// const g = counter();
+// console.log(g.next()) // { value: 1, done: false }
+// console.log(g.next()) // { value: 2, done: false }
+// console.log(g.next()) // {  value: 3, done: false }
+// console.log(g.next())// { value: undefined, done: true }

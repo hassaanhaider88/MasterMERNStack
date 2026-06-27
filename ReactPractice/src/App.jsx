@@ -6,6 +6,7 @@ const App = () => {
   return (
     <div>
       {/* <Todo /> */}
+      <h1>Hi</h1>
     </div>
   );
 };
