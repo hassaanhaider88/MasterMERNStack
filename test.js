@@ -324,3 +324,47 @@
 // console.log(g.next()) // { value: 2, done: false }
 // console.log(g.next()) // {  value: 3, done: false }
 // console.log(g.next())// { value: undefined, done: true }
+
+// const b = [1, 2, 3, 4, 5, 7, , , 9, 8]
+
+// console.log(b)
+// console.log(b.length)
+
+// const a = new Array(10).fill("*")
+
+// a.forEach((e) => {
+//     console.log(e, "_")
+// })
+
+// // Filter Map reduce functions
+// const b = [1, 2, 3, 4, 5, 7, 9, 8]
+// console.log(b.sort(() => Math.random() - 0.5)) // randomly shuffle arrayk
+
+// const a = [1, 2, 3, 4]
+// const b = [1, 2, 3, 4]
+// const c = [1, 2, 3, 4]
+
+// a.splice(1, 0, 8) // 0 mean place place at
+// b.splice(3, 1, 8) // 1 mean replace
+// c.splice(3, 0, 8) // 0 mean place place at
+// console.log(a) 
+// console.log(b)
+// console.log(c)
+
+// ForEach (elemnt,index,whole array)
+// Map () => return/create new 
+// const a = [1, 2, 3, 4]
+// let b = a.map((e) => e * 3)
+// console.log(b) //[ 3, 6, 9, 12 ]
+// Filter evaluate condition
+// Reduce (a,b) accept two argues first will be element and second will be variable
+// const a = [1, 2, 3, 4]
+// const result = a.reduce((a, b) => a + b, 0)
+// console.log(result)
+
+// const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+// console.log(getRandomNumber(1, 100))
+// console.log(getRandomNumber(1, 100))
+// Count the vowels in a string.
+// const countVowels = str => (str.match(/[aeiou]/gi) || []).length;
+// console.log(countVowels("hASSAANAHIDER"))
