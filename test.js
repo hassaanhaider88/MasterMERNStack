@@ -368,3 +368,13 @@
 // Count the vowels in a string.
 // const countVowels = str => (str.match(/[aeiou]/gi) || []).length;
 // console.log(countVowels("hASSAANAHIDER"))
+
+const s = "hassaan haider full stack developer";
+
+s.split();
+console.log(s)
+// s.forEach((s) => {
+//     s[0].toUpperCase();
+// })
+
+console.log(s)
