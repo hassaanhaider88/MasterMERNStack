@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice Command Todo</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #000;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+      }
+      .container {
+        background-color: lightblue;
+        padding: 40px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px inset;
+        width: 400px;
+      }
+      h1 {
+        color: #333a;
+        margin-bottom: 30px;
+      }
+      #taskList {
+        list-style: none;
+        padding: 0px;
+        margin-bottom: 30px;
+      }
+      #taskList li {
+        padding: 10px;
+        margin: 5px 0px;
+        background-color: white;
+      }
+      #startBtn {
+        background-color: #4caf50;
+        font-size: 18px;
+        padding: 10p 8px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Voice todo List</h1>
+      <ul id="taskList"></ul>
+      <button id="startBtn">Start</button>
+      <p class="info">
+        Say : <br />
+        "Naya Tak buy milk" <br />
+        "Delete task 2" <br />
+        "mark Tast 1"
+      </p>
+      <div id="status"></div>
+    </div>
+  </body>
+  <script>
+    const taskList = [];
+    const listElement = document.getElementById("taskList");
+    const status = document.getElementById("status");
+    const speechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new speechRecognition();
+    recognition.continuous = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript.toLowerCase();
+      status.innerText = `Hard ${transcript}`;
+      if (transcript.startsWith("naya tack")) {
+        const taskText = transcript.replace("naya task", "").trim();
+        if (taskText) {
+          addTask(taskText);
+        }
+      } else if (transcript.startsWith("delete task")) {
+        const num = parseInt(transcript.split(" ")[2]) - 1;
+        if (!isNaN(num)) {
+          deleteTask(num);
+        }
+      } else if (transcript.startsWith("mark task")) {
+        const num = parseInt(transcript.split(" ")[2]) - 1;
+        if (!isNaN(num)) {
+          markTask(num);
+        }
+      }
+    };
+
+    function addTask(text) {
+      taskList.push({ text: task, done: false });
+      renderTask();
+    }
+    function deleteTask(n) {
+      if (taskList[n]) {
+        taskList.splice(n, 1);
+        renderTask();
+      }
+    }
+    function markTast(n) {
+      if (taskList[n]) {
+        taskList[n].done = true;
+        renderTask();
+      }
+    }
+    function renderTask() {
+      listElement.innerHTML = "";
+      taskList.forEach((tak, i) => {
+        const li = document.createElement("li");
+        li.innerText = `${i + 1}. ${tak.text} ${tak.done ? "Done" : "Pending"}`;
+      });
+    }
+    function startVoice() {
+      status.innerText = "listening...";
+      recognition.start();
+    }
+    document.getElementById("startBtn").addEventListener("click", () => {
+      startVoice();
+    });
+  </script>
+</html>
