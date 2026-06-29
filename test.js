@@ -369,12 +369,120 @@
 // const countVowels = str => (str.match(/[aeiou]/gi) || []).length;
 // console.log(countVowels("hASSAANAHIDER"))
 
-const s = "hassaan haider full stack developer";
+// let s = "hassaan haider full stack developer";
+// let upper = "";
+// s = s.split(" ")
+// // console.log(s) //hassaan haider full stack developer
+// s.forEach((word) => {
+//     upper += word.charAt(0).toUpperCase() + word.slice(1) + " ";
+// });
+// console.log(upper)
 
-s.split();
-console.log(s)
-// s.forEach((s) => {
-//     s[0].toUpperCase();
+// CallBack Hell
+// console.log("run 1")
+// setTimeout(() => {
+//     console.log("run after 500")
+//     setTimeout(() => {
+//         console.log("run after 300")
+//         setTimeout(() => {
+//             console.log("run after 100")
+//         }, 100);
+//     }, 300);
+// }, 500);
+// console.log("run 2")
+
+// console.log("run 3")
+
+
+// Promises
+//  async await 
+// const oneFun = async (url) => {
+//     console.log("Function One Start")
+//     const data = await fetch(url);
+//     const resutl = await data.json();
+//     console.log("Function One Finished")
+// }
+
+// const TwoFun = async (url) => {
+//     console.log("Function Two Start")
+//     const data = await fetch(url);
+//     const resutl = await data.json();
+//     console.log("Function Two Finished")
+// }
+
+// oneFun('https://api.escuelajs.co/api/v1/products')
+// TwoFun("https://api.escuelajs.co/api/v1/products")
+// function someAPi() {
+//     let p1 = new Promise((resolve, reject) => {
+//         console.log("Me Promise hn");
+//         if (true) {
+//             resolve()
+//         } else {
+//             reject()
+//         }
+//     })
+//     return p1;
+// }
+// let p1 = someAPi();
+// p1.then(() => {
+//     console.log("Promise full filled then run")
+// }, () => {
+//     console.log("Promise rejected then run")
+// })
+// p1.catch(() => {
+//     console.log("Promise rejected then run")
 // })
 
-console.log(s)
+// Primose Chaning
+// function someAPI1() {
+//     let p1 = new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             console.log("Me Promise hn");
+//             if (true) {
+//                 resolve()
+//             } else {
+//                 reject()
+//             }
+//         }, 5000)
+//     })
+//     return p1;
+// }
+// function someAPI2() {
+//     let p2 = new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             console.log("Me Promise hn");
+//             if (true) {
+//                 resolve()
+//             } else {
+//                 reject()
+//             }
+//         }, 4000)
+//     })
+//     return p2;
+// }
+// let p1 = someAPI1();
+// let p2 = someAPI2();
+// p1.then(() => {
+//     console.log("Promise full filled then run of 1")
+// }, () => {
+//     console.log("Promise rejected then run of 1")
+// })
+
+// p2.then(() => {
+//     console.log("Promise full filled then run of 2")
+// }, () => {
+//     console.log("Promise rejected then run of 1")
+// })
+
+// someAPI1().then(() => {
+//     console.log("Promise fulled 1");
+//     return someAPI2();
+// }, () => {
+//     console.log("erorr in 1")
+// }).then(() => {
+//     console.log("Promise full 2")
+// }, () => {
+//     console.log("reject 2")
+// })
+
+
