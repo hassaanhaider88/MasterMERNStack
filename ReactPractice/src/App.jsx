@@ -5,8 +5,9 @@
 // import UserEffectLearn from "./Hooks/UserEffectLearn";
 // import UseStateLearn from "./Hooks/UseStateLearn";
 // import UseRefLearn from "./Hooks/UseRefLearn"
+// import UseMemoLearn from "./Hooks/UseMemoLearn";
 
-import UseMemoLearn from "./Hooks/UseMemoLearn";
+import UseCallBackLearn from "./Hooks/UseCallBackLearn";
 
 // import FirstComponent from "./Hooks/useContextHook/FirstComponent";
 
@@ -26,7 +27,8 @@ const App = () => {
       {/* {ToggleUserEffect ? <UserEffectLearn /> : ""} */}
       {/* <UseRefLearn/> */}
       {/* <FirstComponent/> */}
-      <UseMemoLearn/>
+      {/* <UseMemoLearn/> */}
+      <UseCallBackLearn/>
     </>
   );
 };
