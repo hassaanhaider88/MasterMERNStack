@@ -6,9 +6,7 @@
 // import UseStateLearn from "./Hooks/UseStateLearn";
 // import UseRefLearn from "./Hooks/UseRefLearn"
 // import UseMemoLearn from "./Hooks/UseMemoLearn";
-
-import UseCallBackLearn from "./Hooks/UseCallBackLearn";
-
+// import UseCallBackLearn from "./Hooks/UseCallBackLearn";
 // import FirstComponent from "./Hooks/useContextHook/FirstComponent";
 
 
@@ -28,11 +26,11 @@ const App = () => {
       {/* <UseRefLearn/> */}
       {/* <FirstComponent/> */}
       {/* <UseMemoLearn/> */}
-      <UseCallBackLearn/>
+      {/* <UseCallBackLearn/> */}
     </>
   );
 };
 
 export default App;
 
-// https://www.youtube.com/watch?v=FMzzmbYpc0I useRef
+// https://www.youtube.com/watch?v=L_xUFwzvXc8&list=PLoC8Q0moRTSiHRg-2RgRYuXc1kzQ9_n0J&index=7 useMemo
