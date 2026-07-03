@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+button{
+    padding: 5px 8px;
+    background: black;
+    color: white;
+    border-radius: 20px;
+   margin-left: 5px;
+   cursor: pointer;
+   transition: all;
+   &:hover{
+    scale: .90;
+   }
+}

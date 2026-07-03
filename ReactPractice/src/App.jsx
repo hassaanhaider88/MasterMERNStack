@@ -8,8 +8,8 @@
 // import UseMemoLearn from "./Hooks/UseMemoLearn";
 // import UseCallBackLearn from "./Hooks/UseCallBackLearn";
 // import FirstComponent from "./Hooks/useContextHook/FirstComponent";
-
-import UseMemoLearn from "./Hooks/useMemoLearn";
+// import UseMemoLearn from "./Hooks/useMemoLearn";
+// import UseReducerLearn from "./Hooks/UseReducerLearn";
 
 
 
@@ -29,7 +29,8 @@ const App = () => {
       {/* <FirstComponent/> */}
       {/* <UseMemoLearn/> */}
       {/* <UseCallBackLearn/> */}
-      <UseMemoLearn/>
+      {/* <UseMemoLearn/> */}
+      {/* <UseReducerLearn/> */}
     </>
   );
 };
