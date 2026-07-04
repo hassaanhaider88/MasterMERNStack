@@ -10,8 +10,9 @@
 // import FirstComponent from "./Hooks/useContextHook/FirstComponent";
 // import UseMemoLearn from "./Hooks/useMemoLearn";
 // import UseReducerLearn from "./Hooks/UseReducerLearn";
-
 // import UseImperativeHandleLearn from "./Hooks/UseImperativeHandleLearn";
+
+import UseLayoutEffectLearn from "./Hooks/UserLayoutEffect";
 
 const App = () => {
   // const [ToggleUserEffect, setToggleUserEffect] = useState(false);
@@ -32,10 +33,9 @@ const App = () => {
       {/* <UseMemoLearn/> */}
       {/* <UseReducerLearn/> */}
       {/* <UseImperativeHandleLearn /> */}
+      <UseLayoutEffectLearn />
     </>
   );
 };
 
 export default App;
-
-// https://www.youtube.com/watch?v=L_xUFwzvXc8&list=PLoC8Q0moRTSiHRg-2RgRYuXc1kzQ9_n0J&index=7 useMemo
