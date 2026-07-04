@@ -11,8 +11,9 @@
 // import UseMemoLearn from "./Hooks/useMemoLearn";
 // import UseReducerLearn from "./Hooks/UseReducerLearn";
 // import UseImperativeHandleLearn from "./Hooks/UseImperativeHandleLearn";
+// import CustomHookLearn from "./Hooks/CustomHookLearn";
+// import UseLayoutEffectLearn from "./Hooks/UserLayoutEffect";
 
-import UseLayoutEffectLearn from "./Hooks/UserLayoutEffect";
 
 const App = () => {
   // const [ToggleUserEffect, setToggleUserEffect] = useState(false);
@@ -33,7 +34,8 @@ const App = () => {
       {/* <UseMemoLearn/> */}
       {/* <UseReducerLearn/> */}
       {/* <UseImperativeHandleLearn /> */}
-      <UseLayoutEffectLearn />
+      {/* <UseLayoutEffectLearn /> */}
+      {/* <CustomHookLearn/> */}
     </>
   );
 };
