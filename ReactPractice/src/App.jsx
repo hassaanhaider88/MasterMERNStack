@@ -13,6 +13,8 @@
 // import UseImperativeHandleLearn from "./Hooks/UseImperativeHandleLearn";
 // import CustomHookLearn from "./Hooks/CustomHookLearn";
 // import UseLayoutEffectLearn from "./Hooks/UserLayoutEffect";
+// import ErrorBoundry from "./errorboundrie/ErrorBoundry";
+// import FallingComponent from "./errorboundrie/FallingComponent";
 
 
 const App = () => {
@@ -36,6 +38,11 @@ const App = () => {
       {/* <UseImperativeHandleLearn /> */}
       {/* <UseLayoutEffectLearn /> */}
       {/* <CustomHookLearn/> */}
+      {/* <h1>Learnign erorr Boundary</h1>
+      <ErrorBoundry>
+        <FallingComponent/>
+      </ErrorBoundry> */}
+      
     </>
   );
 };
