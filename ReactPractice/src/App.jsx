@@ -1,4 +1,5 @@
-// import { useState } from "react";
+// import { lazy,Suspense } from "react";
+// use with Suspense with fallback 
 // import TimerCounter from "./Topics/TimerCounter";
 // import Todo from "./Topics/Todo";
 // import Outer from "./Topics/Outer";
@@ -16,6 +17,8 @@
 // import ErrorBoundry from "./errorboundrie/ErrorBoundry";
 // import FallingComponent from "./errorboundrie/FallingComponent";
 
+// this is called lazy loadin like only load component when needed
+// const FallingCompoent = lazy(()=>import("./errorboundrie/FallingComponent"))
 
 const App = () => {
   // const [ToggleUserEffect, setToggleUserEffect] = useState(false);
