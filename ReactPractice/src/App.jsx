@@ -45,9 +45,11 @@ const App = () => {
       <ErrorBoundry>
         <FallingComponent/>
       </ErrorBoundry> */}
-      
+      <h1>My app component</h1>
     </>
   );
 };
 
 export default App;
+
+
