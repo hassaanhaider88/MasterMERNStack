@@ -22,7 +22,7 @@ Node.js
     |-- process.argv                 → array of command-line arguments
     |-- process.exit(code)           → 0 = success, 1+ = error
     |-- process.cwd()                → current working directory
-    |-- process.chdir(dir)
+    |-- process.chdir(dir)           → child folder if any have
     |-- process.platform             → 'win32' | 'linux' | 'darwin' | 'freebsd' etc.
     |-- process.arch                 → 'x64' | 'arm64' | 'ia32'
     |-- process.memoryUsage()
@@ -59,11 +59,11 @@ Node.js
     |-- fs.createWriteStream
 
 |-- path
-    |-- path.join(...parts)
-    |-- path.resolve(...paths)
-    |-- path.basename / dirname / extname
-    |-- path.parse / format
-    |-- path.sep / delimiter
+    |-- path.join(...parts)   → Paths ko combine karta hai
+    |-- path.resolve(...paths)  → Absolute path banata hai
+    |-- path.basename / dirname / extname  → File name deta hai / Folder path deta hai
+    |-- path.parse / format  → string ko obj me / obj ko string me
+    |-- path.sep / delimiter  → OS ka path separator / Environment PATH separator
 
 |-- url
     |-- new URL(input, base)
@@ -71,12 +71,13 @@ Node.js
     |-- url.format(obj)
 
 |-- os
+
     |-- os.cpus()                    → array of CPU info
-    |-- os.freemem() / totalmem()
-    |-- os.homedir() / tmpdir()
-    |-- os.hostname() / userInfo()
-    |-- os.networkInterfaces()
-    |-- os.platform() / arch() / release() / type() / uptime()
+    |-- os.freemem() / totalmem()   →
+    |-- os.homedir() / tmpdir()     → 
+    |-- os.hostname() / userInfo()  → Computer ka host name.
+    |-- os.networkInterfaces()       → Network interfaces ki information.
+    |-- os.platform() / arch() / release() / type() / uptime()  → win32 / CPU architecture return karta hai./  10.0.26100 / / System kitni der se on hai
 
 |-- events
     |-- const EventEmitter = require('node:events')

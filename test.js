@@ -486,3 +486,80 @@ someAPI1().then(() => {
 })
 */
 
+
+
+// Node practice
+
+// console.log(process.platform)
+// console.log(process.cwd())
+// console.log(__dirname)
+// console.log(__filename)
+
+// const startHighResTime = process.hrtime.bigint();
+
+// 3. Advanced console logging structures
+// console.table([
+//     { module: "Auth", status: "Active" },
+//     { module: "Database", status: "Connecting" },
+//     { module: "Database", status: "Connecting" },
+// ]);
+
+// console.time("LoopDuration");
+// var h = "lajlksd"
+// var h = "lajlksd"
+// var h = "lajlksd"
+// var h = "lajlksd"
+// // for (let i = 0; i < 1_000_000; i++) { } // Quick loop
+// console.timeEnd("LoopDuration");
+
+// const endHighResTime = process.hrtime.bigint();
+// console.log(`Precise execution took: ${endHighResTime - startHighResTime} nanoseconds.`);
+// import fs from 'node:fs/promises';
+// import path from "path"
+import os from "os"
+
+// async function manageFiles() {
+//     // const folderName = join(process.cwd(), "logs");
+//     // const fileName = join(folderName, "serer.log");
+
+//     // await fs.mkdir(folderName, { recursive: true });
+
+//     // await fs.writeFile(fileName, 'Initial server status: Healthy\n');
+
+//     // await fs.appendFile(fileName, 'New entry: User logged in\n');
+
+//     // const content = await fs.readFile(fileName, 'utf-8');
+//     // console.log("--- File Contents --- \n", content);
+//     // const contenet = await fs.readdir(process.cwd());
+//     // const contenet = await fs.readdir(join(process.cwd(), "BackEndTechPractice"));
+//     // const contenet = await fs.watch(join(process.cwd(), "CSS.md"))
+//     // console.log(contenet)
+//     // console.log(path.resolve("images"));
+//     // console.log(path.parse(path.join(process.cwd(),"DSAWithJS.js")));
+//     console.log(process.chdir(path.join(process.cwd())))
+// }
+
+
+// manageFiles()
+
+// const myUrl = new URL("https://example.com/users?id=10&name=Ali");
+
+// console.log(myUrl);
+// console.log(myUrl.searchParams.get("name"));
+
+// {              
+//   href: 'https://example.com/users?id=10&name=Ali',
+//   origin: 'https://example.com',
+//   protocol: 'https:',
+//   username: '',
+//   password: '',
+//   host: 'example.com',
+//   hostname: 'example.com',
+//   port: '',
+//   pathname: '/users',
+//   search: '?id=10&name=Ali',
+//   searchParams: URLSearchParams { 'id' => '10', 'name' => 'Ali' },
+//   hash: ''
+// }
+
+console.log(os.networkInterfaces())
