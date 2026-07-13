@@ -516,7 +516,7 @@ someAPI1().then(() => {
 // console.log(`Precise execution took: ${endHighResTime - startHighResTime} nanoseconds.`);
 // import fs from 'node:fs/promises';
 // import path from "path"
-import os from "os"
+// import os from "os"
 
 // async function manageFiles() {
 //     // const folderName = join(process.cwd(), "logs");
@@ -562,4 +562,127 @@ import os from "os"
 //   hash: ''
 // }
 
-console.log(os.networkInterfaces())
+// console.log(os.networkInterfaces())
+
+// console.log(process.argv)
+
+// import { EventEmitter } from 'node:events';
+
+// class OrderService extends EventEmitter { }
+// const orderService = new OrderService();
+
+// // Register listeners
+// orderService.on('payment_success', (orderId, amount) => {
+//     console.log(`[Email Service] Receipt sent for order ${orderId} ($${amount})`);
+// });
+
+// orderService.once('payment_success', () => {
+//     console.log(`[Analytics] This metric runs only on the first payment success!`);
+//     orderService.emit("payment", "IDyahapr")
+// });
+
+// orderService.on("payment", (id) => {
+//     console.log(id)
+// })
+
+// // Triggering the event
+// export default orderService;
+
+// import fs from "node:fs"
+// const readStream = fs.createReadStream("CSS.md");
+
+// readStream.on("data", (chunk) => {
+//     console.log(chunk.toString().replaceAll("|--",""));
+// });
+
+// import fs from 'node:fs';
+// import { join } from 'node:path';
+// import { pipeline } from 'node:stream/promises';
+// import zlib from 'node:zlib';
+
+// async function compressLogFile() {
+//   // Gracefully stream data, zip it, and stream it back out to a file
+//   await pipeline(
+//     fs.createReadStream(join(process.cwd(),'logs/server.log')),
+//     zlib.createGzip(),
+//     fs.createWriteStream(join(process.cwd(),'logs/server.log.gz'))
+//   );
+//   console.log('Streaming compression completed without bloating RAM.');
+// }
+
+
+// compressLogFile().catch(console.error);
+
+// import { Buffer } from "buffer"
+
+// const buf= Buffer.from(" ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijlmnopqrstuvwxyz","utf8")
+// console.log(buf.toString())
+// const crypto = require("node:crypto");
+
+// console.log(
+//     crypto.randomBytes(16).toString("hex")
+// );
+
+// import { promisify } from 'node:util';
+// const { generateKeyPair, sign, verify } = await import('node:crypto');
+
+// const { publicKey, privateKey } = await promisify(generateKeyPair)('ed25519');
+// // console.log(publicKey,"/n",privateKey)
+// // A KeyObject holds the parsed key in memory and can be reused
+// // across multiple operations without re-parsing.
+// const data = new TextEncoder().encode('message to sign');
+// const signature = sign(null, data, privateKey);
+// console.log(signature)
+// console.log(verify(null, "message to sign", publicKey, signature))
+
+// const crypto = require("node:crypto");
+
+// const algorithm = "aes-256-cbc";
+// const key = crypto.randomBytes(32);
+// const iv = crypto.randomBytes(16);
+
+// const cipher = crypto.createCipheriv(
+//     algorithm,
+//     key,
+//     iv
+// );
+
+// let encrypted = cipher.update(
+//     "Hello",
+//     "utf8",
+//     "hex"
+// );
+
+// encrypted += cipher.final("hex");
+
+// console.log(encrypted);
+
+// const zlib = require("node:zlib");
+
+// zlib.gzip("Hello World", (err, buffer) => {
+//     console.log(buffer);
+// });
+
+// const { spawn } = require('child_process');
+// const path = require('path');
+
+// // Target the script file path
+// const scriptPath = path.join(__dirname, 'app.py');
+
+// // Spawn the python process with arguments
+// // Use 'python3' instead of 'python' depending on your OS configuration
+// const pythonProcess = spawn('python', [scriptPath, 'John', 'Doe']);
+
+// const { execFile } = require("node:child_process");
+
+// // const child =spawn("cmd", ["/c", "dir"]);
+
+// // child.stdout.on("data", data => {
+// //     console.log(data.toString());
+// // });
+
+// execFile("npm", ["-v"], (err, stdout) => {
+
+//     console.log(stdout);
+
+// });
