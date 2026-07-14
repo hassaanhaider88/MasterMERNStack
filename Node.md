@@ -125,26 +125,26 @@ const result = Buffer.concat([b1, b2]);```
     |-- .on('exit') .on('error') .stdout .stderr
 
 |-- worker_threads
-    |-- const { Worker, isMainThread, parentPort, workerData } = require('node:worker_threads')
+    |-- const { Worker, isMainThread, parentPort (Main aur Worker ke beech communication.), workerData } = require('node:worker_threads')
     |-- new Worker(__filename, { workerData })
-    |-- parentPort.postMessage / on('message')
+    |-- parentPort.postMessage / on('message') Worker se message bhejna.
 
-|-- perf_hooks
-    |-- performance.now() / mark / measure
-    |-- monitorEventLoopDelay
+|-- perf_hooks => application ki performance measure karne ke liye use hota hai.
+    |-- performance.now() / mark / measure => High-resolution timer /  
+    |-- monitorEventLoopDelay => Event Loop kitna busy hai ye monitor krta hai
 
-|-- dns
-    |-- dns.promises.resolve / lookup / reverse
+|-- dns => Domain names resolve karta hai.
+    |-- dns.promises.resolve (domain se IP find krta hai) / lookup (Operating System resolver use karta hai)/ reverse (IP address se domain nikalta hai)
 
 |-- net / tls / http / https
     |-- See HTTP section below
 
-|-- util
-    |-- util.promisify(fn)
-    |-- util.inspect(obj, options)
-    |-- util.format / formatWithOptions
-    |-- util.deprecate(fn, msg)
-    |-- util.callbackify(asyncFn)
+|-- util =>utility module hai jo callback-based code, debugging, formatting aur backward compatibility ke liye helper functions provide karta hai.
+    |-- util.promisify(fn) => Callback-based function ko Promise-based function mein convert karta hai.
+    |-- util.inspect(obj, options) =>Object ko readable format mein print karta hai.
+    |-- util.format / formatWithOptions =. printf jaisa string formatting.
+    |-- util.deprecate(fn, msg) => Kisi function ko deprecated mark karta hai.
+    |-- util.callbackify(asyncFn) => Promise-based function ko callback-based function mein convert
 ````
 
 ### 3. HTTP / HTTPS / Fetch (modern Node)
@@ -161,6 +161,7 @@ const result = Buffer.concat([b1, b2]);```
     |-- AbortController / AbortSignal
 
 |-- undici (underlying fetch engine – can be used directly)
+Undici Node.js ka official high-performance HTTP client hai. Isay Node.js core team maintain karti hai aur modern Node.js versions mein built-in fetch() bhi Undici par based hai.
 ```
 
 ### 4. Modules System

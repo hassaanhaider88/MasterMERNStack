@@ -686,3 +686,125 @@ someAPI1().then(() => {
 //     console.log(stdout);
 
 // });
+
+// const { isMainThread, Worker, parentPort } = require("node:worker_threads");
+
+// const workder = new Worker("./worker.js", { workerData: 100 })
+// // console.log(workder)
+// // console.log(isMainThread,"this is in parent");
+// workder.on("message", (msg) => {
+//     console.log(msg)
+// })
+
+// const { performance } = require("node:perf_hooks");
+
+// const start = performance.now();
+
+// for (let i = 0; i < 10000e6; i++) {}
+
+// const end = performance.now();
+
+// console.log(end - start,"ms");
+
+// const { performance } = require("node:perf_hooks");
+
+// performance.mark("start");
+
+// for(let i=0;i<10e8;i++){}
+
+// performance.mark("end");
+
+// performance.measure(
+//     "Loop Time",
+//     "start",
+//     "end"
+// );
+
+// console.log(
+//     performance.getEntriesByType("measure")
+// );
+
+
+// const net=require("node:net");
+
+// const server=net.createServer(socket=>{
+
+//     socket.write("Hello");
+//    socket.write("How are you")
+// });
+
+// server.listen(3000);
+
+// import util from "node:util"
+// import fs from 'node:fs'
+// import { join } from "node:path";
+
+// const readFile = util.promisify(fs.readFile)
+
+// async function main(fileName) {
+//     const data = await readFile(fileName, "utf8");
+//     console.log(data)
+// }
+// main(join(process.cwd(), "Prisma.md"))
+
+// const util = require("node:util");
+// const obj = {
+//     user: {
+//         profile: {
+//             skills: ["Node", "React"]
+//         }
+//     }
+// };
+
+// console.log(obj);
+
+// console.log(
+//     util.inspect(obj,{
+//         depth: null,
+//         // color : true
+//         showHidden: true
+//     })
+// );
+
+
+// const util = require("node:util");
+
+// const result = util.formatWithOptions(
+//     {
+//         colors: true
+//     },
+//     "%O",
+//     {
+//         name: "Hassaan"
+//     }
+// );
+
+// console.log(result);
+
+// const util = require("node:util");
+
+// function greet(name) {
+//     return `Hello ${name}`;
+// }
+
+// const oldGreet = util.deprecate(
+//     greet,
+//     "greet() is deprecated. Use greetUser() instead."
+// );
+
+// console.log(oldGreet("Ali"));
+
+
+// console.log(Object.keys(require.cache))
+
+// console.log(import.meta.url);
+// console.log(__dirname)
+// console.log(__filename)
+// import { fileURLToPath } from "node:url";
+
+// // const __filename = fileURLToPath(import.meta.url);
+// const __dirname = fileURLToPath(import.meta.dirname);
+
+// // console.log(__filename);
+// console.log(__dirname);
+
