@@ -95,7 +95,7 @@ A **document** is the basic unit of data in MongoDB — analogous to a *row* in 
 {
   "_id": ObjectId("650f1e2a3b4c5d6e7f8a9b0c"),
   "email": "hassan@example.com",
-  "name": "Hassan Raza",
+  "name": "Hassaan Haider",
   "createdAt": ISODate("2025-03-14T10:00:00Z"),
   "preferences": { "theme": "dark", "newsletter": true, "language": "en" },
   "addresses": [

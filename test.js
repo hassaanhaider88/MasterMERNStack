@@ -808,3 +808,37 @@ someAPI1().then(() => {
 // // console.log(__filename);
 // console.log(__dirname);
 
+// import repl from 'repl';
+// import { exec } from 'child_process';
+
+// console.log("Welcome to Browser CLI! Type 'youtube' or 'chrome' to open apps.\n");
+
+// const myRepl = repl.start({
+//   prompt: 'browser-cli> ',
+//   eval: (input, context, filename, callback) => {
+//     const command = input.trim().toLowerCase();
+
+//     if (command === 'chrome') {
+//       // Opens the base browser based on OS
+//       const startCmd = process.platform === 'darwin' ? 'open -a "Google Chrome"' :
+//                        process.platform === 'win32' ? 'start chrome' : 'google-chrome';
+      
+//       exec(startCmd);
+//       callback(null, 'Opening Google Chrome...');
+
+//     } else if (command === 'youtube') {
+//       // Opens Chrome directly to YouTube
+//       const url = 'https://youtube.com';
+//       const startCmd = process.platform === 'darwin' ? `open -a "Google Chrome" ${url}` :
+//                        process.platform === 'win32' ? `start chrome ${url}` : `google-chrome ${url}`;
+      
+//       exec(startCmd);
+//       callback(null, 'Opening YouTube in Chrome...');
+
+//     } else if (command === 'exit') {
+//       process.exit(0);
+//     } else {
+//       callback(null, `Unknown command. Try 'chrome' or 'youtube'.`);
+//     }
+//   }
+// });
