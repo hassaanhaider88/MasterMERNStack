@@ -375,7 +375,7 @@ db.products.updateOne({ _id: productId }, { $pull: { tags: "discontinued" } })
 // updateMany — apply to every matching document
 db.products.updateMany(
   { category: "Electronics" },
-  { $mul: { price: 0.9 } }       // 10% off every electronics item
+  { $mul: { price: 0.9 } }       // 10% off every electronics item $mul use of multiplying with number
 )
 
 // upsert — update if it exists, insert if it doesn't (idempotent writes)
