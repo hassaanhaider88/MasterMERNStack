@@ -699,6 +699,9 @@ This single query replaces what would otherwise be several application-layer loo
     output: { count: { $sum: 1 } }
   }
 }
+// 0-100
+// 101-300
+// 301+
 
 // $sortByCount — shorthand: group by a field and count, sorted descending
 { $sortByCount: "$region" }
