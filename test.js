@@ -842,3 +842,8 @@ someAPI1().then(() => {
 //     }
 //   }
 // });
+
+
+// const name = "Hassaan Haider - Developer"
+
+// console.log(name.toLowerCase().replace(/\s+/g, '-'))

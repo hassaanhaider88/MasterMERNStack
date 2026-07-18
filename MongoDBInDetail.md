@@ -18,6 +18,7 @@ A deep, example-driven reference covering everything from documents and BSON to 
 10. [Data Modeling: Embedding vs. Referencing](#10-data-modeling-embedding-vs-referencing)
 11. [Drivers & Node.js Integration](#11-drivers--nodejs-integration)
 12. [Transactions (Multi-Document ACID)](#12-transactions-multi-document-acid)
+12.5 [Mongoose Middleware/Hooks](#12.5-mongoose-middleware/hooks)
 13. [Replication & Replica Sets](#13-replication--replica-sets)
 14. [Sharding](#14-sharding)
 15. [Administration & Security](#15-administration--security)
@@ -94,7 +95,7 @@ A **document** is the basic unit of data in MongoDB — analogous to a *row* in 
 ```json
 {
   "_id": ObjectId("650f1e2a3b4c5d6e7f8a9b0c"),
-  "email": "hassan@example.com",
+  "email": "hassaan@example.com",
   "name": "Hassaan Haider",
   "createdAt": ISODate("2025-03-14T10:00:00Z"),
   "preferences": { "theme": "dark", "newsletter": true, "language": "en" },
@@ -907,7 +908,7 @@ Store related data as a nested object/array **inside the parent document** when 
 {
   "_id": "...",
   "title": "Understanding MongoDB Indexes",
-  "author": "hassan",
+  "author": "hassaan",
   "comments": [
     { "user": "alice", "text": "Great post!", "date": "..." },
     { "user": "bob", "text": "Very helpful, thanks.", "date": "..." }
@@ -1133,9 +1134,12 @@ const productSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });   // auto-manages createdAt/updatedAt
 
-// Instance method
+// Instance method like custom method
 productSchema.methods.isInStock = function () { return this.stock > 0; };
 
+const product = await Product.findById(id);
+
+console.log(product.isInStock());
 // Middleware ("hook") — real-world example: auto-generate a URL slug before saving
 productSchema.pre('save', function (next) {
   this.slug = this.name.toLowerCase().replace(/\s+/g, '-');
@@ -1183,7 +1187,7 @@ mongodb+srv://user:pass@cluster0.abcde.mongodb.net/mydb?retryWrites=true&w=major
 
 ---
 
-## 12. Transactions (Multi-Document ACID)
+## 12. Transactions (Multi-Document ACID (Atomicity, Consistency, Isolation, and Durability.))
 
 Since MongoDB 4.0 (replica sets) and 4.2 (sharded clusters), MongoDB supports full ACID transactions across multiple documents and even multiple collections — closing the gap with relational databases for operations that must succeed or fail *together*.
 
@@ -1271,6 +1275,548 @@ await products.updateOne(
 **Real-world tuning:** an analytics dashboard reading aggregate stats can safely use `readConcern: "local"` on a secondary for speed; a payment confirmation read *must* use `readConcern: "majority"` to avoid showing a user a "successful" payment that later gets rolled back during a failover.
 
 ---
+
+
+
+## 12.5 Mongoose Middlware / Hooks
+these are  functions that execute **before (`pre`) or after (`post`)** certain operations on documents, queries, models, or aggregation pipelines.
+
+They are commonly used for:
+
+* Hashing passwords
+* Validating business rules
+* Logging
+* Updating timestamps
+* Sending notifications
+* Cleaning or transforming data
+
+## Types of Middleware
+
+Mongoose has four categories:
+
+1. Document middleware
+2. Query middleware
+3. Model middleware
+4. Aggregate middleware
+
+---
+
+# 1. Document Middleware
+
+Runs on a **document instance**.
+
+Common hooks:
+
+* `save`
+* `validate`
+* `updateOne`
+* `deleteOne`
+* `init`
+
+Example schema:
+
+```javascript
+const userSchema = new mongoose.Schema({
+  name: String,
+  password: String,
+});
+```
+
+## `pre('save')`
+
+Runs **before** saving.
+
+```javascript
+userSchema.pre("save", function (next) {
+  console.log("Before saving");
+
+  this.name = this.name.trim();
+
+  next();
+});
+```
+
+`this` is the current document.
+
+```javascript
+const user = new User({
+  name: " Hassaan "
+});
+
+await user.save();
+```
+
+Output:
+
+```
+Before saving
+```
+
+The name is saved as:
+
+```
+"Hassaan"
+```
+
+---
+
+## `post('save')`
+
+Runs **after** saving.
+
+```javascript
+userSchema.post("save", function (doc) {
+  console.log("User saved:", doc.name);
+});
+```
+
+Output
+
+```
+User saved: Hassaan
+```
+
+---
+
+## Password Hashing Example
+
+```javascript
+import bcrypt from "bcrypt";
+
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  this.password = await bcrypt.hash(this.password, 10);
+});
+```
+
+Without middleware:
+
+```javascript
+user.password = await bcrypt.hash(user.password, 10);
+
+await user.save();
+```
+
+With middleware, hashing happens automatically.
+
+---
+
+## `validate`
+
+Before validation
+
+```javascript
+userSchema.pre("validate", function () {
+  console.log("Validating...");
+});
+```
+
+After validation
+
+```javascript
+userSchema.post("validate", function () {
+  console.log("Validation finished");
+});
+```
+
+---
+
+# 2. Query Middleware
+
+Runs on queries like:
+
+```javascript
+User.find()
+
+User.findOne()
+
+User.updateOne()
+
+User.deleteOne()
+```
+
+Example:
+
+```javascript
+userSchema.pre("find", function () {
+  console.log(this.getFilter());
+});
+```
+
+Query
+
+```javascript
+await User.find({
+  age: { $gt: 18 }
+});
+```
+
+Output
+
+```
+{ age: { $gt: 18 } }
+```
+
+Notice:
+
+In query middleware,
+
+```javascript
+this
+```
+
+is the **query**, **not** a document.
+
+---
+
+## Add Default Filter
+
+Hide deleted users automatically.
+
+```javascript
+userSchema.pre("find", function () {
+  this.where({
+    deleted: false
+  });
+});
+```
+
+Now
+
+```javascript
+await User.find();
+```
+
+becomes
+
+```javascript
+User.find({
+  deleted: false
+});
+```
+
+---
+
+## Modify Update Query
+
+```javascript
+userSchema.pre("updateOne", function () {
+  this.set({
+    updatedAt: new Date()
+  });
+});
+```
+
+---
+
+# 3. Model Middleware
+
+Runs on model methods.
+
+Examples:
+
+```javascript
+User.insertMany()
+
+User.createCollection()
+
+User.bulkWrite()
+```
+
+Example
+
+```javascript
+userSchema.pre("insertMany", function (next, docs) {
+  console.log(docs.length);
+
+  next();
+});
+```
+
+---
+
+# 4. Aggregate Middleware
+
+Runs before aggregation.
+
+```javascript
+userSchema.pre("aggregate", function () {
+  console.log(this.pipeline());
+});
+```
+
+Or modify the pipeline.
+
+```javascript
+userSchema.pre("aggregate", function () {
+  this.pipeline().unshift({
+    $match: {
+      deleted: false
+    }
+  });
+});
+```
+
+Every aggregation now ignores deleted users.
+
+---
+
+# `pre` vs `post`
+
+### pre
+
+Runs before the operation.
+
+```javascript
+userSchema.pre("save", function () {
+  console.log("Before save");
+});
+```
+
+Sequence
+
+```
+pre
+↓
+
+Database Operation
+
+↓
+
+Done
+```
+
+---
+
+### post
+
+Runs after the operation.
+
+```javascript
+userSchema.post("save", function () {
+  console.log("After save");
+});
+```
+
+Sequence
+
+```
+Database Operation
+
+↓
+
+post
+```
+
+---
+
+# `this` in Different Middleware
+
+### Document Middleware
+
+```javascript
+userSchema.pre("save", function () {
+  console.log(this.name);
+});
+```
+
+`this`
+
+```
+Current document
+```
+
+---
+
+### Query Middleware
+
+```javascript
+userSchema.pre("find", function () {
+  console.log(this.getFilter());
+});
+```
+
+`this`
+
+```
+Query object
+```
+
+---
+
+### Aggregate Middleware
+
+```javascript
+userSchema.pre("aggregate", function () {
+  console.log(this.pipeline());
+});
+```
+
+`this`
+
+```
+Aggregation object
+```
+
+---
+
+# Error Handling Middleware
+
+```javascript
+userSchema.post("save", function (error, doc, next) {
+  console.log(error.message);
+
+  next(error);
+});
+```
+
+Useful for handling duplicate key errors or transforming database errors into application-friendly messages.
+
+---
+
+# Async Middleware
+
+```javascript
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(
+    this.password,
+    10
+  );
+});
+```
+
+No `next()` is needed when using an `async` function. Throwing an error or rejecting the promise stops the operation.
+
+---
+
+# Common Real-World Uses
+
+### Hash Password
+
+```javascript
+pre("save")
+```
+
+---
+
+### Update Timestamp
+
+```javascript
+pre("updateOne")
+```
+
+---
+
+### Soft Delete
+
+```javascript
+pre("find")
+```
+
+Automatically filter
+
+```javascript
+deleted: false
+```
+
+---
+
+### Audit Logs
+
+```javascript
+post("save")
+
+post("deleteOne")
+```
+
+---
+
+### Validate Business Rules
+
+```javascript
+pre("validate")
+```
+
+---
+
+### Send Email After Registration
+
+```javascript
+post("save")
+```
+
+---
+
+# Important Gotchas
+
+### `save()` middleware does not run on `findOneAndUpdate()`
+
+```javascript
+await user.save();
+```
+
+Triggers:
+
+```javascript
+pre("save")
+```
+
+But:
+
+```javascript
+await User.findOneAndUpdate(
+  { _id: id },
+  { name: "Ali" }
+);
+```
+
+**Does not trigger** `save` middleware. It triggers `findOneAndUpdate` query middleware instead.
+
+---
+
+### Query middleware doesn't have the document
+
+Inside:
+
+```javascript
+userSchema.pre("findOneAndUpdate", function () {
+  console.log(this);
+});
+```
+
+`this` is the query, not the document. If you need the current document, you must fetch it yourself:
+
+```javascript
+userSchema.pre("findOneAndUpdate", async function () {
+  const doc = await this.model.findOne(this.getFilter());
+  console.log(doc);
+});
+```
+
+---
+
+## Common Middleware Hooks
+
+| Middleware         | Type           | Triggered By                             |
+| ------------------ | -------------- | ---------------------------------------- |
+| `validate`         | Document       | `doc.validate()`, `doc.save()`           |
+| `save`             | Document       | `doc.save()`                             |
+| `init`             | Document       | When a document is hydrated from MongoDB |
+| `updateOne`        | Document/Query | `doc.updateOne()` or `Model.updateOne()` |
+| `deleteOne`        | Document/Query | `doc.deleteOne()` or `Model.deleteOne()` |
+| `find`             | Query          | `Model.find()`                           |
+| `findOne`          | Query          | `Model.findOne()`                        |
+| `findOneAndUpdate` | Query          | `Model.findOneAndUpdate()`               |
+| `findOneAndDelete` | Query          | `Model.findOneAndDelete()`               |
+| `countDocuments`   | Query          | `Model.countDocuments()`                 |
+| `aggregate`        | Aggregate      | `Model.aggregate()`                      |
+| `insertMany`       | Model          | `Model.insertMany()`                     |
+| `bulkWrite`        | Model          | `Model.bulkWrite()`                      |
+| `createCollection` | Model          | `Model.createCollection()`               |
+
+A key thing to remember is that **middleware is tied to specific Mongoose operations**. For example, `pre('save')` only runs for `document.save()`, while `pre('findOneAndUpdate')` only runs for `Model.findOneAndUpdate()`. Understanding which operation triggers which middleware is essential to using hooks correctly.
+
 
 ## 13. Replication & Replica Sets
 
