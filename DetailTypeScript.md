@@ -1,8 +1,5 @@
 # TypeScript — Detailed Line-by-Line Guide
 
-### From Basic to Advanced
-
-This guide expands every topic from the outline with a plain-English explanation of each line plus a runnable code snippet.
 
 ```
 TypeScript
@@ -276,6 +273,7 @@ type Theme = "light" | "dark" | "system";
 
 ### 4.1 Generic functions
 `<T>` is a placeholder type filled in when the function is called, keeping type safety without duplicating code per type.
+it like telling typescript that the function's parameter and return type at calling time not at initializing time
 
 ```ts
 function identity<T>(arg: T): T {
