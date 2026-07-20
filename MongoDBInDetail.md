@@ -2176,7 +2176,7 @@ MongoDB is schema-less by default, but production applications almost always wan
 
 ```js
 db.createCollection("products", {
-  validator: {
+  validator: { 
     $jsonSchema: {
       bsonType: "object",
       required: ["name", "price", "category"],
