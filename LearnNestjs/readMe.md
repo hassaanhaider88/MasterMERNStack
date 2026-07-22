@@ -99,6 +99,8 @@ controller-name</span>
 </blockquote>
 this will create a folder name controller-name along with two files
 
+---
+
 
 # Services
 - TypeScript class with logic like calculations, data accesss, etc
@@ -114,7 +116,37 @@ this will create a folder name controller-name along with two files
 
 ### Generate Auto Controller
 <blockquote style="padding : 10px 0px 5px 8px;font-size:18px">
- $ nest g service / s<span style="color: #2e7d32; font-weight: bold;">
-service -name</span>
-</blockquote>**bold text**
+ $ nest g service<span style="color: #2e7d32; font-weight: bold;">
+service-name</span>
+</blockquote>
 this will create a folder name service-name along with two files
+
+---
+
+# Modules
+- A container where we keep related controllers, services and provider
+for out apps.
+- core part of nestjs architecture. 
+- Every nestjs app has at least one 
+
+
+
+### Generate Auto module
+<blockquote style="padding : 10px 0px 5px 8px;font-size:18px">
+ $ nest g module<span style="color: #2e7d32; font-weight: bold;">
+module-name</span>
+</blockquote>
+this will create a folder name module-name along with two files
+
+
+# Dependency Injection
+It is a machanism where the framework automatically provides the rquired 
+dependencies wihtout creating them manually.
+- It makes the code reusable and clean.
+- It makes testing easier
+- it promotes loose coupling (classesss don't tightly depend on each other)
+- It improves readablity and maintainability
+- e.g. @Get(), @Controller(), @Injectable(), @Params() etc.
+
+---
+
