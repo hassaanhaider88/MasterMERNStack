@@ -164,3 +164,4 @@ dependencies wihtout creating them manually.
 - Pipes are used to transform or validate incoming data.
 - nestjs allows you to create your own custom pips.
 - they can be used for custom validation, data transformation, or business logic filtering.
+
