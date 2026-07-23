@@ -150,3 +150,12 @@ dependencies wihtout creating them manually.
 
 ---
 
+# DTO (Data tranfer Objects)
+- An object that carries data between layer like (like from client to backend);
+- Used to define the shape of incoming request data.
+- Ensures only required data passed (security + validation)  
+
+### Interface in TS
+- Interfae define the structure type of an object.
+- Help write clean, structured, type-safe code.
+- used for both request (DOTs) & response obj.
