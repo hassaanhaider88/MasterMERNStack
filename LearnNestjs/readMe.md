@@ -159,3 +159,8 @@ dependencies wihtout creating them manually.
 - Interfae define the structure type of an object.
 - Help write clean, structured, type-safe code.
 - used for both request (DOTs) & response obj.
+
+### Custom Pips 
+- Pipes are used to transform or validate incoming data.
+- nestjs allows you to create your own custom pips.
+- they can be used for custom validation, data transformation, or business logic filtering.
