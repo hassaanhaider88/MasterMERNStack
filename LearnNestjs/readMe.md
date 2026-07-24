@@ -165,3 +165,17 @@ dependencies wihtout creating them manually.
 - nestjs allows you to create your own custom pips.
 - they can be used for custom validation, data transformation, or business logic filtering.
 
+# Middleware
+- Middleware runs before the request reaches the controller.
+- Logging icoming requests
+- Authentication tokens (JWT etc)
+- Request tranformation
+- Blocking or redirecting requests 
+- settings headers
+
+## Middleware VS Guards
+- Middleware is express's feature whereas guard is nestjs's feature
+- Decorator can't use in middlewares
+- guard run before route access / Authorization
+- middleware before controller / common tasks (logging, token decode)
+
