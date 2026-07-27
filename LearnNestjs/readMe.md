@@ -212,3 +212,9 @@ ConfigModule.forRoot({
 isGlobal: true
 })
 ```
+
+
+# MONGOOSE / MongoDB + Postgrsql / SQL
+here we'll not talk about sql/nosql debate because this have proper their own scoop cover in this LIST
+here we'll talk about how to use these with nestjs
+

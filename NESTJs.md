@@ -114,7 +114,7 @@ There's no direct Express equivalent here — this is one of the places Nest goe
 
 Once `NestFactory` has assembled the app, you still need to bind it to a transport. For a normal HTTP app that's `app.listen(port)`, exactly like Express (in fact it delegates to the underlying Express instance). For apps that mix HTTP with microservices ("hybrid applications"), you also get `app.startAllMicroservices()`.
 
-```typescript
+```typescript 
 await app.listen(3000);
 // or, for a hybrid app:
 app.connectMicroservice<MicroserviceOptions>({ transport: Transport.REDIS });
