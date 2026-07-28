@@ -218,3 +218,15 @@ isGlobal: true
 here we'll not talk about sql/nosql debate because this have proper their own scoop cover in this LIST
 here we'll talk about how to use these with nestjs
 
+## Data Relationship
+Connectons between docs in collections 
+Embedding => Storing related / same data inside the same doc like skills course name in user own doc
+Reference => Storing data in separate docs like comments on post
+
+### Types 
+One-To-One => one president of one country => prefer embeding
+One-To-Many => one studnet can enroll many course => prefer either embeding/refernce
+Many-To-Many => projects and developers prefer only => reference
+
+ 
+ 
